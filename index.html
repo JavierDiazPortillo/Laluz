@@ -1,176 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Abarrotes La Luz – Página de Presentación</title>
-  <meta name="description" content="Tienda de abarrotes con programa de puntos. Haz tu pedido y recibe ofertas por WhatsApp. Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abarrotes La Luz - Programa de Puntos</title>
   <style>
-    :root {
-      --bg: #faf5e6;       /* beige cálido */
-      --ink: #3c2f2f;      /* marrón oscuro */
-      --accent: #d5a021;   /* dorado */
-      --accent-2: #7a4e2d; /* cacao */
-      --ok: #1f7a1f;       /* verde */
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
     body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-      line-height: 1.6;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f9fb;
+      margin: 0;
+      padding: 0;
+      color: #222;
     }
-    a { color: var(--accent-2); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 1050px; margin-inline: auto; padding: 24px; }
 
-    /* HERO */
-    .hero {
-      background: linear-gradient(180deg, #fff6dd 0%, #faf5e6 100%);
-      border-bottom: 2px solid #ecd8a0;
-      padding: 18px 0;
+    header {
+      background-color: #0056b3;
+      color: white;
+      padding: 20px;
+      text-align: center;
     }
-    .brand { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .logo {
-      width: 70px; height: 70px; border-radius: 50%;
-      display: grid; place-items: center;
-      background: radial-gradient(circle at 30% 35%, #ffe9a3, #d5a021);
-      color: #2b2115; font-weight: 800; letter-spacing: .5px;
-      font-size: 14px; text-align: center;
-    }
-    .title { font-size: clamp(28px, 4vw, 42px); margin: 0; font-weight: 900; letter-spacing: .4px; }
-    .subtitle { margin: 4px 0 0; font-size: clamp(14px, 2vw, 18px); opacity: .9; }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-    .btn {
-      display: inline-flex; gap: 10px; align-items: center;
-      border-radius: 12px; padding: 12px 18px; font-weight: 700;
-      border: 2px solid var(--ink); background: #fff; color: var(--ink);
-      box-shadow: 2px 2px 0 #00000022; transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    .btn.primary { background: var(--accent); border-color: var(--accent-2); color: #2b2115; }
-    .btn:hover { transform: translateY(-2px); }
 
-    /* CARDS */
-    .grid { display: grid; gap: 22px; margin-top: 26px; }
-    @media(min-width:880px){ .grid { grid-template-columns: 1.25fr .95fr; } }
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
     .card {
-      background: #fff; border: 1px solid #e6d7ac; border-radius: 16px;
-      padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,.05);
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      padding: 25px;
+      margin-bottom: 25px;
     }
-    .card h3 { margin-top: 0; font-size: 22px; }
+
     .pill {
-      display: inline-block; background: #efe6d1; color: #553e2e;
-      border-radius: 999px; padding: 4px 10px; font-size: 12px; margin-bottom: 8px;
+      display: inline-block;
+      background-color: #e0ecff;
+      color: #0056b3;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 10px;
     }
-    .quote { font-size: 16px; border-left: 4px solid var(--accent); padding-left: 12px; margin: 8px 0; }
-    .note { background: #fff9eb; border: 1px dashed #e0c171; border-radius: 14px; padding: 16px; }
-    .badge { display: inline-block; background: #fff; border: 1px solid #ead9b4; border-radius: 999px; padding: 6px 10px; font-weight: 700; }
 
-    /* FEATURES */
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 26px; }
-    .feature { background: #fff; border: 1px solid #ead9b4; border-radius: 14px; padding: 14px; transition: transform 0.2s ease; }
-    .feature:hover { transform: translateY(-3px); }
-    .feature b { display: block; margin-bottom: 6px; }
+    h3 {
+      margin-top: 5px;
+      color: #003366;
+    }
 
-    /* TABLAS */
-    .table-wrapper { overflow-x: auto; margin-top: 24px; }
+    .muted {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
     table {
-      width: 100%; border-collapse: collapse; font-size: 15px;
-      border: 1px solid #e6d7ac; border-radius: 12px; overflow: hidden;
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
     }
-    thead { background: var(--accent); color: #fff; }
-    th, td { padding: 10px 14px; text-align: left; }
-    tbody tr:nth-child(even) { background: #fff9eb; }
-    tbody tr:hover { background: #f4e7cc; }
 
-    /* FOOTER */
-    .footer { margin-top: 36px; padding: 24px 0; border-top: 1px solid #ead9b4; font-size: 14px; opacity: .9; text-align: center; }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #0056b3;
+      color: white;
+    }
+
+    .btn {
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #003d80;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #f0f0f0;
+      color: #555;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
-  <!-- HERO -->
-  <header class="hero">
-    <div class="container">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">LA<br/>LUZ</div>
-        <div>
-          <h1 class="title">Abarrotes La Luz</h1>
-          <p class="subtitle">Tu tienda de confianza en San Damián Texóloc. ¡Cada compra suma puntos!</p>
-          <div class="cta-row">
-            <a class="btn primary" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">🟢 Pedidos y Ofertas por WhatsApp</a>
-            <a class="btn" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Cómo llegar</a>
-          </div>
-        </div>
-      </div>
-    </div>
+  <header>
+    <h1>🛒 Abarrotes La Luz</h1>
+    <p>Programa de Lealtad - Canjea tus puntos por productos</p>
   </header>
 
-  <!-- CONTENIDO -->
-  <main class="container">
-    <div class="grid">
-      <section class="card">
-        <span class="pill">Mensaje a nuestros clientes</span>
-        <h3>¡Estamos creciendo contigo!</h3>
-        <p class="quote">
-          Estimado Cliente:<br/>
-          Si no ves el producto que buscas, pregunta, con gusto te atendemos.<br/>
-          Si no lo tengo, coméntame qué productos te gustaría que metiéramos.<br/>
-          Estamos intentando crecer, tener en existencia todos los productos que te son de utilidad y con tu apoyo lo lograremos.<br/>
-          <b>¡No etiquetemos comercios pequeños como la tienda del “NO HAY”!</b><br/>
-          Ayúdanos con tus comentarios y con tus compras a crecer para brindarte un mejor servicio.<br/>
-          <i>Atte: Doña Luz</i>
-        </p>
-      </section>
-
-      <aside class="card">
-        <span class="pill">Programa de Puntos</span>
-        <h3>Gana mientras compras</h3>
-        <ul>
-          <li>Cada compra te genera <b>puntos</b>.</li>
-          <li>Canjéalos por <b>descuentos</b> o <b>regalos</b>.</li>
-          <li>Promociones exclusivas en el canal de <b>WhatsApp</b>.</li>
-        </ul>
-        <div class="note">
-          <b class="badge">Consejo</b> Guarda esta página y sigue nuestro canal para no perderte las ofertas.
-        </div>
-      </aside>
-    </div>
-
-    <!-- FEATURES -->
-    <section class="features">
-      <div class="feature"><b>Variedad</b> Productos esenciales para toda la familia: despensa, lácteos, pan, abarrotes y más.</div>
-      <div class="feature"><b>Atención cercana</b> Trato amable y servicio personalizado. Si no lo tenemos, lo conseguimos.</div>
-      <div class="feature"><b>Precios justos</b> Ofertas semanales anunciadas en nuestro canal de WhatsApp.</div>
-    </section>
-
-    <!-- PUNTOS DE CLIENTES -->
-    <section class="card">
-      <span class="pill">Clientes Destacados</span>
-      <h3>Puntos de la Semana</h3>
-      <p class="muted">Aquí actualizamos cada semana a nuestros clientes más constantes y sus puntos acumulados.</p>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>No. Cliente</th>
-              <th>Cliente</th>
-              <th>Puntos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>0004</td><td>Gerardo Sanchez</td><td>1483 pts</td></tr>
-            <tr><td>0003</td><td>Veronica</td><td>1173 pts</td></tr>
-            <tr><td>0012</td><td>Leonardo</td><td>1008 pts</td></tr>
-            <tr><td>0018</td><td>Mauro</td><td>778 pts</td></tr>
-            <tr><td>0007</td><td>Rosa</td><td>670 pts</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- PRODUCTOS CANJEABLES -->
+  <main>
+    <!-- CATÁLOGO DE PRODUCTOS -->
     <section class="card">
       <span class="pill">Catálogo de Canje</span>
       <h3>Productos que puedes obtener con tus puntos</h3>
@@ -199,64 +132,95 @@
       <form id="form-consulta">
         <input type="text" id="cliente-id" placeholder="Ejemplo: 0004"
                style="padding:10px;border-radius:8px;border:1px solid #ccc;width:200px">
-        <button type="submit" class="btn primary">Consultar</button>
+        <button type="submit" class="btn">Consultar</button>
       </form>
 
       <div id="resultado" style="margin-top:16px;font-weight:600;"></div>
     </section>
-
-    <!-- UBICACIÓN -->
-    <section class="card">
-      <span class="pill">Ubicación</span>
-      <h3>Visítanos</h3>
-      <p class="muted">📍 Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala</p>
-      <p><a href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">Abrir en Google Maps →</a></p>
-    </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="container footer">
-    <div>© <span id="y"></span> Abarrotes La Luz • San Damián Texóloc, Tlax.</div>
+  <footer>
+    © 2025 Abarrotes La Luz — Programa de puntos desarrollado por Ingeniero Javier
   </footer>
 
   <script>
-    // Actualizar año en footer
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // Base de datos simulada
+    // --- CLIENTES ---
     const clientes = [
-      { id: "0001", nombre: "Lulu", puntos: 660 },
-      { id: "0002", nombre: "Josefina Diaz", puntos: 1182 },
-      { id: "0003", nombre: "Veronica Nava", puntos: 1394 },
-      { id: "0004", nombre: "Gerardo Sanchez", puntos: 2514 },
-      { id: "0005", nombre: "Margarita", puntos: 15 },
-      { id: "0006", nombre: "Higinia Diaz", puntos: 758 }
-      { id: "0007", nombre: "Rosa", puntos: 748 },
-      { id: "0008", nombre: "Maria Felix", puntos: 360 },
-      { id: "0009", nombre: "Rosy", puntos: 414 },
-      { id: "0010", nombre: "Patricia Sanchez", puntos: 276 }
-      { id: "0012", nombre: "Leo", puntos: 1263 }
-      { id: "0013", nombre: "Angelica Hdz", puntos: 310 },
-      { id: "0014", nombre: "Guadalupe Diaz", puntos: 200 },
-      { id: "0015", nombre: "Concha", puntos: 223 },
-      { id: "0016", nombre: "Leonor", puntos: 314 },
-      { id: "0018", nombre: "Mauro", puntos: 916 }
+      { id: "0001", nombre: "Ana López", puntos: 1520 },
+      { id: "0002", nombre: "Carlos Pérez", puntos: 1340 },
+      { id: "0003", nombre: "Verónica Torres", puntos: 1173 },
+      { id: "0004", nombre: "Gerardo Sánchez", puntos: 1483 },
+      { id: "0005", nombre: "Luis García", puntos: 920 },
+      { id: "0006", nombre: "Paola Hernández", puntos: 870 },
+      { id: "0007", nombre: "Rosa Martínez", puntos: 670 },
+      { id: "0008", nombre: "Mario Díaz", puntos: 1850 },
+      { id: "0009", nombre: "Lucía Vargas", puntos: 980 },
+      { id: "0010", nombre: "Pedro Gómez", puntos: 420 },
+      { id: "0011", nombre: "Isabel Romero", puntos: 510 },
+      { id: "0012", nombre: "Leonardo Ruiz", puntos: 1008 },
+      { id: "0013", nombre: "Alejandra Ortiz", puntos: 1750 },
+      { id: "0014", nombre: "Jorge Castillo", puntos: 1120 },
+      { id: "0015", nombre: "María Sánchez", puntos: 850 },
+      { id: "0016", nombre: "Eduardo Jiménez", puntos: 1620 },
+      { id: "0017", nombre: "Daniel Torres", puntos: 945 },
+      { id: "0018", nombre: "Mauro Ramírez", puntos: 778 },
+      { id: "0019", nombre: "Carmen Flores", puntos: 1390 },
+      { id: "0020", nombre: "Laura Morales", puntos: 320 },
+      { id: "0021", nombre: "Ricardo Delgado", puntos: 1510 },
+      { id: "0022", nombre: "Beatriz Cruz", puntos: 1830 },
+      { id: "0023", nombre: "Fernando Rojas", puntos: 760 },
+      { id: "0024", nombre: "Silvia Torres", puntos: 480 },
+      { id: "0025", nombre: "Andrés Pérez", puntos: 1410 },
+      { id: "0026", nombre: "Rocío Navarro", puntos: 1220 },
+      { id: "0027", nombre: "Julio Herrera", puntos: 880 },
+      { id: "0028", nombre: "Patricia Mendoza", puntos: 600 },
+      { id: "0029", nombre: "Miguel Estrada", puntos: 1500 },
+      { id: "0030", nombre: "Gabriela Soto", puntos: 420 },
+      { id: "0031", nombre: "Emilio Vega", puntos: 1930 },
+      { id: "0032", nombre: "Leticia Cortés", puntos: 350 },
+      { id: "0033", nombre: "Rafael Aguilar", puntos: 1080 },
+      { id: "0034", nombre: "Sofía Pérez", puntos: 1330 },
+      { id: "0035", nombre: "Adrián Morales", puntos: 1690 },
+      { id: "0036", nombre: "Lucero Chávez", puntos: 420 },
+      { id: "0037", nombre: "Héctor Valdez", puntos: 1990 },
+      { id: "0038", nombre: "Tania Espinoza", puntos: 1450 },
+      { id: "0039", nombre: "Iván Cabrera", puntos: 350 },
+      { id: "0040", nombre: "Yolanda Fuentes", puntos: 520 },
+      { id: "0041", nombre: "Omar Flores", puntos: 1710 },
+      { id: "0042", nombre: "Rebeca Vázquez", puntos: 1240 },
+      { id: "0043", nombre: "Javier Díaz", puntos: 2000 },
+      { id: "0044", nombre: "Esteban Salas", puntos: 890 },
+      { id: "0045", nombre: "Marisol Reyes", puntos: 460 },
+      { id: "0046", nombre: "Guillermo Núñez", puntos: 740 },
+      { id: "0047", nombre: "Diana Peña", puntos: 870 },
+      { id: "0048", nombre: "Raúl Campos", puntos: 1270 },
+      { id: "0049", nombre: "Elsa Rivera", puntos: 1550 },
+      { id: "0050", nombre: "Nora Delgado", puntos: 410 }
     ];
 
+    // --- PRODUCTOS ---
     const productos = [
-      { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 2500 },
-      { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 1800 },
-      { nombre: "Pan Bimbo Grande", descripcion: "Blanco o Integral", puntos: 4200 },
+      { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 250 },
+      { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 180 },
+      { nombre: "Pan Bimbo Grande", descripcion: "Blanco o Integral", puntos: 420 },
       { nombre: "Café Soluble 50g", descripcion: "Nescafé Clásico", puntos: 550 },
-      { nombre: "Leche 1L", descripcion: "Lala o Alpura", puntos: 3000 },
-      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 4000 }
+      { nombre: "Leche 1L", descripcion: "Lala o Alpura", puntos: 300 },
+      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 400 },
+      { nombre: "Arroz 1kg", descripcion: "Grano largo", puntos: 350 },
+      { nombre: "Aceite 1L", descripcion: "Ideal para cocinar", puntos: 600 },
+      { nombre: "Galletas Marías", descripcion: "Paquete de 170g", puntos: 220 },
+      { nombre: "Atún en agua", descripcion: "Lata de 140g", puntos: 280 }
     ];
 
-    // Mostrar productos dinámicamente
+    // Mostrar productos en tabla
     const tbody = document.getElementById("productos-body");
     productos.forEach(prod => {
       const fila = document.createElement("tr");
-      fila.innerHTML = `<td>${prod.nombre}</td><td>${prod.descripcion}</td><td>${prod.puntos} pts</td>`;
+      fila.innerHTML = `
+        <td>${prod.nombre}</td>
+        <td>${prod.descripcion}</td>
+        <td>${prod.puntos} pts</td>
+      `;
       tbody.appendChild(fila);
     });
 
@@ -265,6 +229,7 @@
       e.preventDefault();
       const id = document.getElementById("cliente-id").value.trim();
       const resultado = document.getElementById("resultado");
+
       const cliente = clientes.find(c => c.id === id);
       if (cliente) {
         resultado.innerHTML = `👤 <b>${cliente.nombre}</b><br/>💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.`;
@@ -277,6 +242,7 @@
   </script>
 </body>
 </html>
+
 
 
 
