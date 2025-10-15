@@ -47,6 +47,7 @@
       border-radius: 12px; padding: 12px 18px; font-weight: 700;
       border: 2px solid var(--ink); background: #fff; color: var(--ink);
       box-shadow: 2px 2px 0 #00000022; transition: all 0.2s ease;
+      cursor: pointer;
     }
     .btn.primary { background: var(--accent); border-color: var(--accent-2); color: #2b2115; }
     .btn:hover { transform: translateY(-2px); }
@@ -73,7 +74,7 @@
     .feature:hover { transform: translateY(-3px); }
     .feature b { display: block; margin-bottom: 6px; }
 
-    /* TABLA DE PUNTOS */
+    /* TABLAS */
     .table-wrapper { overflow-x: auto; margin-top: 24px; }
     table {
       width: 100%; border-collapse: collapse; font-size: 15px;
@@ -159,33 +160,49 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>0004</td>
-              <td>Gerardo Sanchez</td>
-              <td>1483 pts</td>
-            </tr>
-            <tr>
-              <td>0003</td>
-              <td>Veronica</td>
-              <td>1173 pts</td>
-            </tr>
-            <tr>
-              <td>0012</td>
-              <td>Leonardo</td>
-              <td>1008 pts</td>
-            </tr>
-            <tr>
-              <td>0018</td>
-              <td>Mauro</td>
-              <td>778 pts</td>
-            </tr>
-              <td>0007</td>
-              <td>Rosa</td>
-              <td>670 pts</td>
-            </tr>
+            <tr><td>0004</td><td>Gerardo Sanchez</td><td>1483 pts</td></tr>
+            <tr><td>0003</td><td>Veronica</td><td>1173 pts</td></tr>
+            <tr><td>0012</td><td>Leonardo</td><td>1008 pts</td></tr>
+            <tr><td>0018</td><td>Mauro</td><td>778 pts</td></tr>
+            <tr><td>0007</td><td>Rosa</td><td>670 pts</td></tr>
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- PRODUCTOS CANJEABLES -->
+    <section class="card">
+      <span class="pill">Catálogo de Canje</span>
+      <h3>Productos que puedes obtener con tus puntos</h3>
+      <p class="muted">Canjea tus puntos por productos disponibles en tienda.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Puntos Necesarios</th>
+            </tr>
+          </thead>
+          <tbody id="productos-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONSULTA DE PUNTOS -->
+    <section class="card">
+      <span class="pill">Consulta tus Puntos</span>
+      <h3>Verifica tus puntos acumulados</h3>
+      <p>Ingresa tu número de cliente para consultar tu saldo de puntos.</p>
+
+      <form id="form-consulta">
+        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004"
+               style="padding:10px;border-radius:8px;border:1px solid #ccc;width:200px">
+        <button type="submit" class="btn primary">Consultar</button>
+      </form>
+
+      <div id="resultado" style="margin-top:16px;font-weight:600;"></div>
     </section>
 
     <!-- UBICACIÓN -->
@@ -203,10 +220,54 @@
   </footer>
 
   <script>
+    // Actualizar año en footer
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Base de datos simulada
+    const clientes = [
+      { id: "0004", nombre: "Gerardo Sanchez", puntos: 1483 },
+      { id: "0003", nombre: "Veronica", puntos: 1173 },
+      { id: "0012", nombre: "Leonardo", puntos: 1008 },
+      { id: "0018", nombre: "Mauro", puntos: 778 },
+      { id: "0007", nombre: "Rosa", puntos: 670 },
+      { id: "0020", nombre: "Nuevo Cliente", puntos: 320 }
+    ];
+
+    const productos = [
+      { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 250 },
+      { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 180 },
+      { nombre: "Pan Bimbo Grande", descripcion: "Blanco o Integral", puntos: 420 },
+      { nombre: "Café Soluble 50g", descripcion: "Nescafé Clásico", puntos: 550 },
+      { nombre: "Leche 1L", descripcion: "Lala o Alpura", puntos: 300 },
+      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 400 }
+    ];
+
+    // Mostrar productos dinámicamente
+    const tbody = document.getElementById("productos-body");
+    productos.forEach(prod => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `<td>${prod.nombre}</td><td>${prod.descripcion}</td><td>${prod.puntos} pts</td>`;
+      tbody.appendChild(fila);
+    });
+
+    // Consultar puntos
+    document.getElementById("form-consulta").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const id = document.getElementById("cliente-id").value.trim();
+      const resultado = document.getElementById("resultado");
+      const cliente = clientes.find(c => c.id === id);
+      if (cliente) {
+        resultado.innerHTML = `👤 <b>${cliente.nombre}</b><br/>💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.`;
+        resultado.style.color = "#1f7a1f";
+      } else {
+        resultado.textContent = "❌ Número de cliente no encontrado. Verifica e inténtalo nuevamente.";
+        resultado.style.color = "#b33";
+      }
+    });
   </script>
 </body>
 </html>
+
 
 
 
