@@ -5,230 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Abarrotes La Luz – Página de Presentación</title>
   <meta name="description" content="Tienda de abarrotes con programa de puntos. Haz tu pedido y recibe ofertas por WhatsApp. Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2b70e4;        /* Azul principal */
-      --secondary: #0a2e57;      /* Azul oscuro */
-      --bg: #f7f9fc;             /* Fondo claro */
-      --text: #2c3e50;           /* Texto gris azulado */
-      --white: #ffffff;
-      --accent: #e4ecff;
-      --border: #d9e2ec;
-      --success: #2ecc71;
+      --bg: #faf5e6;       /* beige cálido */
+      --ink: #3c2f2f;      /* marrón oscuro */
+      --accent: #d5a021;   /* dorado */
+      --accent-2: #7a4e2d; /* cacao */
+      --ok: #1f7a1f;       /* verde */
     }
-
     *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; scroll-behavior: smooth; }
+    html, body { height: 100%; margin: 0; }
     body {
       background: var(--bg);
-      color: var(--text);
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      line-height: 1.7;
-      letter-spacing: 0.2px;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      line-height: 1.6;
     }
-
-    a { color: var(--primary); text-decoration: none; }
+    a { color: var(--accent-2); text-decoration: none; }
     a:hover { text-decoration: underline; }
-
-    .container { max-width: 1080px; margin: 0 auto; padding: 24px; }
+    .container { max-width: 1050px; margin-inline: auto; padding: 24px; }
 
     /* HERO */
     .hero {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--white);
-      padding: 48px 0 60px;
-      border-bottom: 4px solid #1f4b9b;
+      background: linear-gradient(180deg, #fff6dd 0%, #faf5e6 100%);
+      border-bottom: 2px solid #ecd8a0;
+      padding: 18px 0;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
+    .brand { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .logo {
-      width: 75px; height: 75px;
-      border-radius: 50%;
-      background: var(--white);
-      color: var(--primary);
+      width: 70px; height: 70px; border-radius: 50%;
       display: grid; place-items: center;
-      font-weight: 900;
-      font-size: 14px;
-      box-shadow: 0 4px 10px rgba(0,0,0,.1);
+      background: radial-gradient(circle at 30% 35%, #ffe9a3, #d5a021);
+      color: #2b2115; font-weight: 800; letter-spacing: .5px;
+      font-size: 14px; text-align: center;
     }
-
-    .title {
-      font-size: clamp(28px, 4vw, 42px);
-      margin: 0;
-      font-weight: 900;
-      letter-spacing: 0.3px;
-    }
-
-    .subtitle {
-      margin: 8px 0 0;
-      font-size: clamp(15px, 2vw, 18px);
-      opacity: 0.9;
-    }
-
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 22px;
-    }
-
+    .title { font-size: clamp(28px, 4vw, 42px); margin: 0; font-weight: 900; letter-spacing: .4px; }
+    .subtitle { margin: 4px 0 0; font-size: clamp(14px, 2vw, 18px); opacity: .9; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 10px;
-      padding: 12px 20px;
-      font-weight: 600;
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
+      display: inline-flex; gap: 10px; align-items: center;
+      border-radius: 12px; padding: 12px 18px; font-weight: 700;
+      border: 2px solid var(--ink); background: #fff; color: var(--ink);
+      box-shadow: 2px 2px 0 #00000022; transition: all 0.2s ease;
       cursor: pointer;
     }
+    .btn.primary { background: var(--accent); border-color: var(--accent-2); color: #2b2115; }
+    .btn:hover { transform: translateY(-2px); }
 
-    .btn.primary {
-      background: var(--white);
-      color: var(--primary);
-      border: 1px solid var(--white);
-    }
-
-    .btn.primary:hover {
-      background: var(--accent);
-    }
-
-    .btn.secondary {
-      background: transparent;
-      border: 1px solid var(--white);
-      color: var(--white);
-    }
-
-    .btn.secondary:hover {
-      background: rgba(255,255,255,0.15);
-    }
-
-    /* TARJETAS */
-    .grid { display: grid; gap: 28px; margin-top: 36px; }
+    /* CARDS */
+    .grid { display: grid; gap: 22px; margin-top: 26px; }
     @media(min-width:880px){ .grid { grid-template-columns: 1.25fr .95fr; } }
-
     .card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.05);
-      transition: transform .2s ease;
+      background: #fff; border: 1px solid #e6d7ac; border-radius: 16px;
+      padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,.05);
     }
-
-    .card:hover { transform: translateY(-3px); }
-
+    .card h3 { margin-top: 0; font-size: 22px; }
     .pill {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--primary);
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 8px;
+      display: inline-block; background: #efe6d1; color: #553e2e;
+      border-radius: 999px; padding: 4px 10px; font-size: 12px; margin-bottom: 8px;
     }
-
-    h3 { margin-top: 0; font-size: 22px; color: var(--secondary); }
-
-    .quote {
-      font-size: 16px;
-      border-left: 4px solid var(--primary);
-      padding-left: 14px;
-      margin: 10px 0;
-    }
-
-    .note {
-      background: #f0f5ff;
-      border-left: 4px solid var(--primary);
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 14px;
-    }
-
-    .badge {
-      display: inline-block;
-      background: var(--primary);
-      color: #fff;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-weight: 600;
-      font-size: 12px;
-    }
+    .quote { font-size: 16px; border-left: 4px solid var(--accent); padding-left: 12px; margin: 8px 0; }
+    .note { background: #fff9eb; border: 1px dashed #e0c171; border-radius: 14px; padding: 16px; }
+    .badge { display: inline-block; background: #fff; border: 1px solid #ead9b4; border-radius: 999px; padding: 6px 10px; font-weight: 700; }
 
     /* FEATURES */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-top: 32px;
-    }
-
-    .feature {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      transition: all 0.2s ease;
-    }
-
-    .feature:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 14px rgba(0,0,0,.05);
-    }
-
-    .feature b { display: block; margin-bottom: 6px; color: var(--secondary); }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 26px; }
+    .feature { background: #fff; border: 1px solid #ead9b4; border-radius: 14px; padding: 14px; transition: transform 0.2s ease; }
+    .feature:hover { transform: translateY(-3px); }
+    .feature b { display: block; margin-bottom: 6px; }
 
     /* TABLAS */
     .table-wrapper { overflow-x: auto; margin-top: 24px; }
     table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 15px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
+      width: 100%; border-collapse: collapse; font-size: 15px;
+      border: 1px solid #e6d7ac; border-radius: 12px; overflow: hidden;
     }
-    thead {
-      background: var(--primary);
-      color: #fff;
-    }
-    th, td { padding: 12px 16px; text-align: left; }
-    tbody tr:nth-child(even) { background: #f8faff; }
-    tbody tr:hover { background: #eef4ff; }
+    thead { background: var(--accent); color: #fff; }
+    th, td { padding: 10px 14px; text-align: left; }
+    tbody tr:nth-child(even) { background: #fff9eb; }
+    tbody tr:hover { background: #f4e7cc; }
 
     /* FOOTER */
-    .footer {
-      margin-top: 40px;
-      padding: 24px 0;
-      border-top: 1px solid var(--border);
-      font-size: 14px;
-      text-align: center;
-      opacity: .8;
-    }
-
-    input {
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 15px;
-      width: 200px;
-      outline: none;
-      transition: border 0.2s ease;
-    }
-
-    input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(43,112,228,0.2);
-    }
+    .footer { margin-top: 36px; padding: 24px 0; border-top: 1px solid #ead9b4; font-size: 14px; opacity: .9; text-align: center; }
   </style>
 </head>
 <body>
@@ -236,13 +94,13 @@
   <header class="hero">
     <div class="container">
       <div class="brand">
-        <div class="logo">LA<br/>LUZ</div>
+        <div class="logo" aria-hidden="true">LA<br/>LUZ</div>
         <div>
           <h1 class="title">Abarrotes La Luz</h1>
           <p class="subtitle">Tu tienda de confianza en San Damián Texóloc. ¡Cada compra suma puntos!</p>
           <div class="cta-row">
-            <a class="btn primary" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">🟢 Pedidos y Ofertas</a>
-            <a class="btn secondary" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Cómo llegar</a>
+            <a class="btn primary" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">🟢 Pedidos y Ofertas por WhatsApp</a>
+            <a class="btn" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Cómo llegar</a>
           </div>
         </div>
       </div>
@@ -251,8 +109,109 @@
 
   <!-- CONTENIDO -->
   <main class="container">
-    <!-- (Todo el contenido, tablas y secciones igual que el original) -->
-    <!-- Simplemente copia y pega aquí el mismo contenido original dentro de <main> -->
+    <div class="grid">
+      <section class="card">
+        <span class="pill">Mensaje a nuestros clientes</span>
+        <h3>¡Estamos creciendo contigo!</h3>
+        <p class="quote">
+          Estimado Cliente:<br/>
+          Si no ves el producto que buscas, pregunta, con gusto te atendemos.<br/>
+          Si no lo tengo, coméntame qué productos te gustaría que metiéramos.<br/>
+          Estamos intentando crecer, tener en existencia todos los productos que te son de utilidad y con tu apoyo lo lograremos.<br/>
+          <b>¡No etiquetemos comercios pequeños como la tienda del “NO HAY”!</b><br/>
+          Ayúdanos con tus comentarios y con tus compras a crecer para brindarte un mejor servicio.<br/>
+          <i>Atte: Doña Luz</i>
+        </p>
+      </section>
+
+      <aside class="card">
+        <span class="pill">Programa de Puntos</span>
+        <h3>Gana mientras compras</h3>
+        <ul>
+          <li>Cada compra te genera <b>puntos</b>.</li>
+          <li>Canjéalos por <b>descuentos</b> o <b>regalos</b>.</li>
+          <li>Promociones exclusivas en el canal de <b>WhatsApp</b>.</li>
+        </ul>
+        <div class="note">
+          <b class="badge">Consejo</b> Guarda esta página y sigue nuestro canal para no perderte las ofertas.
+        </div>
+      </aside>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="features">
+      <div class="feature"><b>Variedad</b> Productos esenciales para toda la familia: despensa, lácteos, pan, abarrotes y más.</div>
+      <div class="feature"><b>Atención cercana</b> Trato amable y servicio personalizado. Si no lo tenemos, lo conseguimos.</div>
+      <div class="feature"><b>Precios justos</b> Ofertas semanales anunciadas en nuestro canal de WhatsApp.</div>
+    </section>
+
+    <!-- PUNTOS DE CLIENTES -->
+    <section class="card">
+      <span class="pill">Clientes Destacados</span>
+      <h3>Puntos de la Semana</h3>
+      <p class="muted">Aquí actualizamos cada semana a nuestros clientes más constantes y sus puntos acumulados.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>No. Cliente</th>
+              <th>Cliente</th>
+              <th>Puntos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0004</td><td>Gerardo Sanchez</td><td>2514 pts</td></tr>
+            <tr><td>0003</td><td>Veronica</td><td>1408 pts</td></tr>
+            <tr><td>0012</td><td>Leonardo</td><td>1263 pts</td></tr>
+            <tr><td>0018</td><td>Mauro</td><td>916 pts</td></tr>
+            <tr><td>0007</td><td>Rosa</td><td>748 pts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS CANJEABLES -->
+    <section class="card">
+      <span class="pill">Catálogo de Canje</span>
+      <h3>Productos que puedes obtener con tus puntos</h3>
+      <p class="muted">Canjea tus puntos por productos disponibles en tienda.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Puntos Necesarios</th>
+            </tr>
+          </thead>
+          <tbody id="productos-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONSULTA DE PUNTOS -->
+    <section class="card">
+      <span class="pill">Consulta tus Puntos</span>
+      <h3>Verifica tus puntos acumulados</h3>
+      <p>Ingresa tu número de cliente para consultar tu saldo de puntos.</p>
+
+      <form id="form-consulta">
+        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004"
+               style="padding:10px;border-radius:8px;border:1px solid #ccc;width:200px">
+        <button type="submit" class="btn primary">Consultar</button>
+      </form>
+
+      <div id="resultado" style="margin-top:16px;font-weight:600;"></div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section class="card">
+      <span class="pill">Ubicación</span>
+      <h3>Visítanos</h3>
+      <p class="muted">📍 Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala</p>
+      <p><a href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">Abrir en Google Maps →</a></p>
+    </section>
   </main>
 
   <!-- FOOTER -->
@@ -261,10 +220,87 @@
   </footer>
 
   <script>
+    // Actualizar año en footer
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Base de datos simulada
+    const clientes = [
+      { id: "0001", nombre: "Lulu", puntos: 660 },
+      { id: "0002", nombre: "Josefina Diaz", puntos: 1182 },
+      { id: "0003", nombre: "Veronica Nava", puntos: 1408 },
+      { id: "0004", nombre: "Gerardo Sanchez", puntos: 2514 },
+      { id: "0005", nombre: "Margarita", puntos: 15 },
+      { id: "0006", nombre: "Higinia Diaz", puntos: 792 },
+      { id: "0007", nombre: "Rosa", puntos: 748 },
+      { id: "0008", nombre: "Maria Felix", puntos: 360 },
+      { id: "0009", nombre: "Rosy", puntos: 414 },
+      { id: "0010", nombre: "Patricia Sanchez", puntos: 276 },
+      { id: "0012", nombre: "Leonardo", puntos: 1263 },
+      { id: "0013", nombre: "Angelica Hdz", puntos: 310 },
+      { id: "0014", nombre: "Guadalupe Diaz", puntos: 200 },
+      { id: "0015", nombre: "Concha", puntos: 223 },
+      { id: "0016", nombre: "Leonor", puntos: 314 },
+      { id: "0018", nombre: "Mauro", puntos: 778 },
+      { id: "0019", nombre: "Natividad", puntos: 225 },
+      { id: "0021", nombre: "Alejandro Rojas", puntos: 392 },
+      { id: "0022", nombre: "Gloria", puntos: 38 },
+      { id: "0024", nombre: "Angelica Marquez", puntos: 147 },
+      { id: "0025", nombre: "Remedios", puntos: 335 },
+      { id: "0026", nombre: "Benito Hdz", puntos: 251 },
+      { id: "0029", nombre: "Jorge Lira", puntos: 220 },
+      { id: "0030", nombre: "Tony Lira", puntos: 361 },
+      { id: "0032", nombre: "Silvia Alonso", puntos: 483 },
+      { id: "0033", nombre: "Guadalupe Salazar", puntos: 124 },
+      { id: "0037", nombre: "Alfredp", puntos: 292 },
+      { id: "0038", nombre: "Sara Nava", puntos: 149 },
+      { id: "0040", nombre: "Yolanda", puntos: 279 },
+      { id: "0041", nombre: "Johana Flores", puntos: 127 },
+      { id: "0042", nombre: "Monica", puntos: 343 },
+      { id: "0043", nombre: "Yesenia", puntos: 109 },
+      { id: "0045", nombre: "Rebeca", puntos: 58 },
+    ];
+
+    const productos = [
+      { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 2500 },
+      { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 1800 },
+      { nombre: "Pan Bimbo Grande", descripcion: "Blanco o Integral", puntos: 4200 },
+      { nombre: "Café Soluble 50g", descripcion: "Nescafé Clásico", puntos: 5500 },
+      { nombre: "Leche 1L", descripcion: "Lala o Alpura", puntos: 3000 },
+      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 4000 }
+    ];
+
+    // Mostrar productos dinámicamente
+    const tbody = document.getElementById("productos-body");
+    productos.forEach(prod => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `<td>${prod.nombre}</td><td>${prod.descripcion}</td><td>${prod.puntos} pts</td>`;
+      tbody.appendChild(fila);
+    });
+
+    // Consultar puntos
+    document.getElementById("form-consulta").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const id = document.getElementById("cliente-id").value.trim();
+      const resultado = document.getElementById("resultado");
+      const cliente = clientes.find(c => c.id === id);
+      if (cliente) {
+        resultado.innerHTML = `👤 <b>${cliente.nombre}</b><br/>💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.`;
+        resultado.style.color = "#1f7a1f";
+      } else {
+        resultado.textContent = "❌ Número de cliente no encontrado. Verifica e inténtalo nuevamente.";
+        resultado.style.color = "#b33";
+      }
+    });
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
