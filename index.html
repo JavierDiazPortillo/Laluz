@@ -7,8 +7,8 @@
   <link rel="icon" href="logo.png">
   <style>
     body {
-      font-family: "Inter", sans-serif;
-      background-color: #f7f9fc;
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
       margin: 0;
       padding: 0;
       color: #333;
@@ -17,30 +17,31 @@
     header {
       background: linear-gradient(135deg, #004AAD, #0074D9);
       color: white;
-      padding: 2rem 1rem;
       text-align: center;
+      padding: 2rem 1rem;
     }
 
     header h1 {
       font-size: 2rem;
-      margin-bottom: 0.3rem;
+      margin: 0;
     }
 
     header p {
+      margin-top: 0.5rem;
       font-size: 1rem;
       opacity: 0.9;
     }
 
     main {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 2rem auto;
-      padding: 1rem;
+      padding: 0 1rem;
     }
 
     .card {
       background: white;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       padding: 2rem;
       margin-bottom: 2rem;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -48,20 +49,19 @@
 
     .card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
     }
 
     .pill {
       background: #004AAD;
       color: white;
-      padding: 0.3rem 1rem;
+      padding: 0.4rem 1rem;
       border-radius: 20px;
       font-size: 0.85rem;
     }
 
     h3 {
-      margin-top: 0.5rem;
-      font-size: 1.4rem;
+      margin-top: 0.7rem;
       color: #004AAD;
     }
 
@@ -70,17 +70,39 @@
       margin-bottom: 1rem;
     }
 
+    /* Productos canjeables */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f4ff;
+      color: #004AAD;
+    }
+
     /* Consulta de puntos */
-    .consulta-container {
+    .consulta-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
       gap: 1rem;
+      text-align: center;
     }
 
     input {
-      padding: 0.7rem;
+      padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
       width: 220px;
@@ -90,12 +112,12 @@
     button {
       background: #004AAD;
       color: white;
-      padding: 0.7rem 1.5rem;
       border: none;
       border-radius: 8px;
-      font-size: 1rem;
+      padding: 0.7rem 1.5rem;
       cursor: pointer;
-      transition: background 0.2s;
+      font-size: 1rem;
+      transition: background 0.2s ease;
     }
 
     button:hover {
@@ -103,90 +125,79 @@
     }
 
     #resultado {
-      margin-top: 1rem;
       font-weight: 600;
+      margin-top: 1rem;
       font-size: 1.1rem;
-    }
-
-    /* Productos canjeables */
-    .productos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.2rem;
-      margin-top: 1.5rem;
-    }
-
-    .producto-card {
-      background: #fefefe;
-      border: 1px solid #e6e6e6;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: all 0.2s ease;
-    }
-
-    .producto-card:hover {
-      border-color: #004AAD;
-      box-shadow: 0 3px 10px rgba(0,74,173,0.1);
-    }
-
-    .producto-card h4 {
-      margin: 0.5rem 0;
-      color: #004AAD;
-    }
-
-    .producto-card p {
-      color: #555;
-      font-size: 0.9rem;
-    }
-
-    .puntos-tag {
-      background: #004AAD;
-      color: white;
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      margin-top: 0.6rem;
     }
 
     footer {
       text-align: center;
-      padding: 1rem;
+      padding: 1.2rem;
       color: #777;
       font-size: 0.9rem;
+      border-top: 1px solid #eee;
       margin-top: 3rem;
     }
+
+    /* Animación de carga */
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #004AAD;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
   </style>
 </head>
 <body>
 
   <header>
     <h1>🛒 Abarrotes La Luz</h1>
-    <p>Consulta tus puntos y descubre nuestros productos canjeables</p>
+    <p>Tu tienda de confianza, premiando tu lealtad</p>
   </header>
 
   <main>
-    <!-- CONSULTA DE PUNTOS -->
+    <!-- PRODUCTOS CANJEABLES -->
     <section class="card">
-      <span class="pill">Consulta de puntos</span>
-      <h3>Verifica tus puntos acumulados</h3>
-      <p class="muted">Ingresa tu número de cliente para conocer tu saldo actual.</p>
+      <span class="pill">Catálogo de Canje</span>
+      <h3>Productos que puedes obtener con tus puntos</h3>
+      <p class="muted">Canjea tus puntos por productos disponibles en tienda.</p>
 
-      <div class="consulta-container">
-        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004">
-        <button id="btn-consultar">Consultar</button>
-        <div id="resultado"></div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Puntos Necesarios</th>
+            </tr>
+          </thead>
+          <tbody id="productos-body"></tbody>
+        </table>
       </div>
     </section>
 
-    <!-- PRODUCTOS CANJEABLES -->
+    <!-- CONSULTA DE PUNTOS (complemento profesional) -->
     <section class="card">
-      <span class="pill">Catálogo de canje</span>
-      <h3>Productos disponibles</h3>
-      <p class="muted">Canjea tus puntos por productos en tienda.</p>
+      <span class="pill">Consulta tus Puntos</span>
+      <h3>Verifica tus puntos acumulados</h3>
+      <p class="muted">Ingresa tu número de cliente para consultar tu saldo actual.</p>
 
-      <div class="productos-grid" id="productos-grid"></div>
+      <div class="consulta-wrapper">
+        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004">
+        <button id="btn-consultar">Consultar</button>
+        <div class="loader" id="loader"></div>
+        <div id="resultado"></div>
+      </div>
     </section>
   </main>
 
@@ -202,7 +213,7 @@
       puntos: Math.floor(Math.random() * (2000 - 200 + 1)) + 200
     }));
 
-    // Productos canjeables
+    // Base de datos de productos canjeables
     const productos = [
       { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 250 },
       { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 180 },
@@ -214,40 +225,47 @@
       { nombre: "Aceite 1L", descripcion: "Nutrioli o 123", puntos: 480 }
     ];
 
-    // Mostrar productos en tarjetas
-    const grid = document.getElementById("productos-grid");
+    // Mostrar productos
+    const tbody = document.getElementById("productos-body");
     productos.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "producto-card";
-      card.innerHTML = `
-        <h4>${p.nombre}</h4>
-        <p>${p.descripcion}</p>
-        <span class="puntos-tag">${p.puntos} pts</span>
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${p.nombre}</td>
+        <td>${p.descripcion}</td>
+        <td>${p.puntos} pts</td>
       `;
-      grid.appendChild(card);
+      tbody.appendChild(fila);
     });
 
-    // Consultar puntos
-    document.getElementById("btn-consultar").addEventListener("click", () => {
-      const id = document.getElementById("cliente-id").value.trim();
-      const resultado = document.getElementById("resultado");
-      const cliente = clientes.find(c => c.id === id);
+    // Consulta de puntos con animación de carga
+    const boton = document.getElementById("btn-consultar");
+    const loader = document.getElementById("loader");
+    const resultado = document.getElementById("resultado");
 
-      if (cliente) {
-        resultado.innerHTML = `
-          👤 <b>${cliente.nombre}</b><br>
-          💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.
-        `;
-        resultado.style.color = "#1f7a1f";
-      } else {
-        resultado.textContent = "❌ Cliente no encontrado. Verifica tu número e inténtalo nuevamente.";
-        resultado.style.color = "#b33";
-      }
+    boton.addEventListener("click", () => {
+      const id = document.getElementById("cliente-id").value.trim();
+      resultado.textContent = "";
+      loader.style.display = "block";
+
+      setTimeout(() => {
+        loader.style.display = "none";
+        const cliente = clientes.find(c => c.id === id);
+
+        if (cliente) {
+          resultado.innerHTML = `
+            👤 <b>${cliente.nombre}</b><br>
+            💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.
+          `;
+          resultado.style.color = "#1f7a1f";
+        } else {
+          resultado.textContent = "❌ Cliente no encontrado. Verifica tu número e inténtalo nuevamente.";
+          resultado.style.color = "#b33";
+        }
+      }, 1200);
     });
   </script>
 </body>
 </html>
-
 
 
 
