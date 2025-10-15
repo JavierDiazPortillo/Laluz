@@ -1,171 +1,175 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Abarrotes La Luz | Programa de Lealtad</title>
-  <link rel="icon" href="logo.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abarrotes La Luz – Página de Presentación</title>
+  <meta name="description" content="Tienda de abarrotes con programa de puntos. Haz tu pedido y recibe ofertas por WhatsApp. Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala." />
   <style>
+    :root {
+      --bg: #faf5e6;       /* beige cálido */
+      --ink: #3c2f2f;      /* marrón oscuro */
+      --accent: #d5a021;   /* dorado */
+      --accent-2: #7a4e2d; /* cacao */
+      --ok: #1f7a1f;       /* verde */
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8fafc;
-      margin: 0;
-      padding: 0;
-      color: #333;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      line-height: 1.6;
     }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1050px; margin-inline: auto; padding: 24px; }
 
-    header {
-      background: linear-gradient(135deg, #004AAD, #0074D9);
-      color: white;
-      text-align: center;
-      padding: 2rem 1rem;
+    /* HERO */
+    .hero {
+      background: linear-gradient(180deg, #fff6dd 0%, #faf5e6 100%);
+      border-bottom: 2px solid #ecd8a0;
+      padding: 18px 0;
     }
-
-    header h1 {
-      font-size: 2rem;
-      margin: 0;
+    .brand { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .logo {
+      width: 70px; height: 70px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: radial-gradient(circle at 30% 35%, #ffe9a3, #d5a021);
+      color: #2b2115; font-weight: 800; letter-spacing: .5px;
+      font-size: 14px; text-align: center;
     }
-
-    header p {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    }
-
-    .pill {
-      background: #004AAD;
-      color: white;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-    }
-
-    h3 {
-      margin-top: 0.7rem;
-      color: #004AAD;
-    }
-
-    .muted {
-      color: #666;
-      margin-bottom: 1rem;
-    }
-
-    /* Productos canjeables */
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f0f4ff;
-      color: #004AAD;
-    }
-
-    /* Consulta de puntos */
-    .consulta-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      text-align: center;
-    }
-
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      width: 220px;
-      font-size: 1rem;
-    }
-
-    button {
-      background: #004AAD;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0.7rem 1.5rem;
+    .title { font-size: clamp(28px, 4vw, 42px); margin: 0; font-weight: 900; letter-spacing: .4px; }
+    .subtitle { margin: 4px 0 0; font-size: clamp(14px, 2vw, 18px); opacity: .9; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .btn {
+      display: inline-flex; gap: 10px; align-items: center;
+      border-radius: 12px; padding: 12px 18px; font-weight: 700;
+      border: 2px solid var(--ink); background: #fff; color: var(--ink);
+      box-shadow: 2px 2px 0 #00000022; transition: all 0.2s ease;
       cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.2s ease;
     }
+    .btn.primary { background: var(--accent); border-color: var(--accent-2); color: #2b2115; }
+    .btn:hover { transform: translateY(-2px); }
 
-    button:hover {
-      background: #0066CC;
+    /* CARDS */
+    .grid { display: grid; gap: 22px; margin-top: 26px; }
+    @media(min-width:880px){ .grid { grid-template-columns: 1.25fr .95fr; } }
+    .card {
+      background: #fff; border: 1px solid #e6d7ac; border-radius: 16px;
+      padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,.05);
     }
-
-    #resultado {
-      font-weight: 600;
-      margin-top: 1rem;
-      font-size: 1.1rem;
+    .card h3 { margin-top: 0; font-size: 22px; }
+    .pill {
+      display: inline-block; background: #efe6d1; color: #553e2e;
+      border-radius: 999px; padding: 4px 10px; font-size: 12px; margin-bottom: 8px;
     }
+    .quote { font-size: 16px; border-left: 4px solid var(--accent); padding-left: 12px; margin: 8px 0; }
+    .note { background: #fff9eb; border: 1px dashed #e0c171; border-radius: 14px; padding: 16px; }
+    .badge { display: inline-block; background: #fff; border: 1px solid #ead9b4; border-radius: 999px; padding: 6px 10px; font-weight: 700; }
 
-    footer {
-      text-align: center;
-      padding: 1.2rem;
-      color: #777;
-      font-size: 0.9rem;
-      border-top: 1px solid #eee;
-      margin-top: 3rem;
+    /* FEATURES */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 26px; }
+    .feature { background: #fff; border: 1px solid #ead9b4; border-radius: 14px; padding: 14px; transition: transform 0.2s ease; }
+    .feature:hover { transform: translateY(-3px); }
+    .feature b { display: block; margin-bottom: 6px; }
+
+    /* TABLAS */
+    .table-wrapper { overflow-x: auto; margin-top: 24px; }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 15px;
+      border: 1px solid #e6d7ac; border-radius: 12px; overflow: hidden;
     }
+    thead { background: var(--accent); color: #fff; }
+    th, td { padding: 10px 14px; text-align: left; }
+    tbody tr:nth-child(even) { background: #fff9eb; }
+    tbody tr:hover { background: #f4e7cc; }
 
-    /* Animación de carga */
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #004AAD;
-      border-radius: 50%;
-      width: 35px;
-      height: 35px;
-      animation: spin 1s linear infinite;
-      margin: 1rem auto;
-      display: none;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
+    /* FOOTER */
+    .footer { margin-top: 36px; padding: 24px 0; border-top: 1px solid #ead9b4; font-size: 14px; opacity: .9; text-align: center; }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>🛒 Abarrotes La Luz</h1>
-    <p>Tu tienda de confianza, premiando tu lealtad</p>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">LA<br/>LUZ</div>
+        <div>
+          <h1 class="title">Abarrotes La Luz</h1>
+          <p class="subtitle">Tu tienda de confianza en San Damián Texóloc. ¡Cada compra suma puntos!</p>
+          <div class="cta-row">
+            <a class="btn primary" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">🟢 Pedidos y Ofertas por WhatsApp</a>
+            <a class="btn" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Cómo llegar</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main>
+  <!-- CONTENIDO -->
+  <main class="container">
+    <div class="grid">
+      <section class="card">
+        <span class="pill">Mensaje a nuestros clientes</span>
+        <h3>¡Estamos creciendo contigo!</h3>
+        <p class="quote">
+          Estimado Cliente:<br/>
+          Si no ves el producto que buscas, pregunta, con gusto te atendemos.<br/>
+          Si no lo tengo, coméntame qué productos te gustaría que metiéramos.<br/>
+          Estamos intentando crecer, tener en existencia todos los productos que te son de utilidad y con tu apoyo lo lograremos.<br/>
+          <b>¡No etiquetemos comercios pequeños como la tienda del “NO HAY”!</b><br/>
+          Ayúdanos con tus comentarios y con tus compras a crecer para brindarte un mejor servicio.<br/>
+          <i>Atte: Doña Luz</i>
+        </p>
+      </section>
+
+      <aside class="card">
+        <span class="pill">Programa de Puntos</span>
+        <h3>Gana mientras compras</h3>
+        <ul>
+          <li>Cada compra te genera <b>puntos</b>.</li>
+          <li>Canjéalos por <b>descuentos</b> o <b>regalos</b>.</li>
+          <li>Promociones exclusivas en el canal de <b>WhatsApp</b>.</li>
+        </ul>
+        <div class="note">
+          <b class="badge">Consejo</b> Guarda esta página y sigue nuestro canal para no perderte las ofertas.
+        </div>
+      </aside>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="features">
+      <div class="feature"><b>Variedad</b> Productos esenciales para toda la familia: despensa, lácteos, pan, abarrotes y más.</div>
+      <div class="feature"><b>Atención cercana</b> Trato amable y servicio personalizado. Si no lo tenemos, lo conseguimos.</div>
+      <div class="feature"><b>Precios justos</b> Ofertas semanales anunciadas en nuestro canal de WhatsApp.</div>
+    </section>
+
+    <!-- PUNTOS DE CLIENTES -->
+    <section class="card">
+      <span class="pill">Clientes Destacados</span>
+      <h3>Puntos de la Semana</h3>
+      <p class="muted">Aquí actualizamos cada semana a nuestros clientes más constantes y sus puntos acumulados.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>No. Cliente</th>
+              <th>Cliente</th>
+              <th>Puntos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0004</td><td>Gerardo Sanchez</td><td>1483 pts</td></tr>
+            <tr><td>0003</td><td>Veronica</td><td>1173 pts</td></tr>
+            <tr><td>0012</td><td>Leonardo</td><td>1008 pts</td></tr>
+            <tr><td>0018</td><td>Mauro</td><td>778 pts</td></tr>
+            <tr><td>0007</td><td>Rosa</td><td>670 pts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- PRODUCTOS CANJEABLES -->
     <section class="card">
       <span class="pill">Catálogo de Canje</span>
@@ -186,87 +190,83 @@
       </div>
     </section>
 
-    <!-- CONSULTA DE PUNTOS (complemento profesional) -->
+    <!-- CONSULTA DE PUNTOS -->
     <section class="card">
       <span class="pill">Consulta tus Puntos</span>
       <h3>Verifica tus puntos acumulados</h3>
-      <p class="muted">Ingresa tu número de cliente para consultar tu saldo actual.</p>
+      <p>Ingresa tu número de cliente para consultar tu saldo de puntos.</p>
 
-      <div class="consulta-wrapper">
-        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004">
-        <button id="btn-consultar">Consultar</button>
-        <div class="loader" id="loader"></div>
-        <div id="resultado"></div>
-      </div>
+      <form id="form-consulta">
+        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004"
+               style="padding:10px;border-radius:8px;border:1px solid #ccc;width:200px">
+        <button type="submit" class="btn primary">Consultar</button>
+      </form>
+
+      <div id="resultado" style="margin-top:16px;font-weight:600;"></div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section class="card">
+      <span class="pill">Ubicación</span>
+      <h3>Visítanos</h3>
+      <p class="muted">📍 Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala</p>
+      <p><a href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">Abrir en Google Maps →</a></p>
     </section>
   </main>
 
-  <footer>
-    © 2025 Abarrotes La Luz — Programa de Lealtad
+  <!-- FOOTER -->
+  <footer class="container footer">
+    <div>© <span id="y"></span> Abarrotes La Luz • San Damián Texóloc, Tlax.</div>
   </footer>
 
   <script>
-    // Base de datos de clientes (1 al 50)
-    const clientes = Array.from({ length: 50 }, (_, i) => ({
-      id: (i + 1).toString().padStart(4, '0'),
-      nombre: `Cliente ${i + 1}`,
-      puntos: Math.floor(Math.random() * (2000 - 200 + 1)) + 200
-    }));
+    // Actualizar año en footer
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Base de datos de productos canjeables
+    // Base de datos simulada
+    const clientes = [
+      { id: "0004", nombre: "Gerardo Sanchez", puntos: 1483 },
+      { id: "0003", nombre: "Veronica", puntos: 1173 },
+      { id: "0012", nombre: "Leonardo", puntos: 1008 },
+      { id: "0018", nombre: "Mauro", puntos: 778 },
+      { id: "0007", nombre: "Rosa", puntos: 670 },
+      { id: "0020", nombre: "Nuevo Cliente", puntos: 320 }
+    ];
+
     const productos = [
       { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 250 },
       { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 180 },
       { nombre: "Pan Bimbo Grande", descripcion: "Blanco o Integral", puntos: 420 },
       { nombre: "Café Soluble 50g", descripcion: "Nescafé Clásico", puntos: 550 },
       { nombre: "Leche 1L", descripcion: "Lala o Alpura", puntos: 300 },
-      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 400 },
-      { nombre: "Galletas María", descripcion: "Empaque 170g", puntos: 220 },
-      { nombre: "Aceite 1L", descripcion: "Nutrioli o 123", puntos: 480 }
+      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 400 }
     ];
 
-    // Mostrar productos
+    // Mostrar productos dinámicamente
     const tbody = document.getElementById("productos-body");
-    productos.forEach(p => {
+    productos.forEach(prod => {
       const fila = document.createElement("tr");
-      fila.innerHTML = `
-        <td>${p.nombre}</td>
-        <td>${p.descripcion}</td>
-        <td>${p.puntos} pts</td>
-      `;
+      fila.innerHTML = `<td>${prod.nombre}</td><td>${prod.descripcion}</td><td>${prod.puntos} pts</td>`;
       tbody.appendChild(fila);
     });
 
-    // Consulta de puntos con animación de carga
-    const boton = document.getElementById("btn-consultar");
-    const loader = document.getElementById("loader");
-    const resultado = document.getElementById("resultado");
-
-    boton.addEventListener("click", () => {
+    // Consultar puntos
+    document.getElementById("form-consulta").addEventListener("submit", function(e) {
+      e.preventDefault();
       const id = document.getElementById("cliente-id").value.trim();
-      resultado.textContent = "";
-      loader.style.display = "block";
-
-      setTimeout(() => {
-        loader.style.display = "none";
-        const cliente = clientes.find(c => c.id === id);
-
-        if (cliente) {
-          resultado.innerHTML = `
-            👤 <b>${cliente.nombre}</b><br>
-            💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.
-          `;
-          resultado.style.color = "#1f7a1f";
-        } else {
-          resultado.textContent = "❌ Cliente no encontrado. Verifica tu número e inténtalo nuevamente.";
-          resultado.style.color = "#b33";
-        }
-      }, 1200);
+      const resultado = document.getElementById("resultado");
+      const cliente = clientes.find(c => c.id === id);
+      if (cliente) {
+        resultado.innerHTML = `👤 <b>${cliente.nombre}</b><br/>💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.`;
+        resultado.style.color = "#1f7a1f";
+      } else {
+        resultado.textContent = "❌ Número de cliente no encontrado. Verifica e inténtalo nuevamente.";
+        resultado.style.color = "#b33";
+      }
     });
   </script>
 </body>
 </html>
-
 
 
 
