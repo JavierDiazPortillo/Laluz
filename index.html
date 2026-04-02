@@ -3,302 +3,768 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Abarrotes La Luz – Página de Presentación</title>
+  <title>Abarrotes La Luz – San Damián Texóloc</title>
   <meta name="description" content="Tienda de abarrotes con programa de puntos. Haz tu pedido y recibe ofertas por WhatsApp. Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #faf5e6;       /* beige cálido */
-      --ink: #3c2f2f;      /* marrón oscuro */
-      --accent: #d5a021;   /* dorado */
-      --accent-2: #7a4e2d; /* cacao */
-      --ok: #1f7a1f;       /* verde */
+      --cream:     #fdf6e3;
+      --cream-2:   #f5ead0;
+      --cream-3:   #eddbb4;
+      --gold:      #c8922a;
+      --gold-dk:   #9e6e18;
+      --brown:     #4a2e1a;
+      --brown-lt:  #7a5535;
+      --green:     #2d6a3f;
+      --green-lt:  #e6f4ec;
+      --ink:       #1e140a;
+      --muted:     #7a6654;
+      --white:     #ffffff;
+      --card-bg:   #fffdf5;
+      --border:    #e5d6b3;
+      --shadow:    0 4px 24px rgba(74,46,26,.08);
+      --shadow-lg: 0 8px 40px rgba(74,46,26,.13);
+      --radius:    16px;
+      --radius-sm: 8px;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      background: var(--bg);
+      background: var(--cream);
       color: var(--ink);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-      line-height: 1.6;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
-    a { color: var(--accent-2); text-decoration: none; }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1.2;
+      color: var(--brown);
+    }
+
+    a { color: var(--gold-dk); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .container { max-width: 1050px; margin-inline: auto; padding: 24px; }
 
-    /* HERO */
+    img { display: block; max-width: 100%; }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+
+    /* ─── NAV ─────────────────────────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,246,227,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1100px; margin-inline: auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; }
+    .nav-logo {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gold); display: grid; place-items: center;
+      font-family: 'Playfair Display', serif; font-size: 11px; font-weight: 700;
+      color: var(--brown); letter-spacing: .5px; flex-shrink: 0;
+    }
+    .nav-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--brown); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--brown); text-decoration: none; }
+    @media(max-width:640px){ .nav-links { display: none; } }
+
+    /* ─── HERO ────────────────────────────────────────────────────── */
     .hero {
-      background: linear-gradient(180deg, #fff6dd 0%, #faf5e6 100%);
-      border-bottom: 2px solid #ecd8a0;
-      padding: 18px 0;
+      background: linear-gradient(160deg, #fff8e7 0%, #fdf1cc 55%, #f9e7ab 100%);
+      border-bottom: 1px solid var(--cream-3);
+      padding: 72px 24px 64px;
+      position: relative;
+      overflow: hidden;
     }
-    .brand { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .logo {
-      width: 70px; height: 70px; border-radius: 50%;
-      display: grid; place-items: center;
-      background: radial-gradient(circle at 30% 35%, #ffe9a3, #d5a021);
-      color: #2b2115; font-weight: 800; letter-spacing: .5px;
-      font-size: 14px; text-align: center;
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 80% 20%, rgba(200,146,42,.12) 0%, transparent 55%),
+                        radial-gradient(circle at 10% 80%, rgba(158,110,24,.08) 0%, transparent 45%);
+      pointer-events: none;
     }
-    .title { font-size: clamp(28px, 4vw, 42px); margin: 0; font-weight: 900; letter-spacing: .4px; }
-    .subtitle { margin: 4px 0 0; font-size: clamp(14px, 2vw, 18px); opacity: .9; }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .hero-inner {
+      max-width: 1100px; margin-inline: auto;
+      display: grid; gap: 40px;
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+    @media(min-width:780px){ .hero-inner { grid-template-columns: 1.1fr .9fr; align-items: center; } }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 999px; padding: 4px 14px;
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    .hero h1 { font-size: clamp(34px, 5vw, 58px); color: var(--brown); margin-bottom: 16px; }
+    .hero h1 span { color: var(--gold); }
+    .hero-desc { font-size: 16px; color: var(--muted); max-width: 480px; margin-bottom: 32px; }
+
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
     .btn {
-      display: inline-flex; gap: 10px; align-items: center;
-      border-radius: 12px; padding: 12px 18px; font-weight: 700;
-      border: 2px solid var(--ink); background: #fff; color: var(--ink);
-      box-shadow: 2px 2px 0 #00000022; transition: all 0.2s ease;
-      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 22px; border-radius: 12px; font-size: 14px; font-weight: 600;
+      border: 1.5px solid var(--brown); background: var(--white);
+      color: var(--brown); cursor: pointer; text-decoration: none;
+      transition: transform .18s, box-shadow .18s, background .18s;
     }
-    .btn.primary { background: var(--accent); border-color: var(--accent-2); color: #2b2115; }
-    .btn:hover { transform: translateY(-2px); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(74,46,26,.14); text-decoration: none; }
+    .btn-primary { background: var(--brown); color: var(--cream); border-color: var(--brown); }
+    .btn-primary:hover { background: var(--brown-lt); }
+    .btn-wa { background: #25d366; border-color: #1eab54; color: #fff; }
+    .btn-wa:hover { background: #1eab54; }
+    .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
 
-    /* CARDS */
-    .grid { display: grid; gap: 22px; margin-top: 26px; }
-    @media(min-width:880px){ .grid { grid-template-columns: 1.25fr .95fr; } }
+    .hero-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+      box-shadow: var(--shadow-lg);
+    }
+    .hero-card-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .hero-card h3 { font-size: 20px; margin-bottom: 12px; }
+    .hero-card blockquote {
+      font-size: 14.5px; color: var(--muted); border-left: 3px solid var(--gold);
+      padding-left: 14px; line-height: 1.75;
+    }
+    .hero-card blockquote strong { color: var(--brown); }
+    .hero-card-sig { margin-top: 14px; font-size: 13px; color: var(--gold-dk); font-style: italic; }
+
+    /* ─── STATS BAR ───────────────────────────────────────────────── */
+    .stats-bar {
+      background: var(--brown);
+      padding: 0 24px;
+    }
+    .stats-inner {
+      max-width: 1100px; margin-inline: auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+    .stat-item {
+      padding: 22px 16px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--gold); }
+    .stat-label { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 2px; }
+
+    /* ─── SECTION ─────────────────────────────────────────────────── */
+    .section { padding: 64px 24px; }
+    .section-alt { background: var(--cream-2); }
+    .container { max-width: 1100px; margin-inline: auto; }
+
+    .section-header { margin-bottom: 36px; }
+    .eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--gold-dk); margin-bottom: 8px;
+    }
+    .section-header h2 { font-size: clamp(24px, 3vw, 36px); }
+    .section-header p { font-size: 15px; color: var(--muted); max-width: 540px; margin-top: 8px; }
+
+    /* ─── FEATURES GRID ───────────────────────────────────────────── */
+    .features-grid {
+      display: grid; gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .feature-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, #fff6d4, #fde9a2);
+      display: grid; place-items: center; font-size: 20px; margin-bottom: 14px;
+      border: 1px solid var(--cream-3);
+    }
+    .feature-card h4 { font-size: 16px; margin-bottom: 6px; }
+    .feature-card p { font-size: 13.5px; color: var(--muted); }
+
+    /* ─── PUNTOS ──────────────────────────────────────────────────── */
+    .puntos-grid { display: grid; gap: 24px; }
+    @media(min-width:840px){ .puntos-grid { grid-template-columns: 1fr 1fr; } }
+
     .card {
-      background: #fff; border: 1px solid #e6d7ac; border-radius: 16px;
-      padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,.05);
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+      box-shadow: var(--shadow);
     }
-    .card h3 { margin-top: 0; font-size: 22px; }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+    .card h3 { font-size: 20px; }
     .pill {
-      display: inline-block; background: #efe6d1; color: #553e2e;
-      border-radius: 999px; padding: 4px 10px; font-size: 12px; margin-bottom: 8px;
+      display: inline-block; padding: 3px 12px; border-radius: 999px;
+      background: #fff6d0; color: var(--gold-dk); border: 1px solid var(--cream-3);
+      font-size: 11px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase;
     }
-    .quote { font-size: 16px; border-left: 4px solid var(--accent); padding-left: 12px; margin: 8px 0; }
-    .note { background: #fff9eb; border: 1px dashed #e0c171; border-radius: 14px; padding: 16px; }
-    .badge { display: inline-block; background: #fff; border: 1px solid #ead9b4; border-radius: 999px; padding: 6px 10px; font-weight: 700; }
 
-    /* FEATURES */
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 26px; }
-    .feature { background: #fff; border: 1px solid #ead9b4; border-radius: 14px; padding: 14px; transition: transform 0.2s ease; }
-    .feature:hover { transform: translateY(-3px); }
-    .feature b { display: block; margin-bottom: 6px; }
-
-    /* TABLAS */
-    .table-wrapper { overflow-x: auto; margin-top: 24px; }
-    table {
-      width: 100%; border-collapse: collapse; font-size: 15px;
-      border: 1px solid #e6d7ac; border-radius: 12px; overflow: hidden;
+    /* leaderboard */
+    .leader-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .leader-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--cream); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px;
+      transition: background .15s;
     }
-    thead { background: var(--accent); color: #fff; }
-    th, td { padding: 10px 14px; text-align: left; }
-    tbody tr:nth-child(even) { background: #fff9eb; }
-    tbody tr:hover { background: #f4e7cc; }
+    .leader-item:hover { background: var(--cream-2); }
+    .rank {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+      background: var(--cream-3); color: var(--brown);
+    }
+    .rank.gold { background: #c8922a; color: #fff; }
+    .rank.silver { background: #a3a3a3; color: #fff; }
+    .rank.bronze { background: #b87333; color: #fff; }
+    .leader-name { flex: 1; font-weight: 500; font-size: 14px; }
+    .leader-id { font-size: 11px; color: var(--muted); }
+    .leader-pts {
+      font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--gold-dk);
+    }
+    .pts-bar-wrap { margin-top: 6px; }
+    .pts-bar { height: 4px; border-radius: 999px; background: var(--cream-3); overflow: hidden; }
+    .pts-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-dk)); border-radius: 999px; }
 
-    /* FOOTER */
-    .footer { margin-top: 36px; padding: 24px 0; border-top: 1px solid #ead9b4; font-size: 14px; opacity: .9; text-align: center; }
+    /* consulta */
+    .consult-form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .input {
+      flex: 1; min-width: 140px; padding: 11px 16px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--white); font-size: 14px; color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color .2s;
+      outline: none;
+    }
+    .input:focus { border-color: var(--gold); }
+    .result-box {
+      padding: 16px; border-radius: 12px;
+      border: 1px dashed var(--border);
+      background: var(--cream);
+      font-size: 14px;
+      min-height: 60px;
+      display: flex; align-items: center;
+    }
+    .result-box.success { border-color: var(--green); background: var(--green-lt); }
+    .result-box.error { border-color: #c0392b; background: #fdecec; }
+
+    .pts-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dk));
+      display: grid; place-items: center; flex-shrink: 0;
+      color: var(--white); text-align: center;
+    }
+    .pts-circle strong { font-family: 'Playfair Display', serif; font-size: 18px; display: block; }
+    .pts-circle span { font-size: 10px; opacity: .85; }
+
+    /* ─── CATÁLOGO CANJE ──────────────────────────────────────────── */
+    .canje-grid {
+      display: grid; gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    .canje-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .canje-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .canje-img {
+      height: 100px; background: linear-gradient(135deg, var(--cream-2), var(--cream-3));
+      display: grid; place-items: center; font-size: 40px;
+    }
+    .canje-body { padding: 14px; }
+    .canje-body h4 { font-size: 14px; margin-bottom: 4px; }
+    .canje-body p { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .canje-pts {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #fff6d0; border: 1px solid var(--cream-3);
+      border-radius: 999px; padding: 3px 10px;
+      font-size: 12px; font-weight: 600; color: var(--gold-dk);
+    }
+
+    /* ─── INFO / UBICACIÓN ────────────────────────────────────────── */
+    .info-grid { display: grid; gap: 20px; }
+    @media(min-width:840px){ .info-grid { grid-template-columns: 1fr 1fr; } }
+
+    .info-row { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+    .info-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      background: var(--cream-2); border: 1px solid var(--border);
+      display: grid; place-items: center; font-size: 18px;
+    }
+    .info-row h4 { font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 600; margin-bottom: 2px; }
+    .info-row p { font-size: 13px; color: var(--muted); }
+
+    .map-embed {
+      width: 100%; height: 240px; border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+      background: var(--cream-2);
+      display: grid; place-items: center;
+      font-size: 14px; color: var(--muted); text-align: center; gap: 8px;
+    }
+    .map-embed a.map-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 10px;
+      background: var(--brown); color: var(--cream);
+      font-size: 13px; font-weight: 600; margin-top: 8px;
+      text-decoration: none; transition: background .2s;
+    }
+    .map-embed a.map-link:hover { background: var(--brown-lt); }
+
+    /* ─── WHATSAPP BANNER ─────────────────────────────────────────── */
+    .wa-banner {
+      background: linear-gradient(135deg, #1a3c2c 0%, #25503a 100%);
+      border-radius: var(--radius); padding: 32px 28px;
+      display: flex; flex-wrap: wrap; gap: 20px;
+      align-items: center; justify-content: space-between;
+    }
+    .wa-banner h3 { color: #fff; font-size: 22px; margin-bottom: 6px; }
+    .wa-banner p { color: rgba(255,255,255,.7); font-size: 14px; }
+    .wa-banner .btn { flex-shrink: 0; }
+
+    /* ─── FOOTER ──────────────────────────────────────────────────── */
+    footer {
+      background: var(--brown); color: rgba(255,255,255,.7);
+      padding: 40px 24px 28px;
+      font-size: 13px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin-inline: auto;
+      display: grid; gap: 28px;
+    }
+    @media(min-width:640px){ .footer-inner { grid-template-columns: 1.5fr 1fr 1fr; } }
+
+    .footer-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .footer-logo {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gold); display: grid; place-items: center;
+      font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700;
+      color: var(--brown); flex-shrink: 0;
+    }
+    .footer-brand-name { font-family: 'Playfair Display', serif; font-size: 18px; color: #fff; }
+    .footer h5 { color: rgba(255,255,255,.9); font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px; margin-bottom: 12px; }
+    .footer ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer ul a { color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer ul a:hover { color: var(--gold); text-decoration: none; }
+    .footer-bottom {
+      max-width: 1100px; margin-inline: auto;
+      padding-top: 24px; margin-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between;
+      font-size: 12px; color: rgba(255,255,255,.45);
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────────────────────── */
+    [data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity .55s ease, transform .55s ease; }
+    [data-reveal].visible { opacity: 1; transform: none; }
+
+    /* ─── SCROLLBAR ───────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--cream-3); border-radius: 999px; }
   </style>
 </head>
 <body>
-  <!-- HERO -->
+
+  <!-- ─── NAV ──────────────────────────────────────────────────────── -->
+  <nav class="nav" aria-label="Navegación principal">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="nav-logo" aria-hidden="true">LL</div>
+        <span class="nav-name">Abarrotes La Luz</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#puntos">Mis Puntos</a></li>
+        <li><a href="#canje">Canjear</a></li>
+        <li><a href="#ubicacion">Ubicación</a></li>
+      </ul>
+      <a class="btn btn-wa btn-sm" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener" aria-label="Ir al canal de WhatsApp">
+        <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5a13.1 13.1 0 01-2-7c0-7.2 5.9-13 13.2-13s13.2 5.8 13.2 13-5.9 13-13.2 13zm7.2-9.7c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────────────────── -->
   <header class="hero">
-    <div class="container">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">LA<br/>LUZ</div>
-        <div>
-          <h1 class="title">Abarrotes La Luz</h1>
-          <p class="subtitle">Tu tienda de confianza en San Damián Texóloc. ¡Cada compra suma puntos!</p>
-          <div class="cta-row">
-            <a class="btn primary" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">🟢 Pedidos y Ofertas por WhatsApp</a>
-            <a class="btn" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Cómo llegar</a>
-          </div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="dot" aria-hidden="true"></span>
+          San Damián Texóloc, Tlaxcala
         </div>
+        <h1>Tu tienda de <span>confianza</span> en el barrio</h1>
+        <p class="hero-desc">Abarrotes frescos, precios justos y un programa de puntos que te premia con cada compra. ¡Bienvenido a La Luz!</p>
+        <div class="btn-row">
+          <a class="btn btn-wa" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5a13.1 13.1 0 01-2-7c0-7.2 5.9-13 13.2-13s13.2 5.8 13.2 13-5.9 13-13.2 13zm7.2-9.7c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+            Pedidos y Ofertas
+          </a>
+          <a class="btn" href="#puntos">⭐ Consultar mis Puntos</a>
+          <a class="btn" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Cómo llegar</a>
+        </div>
+      </div>
+
+      <div class="hero-card" data-reveal>
+        <p class="hero-card-label">Mensaje de la dueña</p>
+        <h3>¡Estamos creciendo contigo!</h3>
+        <blockquote>
+          Si no ves el producto que buscas, pregunta. Si no lo tengo, dime qué te gustaría que trajéramos.<br/><br/>
+          <strong>¡No etiquetemos los comercios pequeños como la tienda del "NO HAY"!</strong><br/><br/>
+          Ayúdanos con tus comentarios y con tus compras para brindarte un mejor servicio.
+        </blockquote>
+        <p class="hero-card-sig">— Atte: Doña Luz ✨</p>
       </div>
     </div>
   </header>
 
-  <!-- CONTENIDO -->
-  <main class="container">
-    <div class="grid">
-      <section class="card">
-        <span class="pill">Mensaje a nuestros clientes</span>
-        <h3>¡Estamos creciendo contigo!</h3>
-        <p class="quote">
-          Estimado Cliente:<br/>
-          Si no ves el producto que buscas, pregunta, con gusto te atendemos.<br/>
-          Si no lo tengo, coméntame qué productos te gustaría que metiéramos.<br/>
-          Estamos intentando crecer, tener en existencia todos los productos que te son de utilidad y con tu apoyo lo lograremos.<br/>
-          <b>¡No etiquetemos comercios pequeños como la tienda del “NO HAY”!</b><br/>
-          Ayúdanos con tus comentarios y con tus compras a crecer para brindarte un mejor servicio.<br/>
-          <i>Atte: Doña Luz</i>
-        </p>
-      </section>
-
-      <aside class="card">
-        <span class="pill">Programa de Puntos</span>
-        <h3>Gana mientras compras</h3>
-        <ul>
-          <li>Cada compra te genera <b>puntos</b>.</li>
-          <li>Canjéalos por <b>descuentos</b> o <b>regalos</b>.</li>
-          <li>Promociones exclusivas en el canal de <b>WhatsApp</b>.</li>
-        </ul>
-        <div class="note">
-          <b class="badge">Consejo</b> Guarda esta página y sigue nuestro canal para no perderte las ofertas.
-        </div>
-      </aside>
+  <!-- ─── STATS BAR ─────────────────────────────────────────────────── -->
+  <div class="stats-bar" role="region" aria-label="Estadísticas de la tienda">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">33+</div><div class="stat-label">Clientes activos</div></div>
+      <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">Productos canjeables</div></div>
+      <div class="stat-item"><div class="stat-num">2,724</div><div class="stat-label">Récord de puntos</div></div>
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Atención personalizada</div></div>
     </div>
+  </div>
 
-    <!-- FEATURES -->
-    <section class="features">
-      <div class="feature"><b>Variedad</b> Productos esenciales para toda la familia: despensa, lácteos, pan, abarrotes y más.</div>
-      <div class="feature"><b>Atención cercana</b> Trato amable y servicio personalizado. Si no lo tenemos, lo conseguimos.</div>
-      <div class="feature"><b>Precios justos</b> Ofertas semanales anunciadas en nuestro canal de WhatsApp.</div>
-    </section>
-
-    <!-- PUNTOS DE CLIENTES -->
-    <section class="card">
-      <span class="pill">Clientes Destacados</span>
-      <h3>Puntos de la Semana</h3>
-      <p class="muted">Aquí actualizamos cada semana a nuestros clientes más constantes y sus puntos acumulados.</p>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>No. Cliente</th>
-              <th>Cliente</th>
-              <th>Puntos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>0004</td><td>Gerardo Sanchez</td><td>2724 pts</td></tr>
-            <tr><td>0003</td><td>Veronica</td><td>1735 pts</td></tr>
-            <tr><td>0012</td><td>Leonardo</td><td>1349 pts</td></tr>
-            <tr><td>0018</td><td>Mauro</td><td>1185 pts</td></tr>
-            <tr><td>0032</td><td>Silvia Alonso</td><td>895 pts</td></tr>
-          </tbody>
-        </table>
+  <!-- ─── SERVICIOS ─────────────────────────────────────────────────── -->
+  <section class="section" id="servicios">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <span class="eyebrow">Por qué elegirnos</span>
+        <h2>Todo lo que necesitas, cerca de ti</h2>
+        <p>Una tienda pensada para la familia, con atención personalizada y productos de calidad.</p>
       </div>
-    </section>
-
-    <!-- PRODUCTOS CANJEABLES -->
-    <section class="card">
-      <span class="pill">Catálogo de Canje</span>
-      <h3>Productos que puedes obtener con tus puntos</h3>
-      <p class="muted">Canjea tus puntos por productos disponibles en tienda.</p>
-
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Descripción</th>
-              <th>Puntos Necesarios</th>
-            </tr>
-          </thead>
-          <tbody id="productos-body"></tbody>
-        </table>
+      <div class="features-grid" data-reveal>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🛒</div>
+          <h4>Gran Variedad</h4>
+          <p>Despensa, lácteos, pan, bebidas, higiene y mucho más para toda tu familia.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">❤️</div>
+          <h4>Atención Cercana</h4>
+          <p>Trato amable y personalizado. Si no lo tenemos, lo conseguimos por ti.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">💰</div>
+          <h4>Precios Justos</h4>
+          <p>Ofertas semanales anunciadas en nuestro canal de WhatsApp exclusivo.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">⭐</div>
+          <h4>Programa de Puntos</h4>
+          <p>Cada compra suma. Acumula puntos y canjéalos por productos gratis.</p>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- CONSULTA DE PUNTOS -->
-    <section class="card">
-      <span class="pill">Consulta tus Puntos</span>
-      <h3>Verifica tus puntos acumulados</h3>
-      <p>Ingresa tu número de cliente para consultar tu saldo de puntos.</p>
+  <!-- ─── PUNTOS ────────────────────────────────────────────────────── -->
+  <section class="section section-alt" id="puntos">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <span class="eyebrow">Programa de Lealtad</span>
+        <h2>Tus Puntos La Luz</h2>
+        <p>Cada peso que gastas en nuestra tienda suma puntos que puedes canjear por productos.</p>
+      </div>
 
-      <form id="form-consulta">
-        <input type="text" id="cliente-id" placeholder="Ejemplo: 0004"
-               style="padding:10px;border-radius:8px;border:1px solid #ccc;width:200px">
-        <button type="submit" class="btn primary">Consultar</button>
-      </form>
+      <div class="puntos-grid">
+        <!-- Ranking -->
+        <div class="card" data-reveal>
+          <div class="card-header">
+            <h3>🏆 Top Clientes</h3>
+            <span class="pill">Esta semana</span>
+          </div>
+          <ul class="leader-list" id="leader-list" aria-label="Ranking de clientes con más puntos"></ul>
+        </div>
 
-      <div id="resultado" style="margin-top:16px;font-weight:600;"></div>
-    </section>
+        <!-- Consulta -->
+        <div class="card" data-reveal>
+          <div class="card-header">
+            <h3>🔍 Consulta tus Puntos</h3>
+          </div>
+          <p style="font-size:14px;color:var(--muted);margin-bottom:18px;">Ingresa tu número de cliente para ver tu saldo.</p>
+          <div class="consult-form">
+            <input class="input" id="cliente-id" type="text" placeholder="Ej. 0004" autocomplete="off" aria-label="Número de cliente" maxlength="6" />
+            <button class="btn btn-primary" id="btn-consultar" type="button">Consultar</button>
+          </div>
+          <div class="result-box" id="resultado" role="alert" aria-live="polite">
+            <span style="color:var(--muted)">Ingresa tu número para ver tus puntos acumulados.</span>
+          </div>
 
-    <!-- UBICACIÓN -->
-    <section class="card">
-      <span class="pill">Ubicación</span>
-      <h3>Visítanos</h3>
-      <p class="muted">📍 Calle Porfirio Díaz No. 48, San Damián Texóloc, Tlaxcala</p>
-      <p><a href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">Abrir en Google Maps →</a></p>
-    </section>
-  </main>
+          <!-- Tip -->
+          <div style="margin-top:20px;padding:14px;background:var(--cream);border-radius:10px;border:1px solid var(--border);font-size:13px;color:var(--muted);">
+            💡 <strong>¿No tienes número de cliente?</strong> Pregunta en tienda o contáctanos por WhatsApp para registrarte gratis.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- FOOTER -->
-  <footer class="container footer">
-    <div>© <span id="y"></span> Abarrotes La Luz • San Damián Texóloc, Tlax.</div>
+  <!-- ─── CATÁLOGO CANJE ────────────────────────────────────────────── -->
+  <section class="section" id="canje">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <span class="eyebrow">Catálogo de Canje</span>
+        <h2>Canjea tus Puntos</h2>
+        <p>¡Acumula y llévate productos gratis! Aquí todo lo que puedes obtener con tus puntos.</p>
+      </div>
+      <div class="canje-grid" id="canje-grid" data-reveal aria-label="Productos disponibles para canje"></div>
+    </div>
+  </section>
+
+  <!-- ─── INFO + UBICACIÓN ─────────────────────────────────────────── -->
+  <section class="section section-alt" id="ubicacion">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <span class="eyebrow">Visítanos</span>
+        <h2>¿Dónde estamos?</h2>
+      </div>
+      <div class="info-grid">
+        <div class="card" data-reveal>
+          <h3 style="margin-bottom:20px;font-size:20px;">Información de la Tienda</h3>
+          <div class="info-row">
+            <div class="info-icon" aria-hidden="true">📍</div>
+            <div>
+              <h4>Dirección</h4>
+              <p>Calle Porfirio Díaz No. 48<br/>San Damián Texóloc, Tlaxcala</p>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon" aria-hidden="true">🟢</div>
+            <div>
+              <h4>Pedidos y Ofertas</h4>
+              <p>Canal de WhatsApp exclusivo para clientes</p>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-icon" aria-hidden="true">⭐</div>
+            <div>
+              <h4>Programa de Puntos</h4>
+              <p>Pide tu tarjeta de cliente en tienda o por WhatsApp</p>
+            </div>
+          </div>
+          <a class="btn btn-wa" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener" style="margin-top:10px;width:fit-content;">
+            Unirse al Canal
+          </a>
+        </div>
+
+        <div class="card" data-reveal>
+          <div class="map-embed" role="region" aria-label="Mapa de ubicación">
+            <div>
+              <div style="font-size:36px;margin-bottom:8px" aria-hidden="true">📍</div>
+              <strong style="color:var(--brown);font-family:'Playfair Display',serif;font-size:15px;">Abarrotes La Luz</strong>
+              <p style="margin:4px 0 0;font-size:13px;">Calle Porfirio Díaz No. 48<br/>San Damián Texóloc, Tlaxcala</p>
+              <a class="map-link" href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">
+                Abrir en Google Maps →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WA Banner -->
+      <div class="wa-banner" style="margin-top:28px;" data-reveal>
+        <div>
+          <h3>¿Ya sigues nuestro canal?</h3>
+          <p>Recibe ofertas exclusivas, novedades y actualización de tus puntos directo en WhatsApp.</p>
+        </div>
+        <a class="btn btn-wa" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">
+          Unirse Gratis al Canal
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">
+          <div class="footer-logo" aria-hidden="true">LL</div>
+          <span class="footer-brand-name">Abarrotes La Luz</span>
+        </div>
+        <p>Tu tienda de confianza en San Damián Texóloc. Creciendo contigo cada día.</p>
+      </div>
+      <div>
+        <h5>Navegación</h5>
+        <ul>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#puntos">Mis Puntos</a></li>
+          <li><a href="#canje">Catálogo Canje</a></li>
+          <li><a href="#ubicacion">Ubicación</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <ul>
+          <li><a href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">Canal WhatsApp</a></li>
+          <li><a href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">Google Maps</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="yr"></span> Abarrotes La Luz · San Damián Texóloc, Tlaxcala</span>
+      <span>Hecho con ❤️ para la comunidad</span>
+    </div>
   </footer>
 
   <script>
-    // Actualizar año en footer
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // Base de datos simulada
+    // ─── DATA ───────────────────────────────────────────────────────
     const clientes = [
-      { id: "0001", nombre: "Lulu", puntos: 660 },
-      { id: "0002", nombre: "Josefina Diaz", puntos: 1182 },
-      { id: "0003", nombre: "Veronica Nava", puntos: 1735 },
-      { id: "0004", nombre: "Gerardo Sanchez", puntos: 2724 },
-      { id: "0005", nombre: "Margarita", puntos: 15 },
-      { id: "0006", nombre: "Higinia Diaz", puntos: 792 },
-      { id: "0007", nombre: "Rosa", puntos: 748 },
-      { id: "0008", nombre: "Maria Felix", puntos: 360 },
-      { id: "0009", nombre: "Rosy", puntos: 454 },
-      { id: "0010", nombre: "Patricia Sanchez", puntos: 276 },
-      { id: "0012", nombre: "Leonardo", puntos: 1349 },
-      { id: "0013", nombre: "Angelica Hdz", puntos: 310 },
-      { id: "0014", nombre: "Guadalupe Diaz", puntos: 200 },
-      { id: "0015", nombre: "Concha", puntos: 223 },
-      { id: "0016", nombre: "Leonor", puntos: 314 },
-      { id: "0018", nombre: "Mauro", puntos: 1185 },
-      { id: "0019", nombre: "Natividad", puntos: 225 },
-      { id: "0021", nombre: "Alejandro Rojas", puntos: 392 },
-      { id: "0022", nombre: "Gloria", puntos: 38 },
-      { id: "0024", nombre: "Angelica Marquez", puntos: 147 },
-      { id: "0025", nombre: "Remedios", puntos: 335 },
-      { id: "0026", nombre: "Benito Hdz", puntos: 251 },
-      { id: "0029", nombre: "Jorge Lira", puntos: 220 },
-      { id: "0030", nombre: "Tony Lira", puntos: 361 },
-      { id: "0032", nombre: "Silvia Alonso", puntos: 895 },
-      { id: "0033", nombre: "Guadalupe Salazar", puntos: 124 },
-      { id: "0037", nombre: "Alfredo", puntos: 694 },
-      { id: "0038", nombre: "Sara Nava", puntos: 250 },
-      { id: "0040", nombre: "Yolanda", puntos: 317 },
-      { id: "0041", nombre: "Johana Flores", puntos: 127 },
-      { id: "0042", nombre: "Monica", puntos: 557 },
-      { id: "0043", nombre: "Yesenia", puntos: 216 },
-      { id: "0045", nombre: "Rebeca", puntos: 223 },
+      { id:"0001", nombre:"Lulu",             puntos:660  },
+      { id:"0002", nombre:"Josefina Diaz",    puntos:1182 },
+      { id:"0003", nombre:"Veronica Nava",    puntos:1735 },
+      { id:"0004", nombre:"Gerardo Sanchez",  puntos:2724 },
+      { id:"0005", nombre:"Margarita",        puntos:15   },
+      { id:"0006", nombre:"Higinia Diaz",     puntos:792  },
+      { id:"0007", nombre:"Rosa",             puntos:748  },
+      { id:"0008", nombre:"Maria Felix",      puntos:360  },
+      { id:"0009", nombre:"Rosy",             puntos:454  },
+      { id:"0010", nombre:"Patricia Sanchez", puntos:276  },
+      { id:"0012", nombre:"Leonardo",         puntos:1349 },
+      { id:"0013", nombre:"Angelica Hdz",     puntos:310  },
+      { id:"0014", nombre:"Guadalupe Diaz",   puntos:200  },
+      { id:"0015", nombre:"Concha",           puntos:223  },
+      { id:"0016", nombre:"Leonor",           puntos:314  },
+      { id:"0018", nombre:"Mauro",            puntos:1185 },
+      { id:"0019", nombre:"Natividad",        puntos:225  },
+      { id:"0021", nombre:"Alejandro Rojas",  puntos:392  },
+      { id:"0022", nombre:"Gloria",           puntos:38   },
+      { id:"0024", nombre:"Angelica Marquez", puntos:147  },
+      { id:"0025", nombre:"Remedios",         puntos:335  },
+      { id:"0026", nombre:"Benito Hdz",       puntos:251  },
+      { id:"0029", nombre:"Jorge Lira",       puntos:220  },
+      { id:"0030", nombre:"Tony Lira",        puntos:361  },
+      { id:"0032", nombre:"Silvia Alonso",    puntos:895  },
+      { id:"0033", nombre:"Guadalupe Salazar",puntos:124  },
+      { id:"0037", nombre:"Alfredo",          puntos:694  },
+      { id:"0038", nombre:"Sara Nava",        puntos:250  },
+      { id:"0040", nombre:"Yolanda",          puntos:317  },
+      { id:"0041", nombre:"Johana Flores",    puntos:127  },
+      { id:"0042", nombre:"Monica",           puntos:557  },
+      { id:"0043", nombre:"Yesenia",          puntos:216  },
+      { id:"0045", nombre:"Rebeca",           puntos:223  },
     ];
 
     const productos = [
-      { nombre: "Refresco 600ml", descripcion: "Coca-Cola, Pepsi o similar", puntos: 2500 },
-      { nombre: "Bolsa de Sabritas", descripcion: "Variedades clásicas", puntos: 1800 },
-      { nombre: "Pan Bimbo Grande", descripcion: "Blanco o Integral", puntos: 4200 },
-      { nombre: "Café Soluble 50g", descripcion: "Nescafé Clásico", puntos: 5500 },
-      { nombre: "Leche 1L", descripcion: "Lala o Alpura", puntos: 3000 },
-      { nombre: "Chocolate Abuelita 180g", descripcion: "Para tus tardes frías", puntos: 4000 }
+      { nombre:"Refresco 600ml",       desc:"Coca-Cola, Pepsi o similar",  puntos:2500, emoji:"🥤" },
+      { nombre:"Bolsa de Sabritas",    desc:"Variedades clásicas",          puntos:1800, emoji:"🍟" },
+      { nombre:"Pan Bimbo Grande",     desc:"Blanco o Integral",            puntos:4200, emoji:"🍞" },
+      { nombre:"Café Soluble 50g",     desc:"Nescafé Clásico",              puntos:5500, emoji:"☕" },
+      { nombre:"Leche 1L",             desc:"Lala o Alpura",                puntos:3000, emoji:"🥛" },
+      { nombre:"Chocolate Abuelita",   desc:"Para tus tardes frías",        puntos:4000, emoji:"🍫" },
     ];
 
-    // Mostrar productos dinámicamente
-    const tbody = document.getElementById("productos-body");
-    productos.forEach(prod => {
-      const fila = document.createElement("tr");
-      fila.innerHTML = `<td>${prod.nombre}</td><td>${prod.descripcion}</td><td>${prod.puntos} pts</td>`;
-      tbody.appendChild(fila);
+    // ─── RANKING ────────────────────────────────────────────────────
+    const top5 = [...clientes].sort((a,b) => b.puntos - a.puntos).slice(0,5);
+    const maxPts = top5[0].puntos;
+    const rankClasses = ['gold','silver','bronze','',''];
+
+    const leaderList = document.getElementById('leader-list');
+    top5.forEach((c, i) => {
+      const pct = Math.round((c.puntos / maxPts) * 100);
+      const li = document.createElement('li');
+      li.className = 'leader-item';
+      li.innerHTML = `
+        <div class="rank ${rankClasses[i]}" aria-label="Posición ${i+1}">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="leader-name">${c.nombre}</span>
+            <span class="leader-id">#${c.id}</span>
+          </div>
+          <div class="pts-bar-wrap">
+            <div class="pts-bar"><div class="pts-bar-fill" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+        <div class="leader-pts">${c.puntos.toLocaleString()} pts</div>
+      `;
+      leaderList.appendChild(li);
     });
 
-    // Consultar puntos
-    document.getElementById("form-consulta").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const id = document.getElementById("cliente-id").value.trim();
-      const resultado = document.getElementById("resultado");
-      const cliente = clientes.find(c => c.id === id);
-      if (cliente) {
-        resultado.innerHTML = `👤 <b>${cliente.nombre}</b><br/>💰 Tienes <b>${cliente.puntos}</b> puntos disponibles.`;
-        resultado.style.color = "#1f7a1f";
-      } else {
-        resultado.textContent = "❌ Número de cliente no encontrado. Verifica e inténtalo nuevamente.";
-        resultado.style.color = "#b33";
-      }
+    // ─── CANJE GRID ─────────────────────────────────────────────────
+    const canjeGrid = document.getElementById('canje-grid');
+    productos.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'canje-card';
+      div.innerHTML = `
+        <div class="canje-img" aria-hidden="true">${p.emoji}</div>
+        <div class="canje-body">
+          <h4>${p.nombre}</h4>
+          <p>${p.desc}</p>
+          <span class="canje-pts">⭐ ${p.puntos.toLocaleString()} pts</span>
+        </div>
+      `;
+      canjeGrid.appendChild(div);
     });
+
+    // ─── CONSULTA PUNTOS ────────────────────────────────────────────
+    function consultarPuntos() {
+      const val = document.getElementById('cliente-id').value.trim().padStart(4,'0');
+      const box = document.getElementById('resultado');
+      const c = clientes.find(x => x.id === val || x.id === val.padStart(4,'0'));
+      box.className = 'result-box';
+
+      if (c) {
+        const prod = productos.filter(p => p.puntos <= c.puntos);
+        box.classList.add('success');
+        box.innerHTML = `
+          <div class="pts-circle" aria-label="${c.puntos} puntos">
+            <strong>${c.puntos.toLocaleString()}</strong>
+            <span>puntos</span>
+          </div>
+          <div style="margin-left:16px">
+            <strong style="font-size:15px;color:var(--brown)">👤 ${c.nombre}</strong>
+            <p style="font-size:13px;margin-top:4px;color:var(--muted)">Cliente #${c.id}</p>
+            ${prod.length > 0
+              ? `<p style="font-size:13px;color:var(--green);margin-top:6px">¡Puedes canjear <strong>${prod.length} producto${prod.length>1?'s':''}!</strong></p>`
+              : `<p style="font-size:13px;color:var(--muted);margin-top:6px">Sigue acumulando para canjear.</p>`
+            }
+          </div>
+        `;
+      } else {
+        box.classList.add('error');
+        box.innerHTML = `<span>❌ Número de cliente no encontrado. Verifica e intenta de nuevo.</span>`;
+      }
+    }
+
+    document.getElementById('btn-consultar').addEventListener('click', consultarPuntos);
+    document.getElementById('cliente-id').addEventListener('keydown', e => { if(e.key === 'Enter') consultarPuntos(); });
+
+    // ─── REVEAL ON SCROLL ────────────────────────────────────────────
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => obs.observe(el));
   </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
