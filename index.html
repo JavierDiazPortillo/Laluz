@@ -952,6 +952,862 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
 .svc-strip-text{display:flex;flex-direction:column;gap:3px}
 .svc-strip-text strong{font-size:15px;font-weight:800;color:var(--black)}
 .svc-strip-text span{font-size:13px;color:var(--gray)}
+
+/* ================================================================
+   AUTH SYSTEM — Login, Register, Dashboard
+   Abarrotes La Luz
+================================================================ */
+
+/* ── AUTH MODAL OVERLAY ─────────────────────────────────────── */
+.auth-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.65);
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+}
+.auth-overlay.open{opacity:1;pointer-events:all}
+
+.auth-modal{
+  background:var(--white);border-radius:var(--r-xl);
+  width:100%;max-width:480px;max-height:92vh;overflow-y:auto;
+  box-shadow:var(--sh-lg);
+  transform:translateY(24px) scale(.97);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.auth-overlay.open .auth-modal{transform:none}
+
+.auth-modal-head{
+  padding:28px 28px 0;display:flex;align-items:center;justify-content:space-between;
+}
+.auth-logo-wrap{display:flex;align-items:center;gap:10px}
+.auth-logo-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dk));
+  display:grid;place-items:center;
+  font-size:14px;font-weight:900;color:var(--black);
+}
+.auth-logo-name{font-size:14px;font-weight:800;color:var(--black)}
+.auth-close{
+  background:none;border:none;color:var(--gray);font-size:22px;
+  cursor:pointer;line-height:1;padding:4px;transition:color var(--t);
+  border-radius:6px;
+}
+.auth-close:hover{color:var(--black);background:var(--bg)}
+
+.auth-tabs{
+  display:flex;gap:0;margin:20px 28px 0;
+  background:var(--bg);border-radius:var(--r-sm);padding:4px;
+}
+.auth-tab{
+  flex:1;padding:9px 0;border-radius:6px;border:none;background:none;
+  font-size:13px;font-weight:700;color:var(--gray);
+  cursor:pointer;transition:var(--t);font-family:'Poppins',sans-serif;
+}
+.auth-tab.on{background:var(--white);color:var(--black);box-shadow:var(--sh)}
+
+.auth-body{padding:24px 28px 28px}
+
+.auth-title{font-size:22px;font-weight:800;color:var(--black);margin-bottom:4px}
+.auth-sub{font-size:13px;color:var(--gray);margin-bottom:22px}
+
+/* form fields */
+.auth-field{margin-bottom:14px}
+.auth-label{
+  display:block;font-size:12px;font-weight:700;color:var(--black2);
+  margin-bottom:5px;letter-spacing:.2px;
+}
+.auth-input{
+  width:100%;padding:12px 16px;
+  border:1.5px solid var(--line);border-radius:var(--r-sm);
+  background:var(--bg);font-size:14px;color:var(--black);
+  font-family:'Poppins',sans-serif;outline:none;transition:var(--t);
+}
+.auth-input:focus{border-color:var(--gold);background:var(--white)}
+.auth-input.err{border-color:var(--red);background:var(--red-lt)}
+.auth-input.ok{border-color:var(--green)}
+.auth-field-err{font-size:11px;color:var(--red);margin-top:4px;display:none}
+.auth-field.has-err .auth-field-err{display:block}
+.auth-field.has-err .auth-input{border-color:var(--red);background:var(--red-lt)}
+
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.auth-row{grid-template-columns:1fr}}
+
+.auth-submit{
+  width:100%;padding:14px;background:var(--black);color:var(--white);
+  border:none;border-radius:var(--r);font-size:14px;font-weight:800;
+  cursor:pointer;transition:var(--t);font-family:'Poppins',sans-serif;
+  margin-top:6px;
+}
+.auth-submit:hover{background:var(--black2);transform:translateY(-1px);box-shadow:var(--sh-md)}
+.auth-submit:disabled{background:var(--line);color:var(--gray);cursor:not-allowed;transform:none;box-shadow:none}
+
+.auth-divider{
+  display:flex;align-items:center;gap:12px;margin:16px 0;
+}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.auth-divider span{font-size:12px;color:var(--gray)}
+
+.auth-wa-btn{
+  width:100%;padding:13px;background:var(--wa);color:var(--white);
+  border:none;border-radius:var(--r);font-size:14px;font-weight:700;
+  cursor:pointer;transition:var(--t);font-family:'Poppins',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.auth-wa-btn:hover{background:var(--wa-dk)}
+
+.auth-forgot{
+  text-align:right;margin-top:-8px;margin-bottom:14px;
+}
+.auth-forgot a{font-size:12px;color:var(--gold-dk);cursor:pointer;font-weight:600}
+.auth-forgot a:hover{text-decoration:underline}
+
+.auth-terms{
+  font-size:12px;color:var(--gray);margin-top:12px;line-height:1.5;
+}
+.auth-terms a{color:var(--gold-dk);font-weight:600}
+
+.auth-check-row{
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;
+}
+.auth-checkbox{
+  width:18px;height:18px;border:2px solid var(--line);border-radius:4px;
+  background:var(--bg);cursor:pointer;flex-shrink:0;margin-top:1px;
+  display:grid;place-items:center;transition:var(--t);
+}
+.auth-checkbox.checked{background:var(--black);border-color:var(--black)}
+.auth-checkbox.checked::after{content:'✓';color:var(--white);font-size:11px;font-weight:800}
+
+.auth-loading{
+  display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:var(--white);border-radius:50%;
+  animation:spin .7s linear infinite;margin:0 auto;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.auth-submit.loading .auth-btn-text{display:none}
+.auth-submit.loading .auth-loading{display:block}
+
+/* strength bar */
+.pwd-strength{margin-top:6px}
+.pwd-strength-bar{height:3px;background:var(--line);border-radius:99px;overflow:hidden}
+.pwd-strength-fill{height:100%;border-radius:99px;transition:width .3s,background .3s}
+.pwd-strength-label{font-size:11px;margin-top:3px;font-weight:600}
+
+/* ── NAV USER BUTTON ────────────────────────────────────────── */
+.nav-user-btn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--gold-lt);border:1.5px solid rgba(229,169,61,.4);
+  color:var(--black);border-radius:99px;padding:7px 14px;
+  font-size:13px;font-weight:700;cursor:pointer;transition:var(--t);
+  font-family:'Poppins',sans-serif;flex-shrink:0;
+  display:none;
+}
+.nav-user-btn.visible{display:flex}
+.nav-user-btn:hover{background:var(--gold);border-color:var(--gold)}
+.nav-user-avatar{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--gold);display:grid;place-items:center;
+  font-size:11px;font-weight:800;color:var(--black);flex-shrink:0;
+}
+.nav-login-btn{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);
+  color:rgba(255,255,255,.9);border-radius:var(--r-sm);padding:8px 14px;
+  font-size:13px;font-weight:600;cursor:pointer;transition:var(--t);
+  font-family:'Poppins',sans-serif;flex-shrink:0;
+}
+.nav-login-btn:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5);color:#fff}
+
+/* ── DASHBOARD ──────────────────────────────────────────────── */
+.dashboard-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:var(--bg);overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.dashboard-overlay.open{transform:none}
+
+.dash-nav{
+  position:sticky;top:0;z-index:10;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  height:60px;display:flex;align-items:center;
+  padding:0 20px;gap:16px;
+}
+.dash-back{
+  display:flex;align-items:center;gap:7px;
+  background:none;border:1.5px solid var(--line);border-radius:99px;
+  padding:7px 14px;font-size:13px;font-weight:600;color:var(--black2);
+  cursor:pointer;transition:var(--t);font-family:'Poppins',sans-serif;flex-shrink:0;
+}
+.dash-back:hover{border-color:var(--black);color:var(--black)}
+.dash-nav-title{font-size:15px;font-weight:800;color:var(--black);flex:1}
+.dash-logout{
+  background:none;border:none;color:var(--gray);font-size:13px;
+  font-weight:600;cursor:pointer;transition:color var(--t);
+  font-family:'Poppins',sans-serif;flex-shrink:0;
+}
+.dash-logout:hover{color:var(--red)}
+
+.dash-inner{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+
+/* welcome */
+.dash-welcome{
+  background:var(--black);border-radius:var(--r-xl);padding:28px;
+  margin-bottom:24px;position:relative;overflow:hidden;
+}
+.dash-welcome::before{
+  content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(229,169,61,.18) 0%,transparent 70%);
+}
+.dash-welcome-hi{font-size:13px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:4px}
+.dash-welcome-name{font-size:26px;font-weight:900;color:var(--white);margin-bottom:6px}
+.dash-welcome-sub{font-size:13px;color:rgba(255,255,255,.55)}
+.dash-level-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 14px;border-radius:99px;font-size:12px;font-weight:700;
+  margin-top:14px;
+}
+.level-bronze{background:rgba(205,127,50,.2);color:#cd7f32;border:1px solid rgba(205,127,50,.3)}
+.level-silver{background:rgba(192,192,192,.2);color:#aaa;border:1px solid rgba(192,192,192,.3)}
+.level-gold{background:rgba(229,169,61,.2);color:var(--gold);border:1px solid rgba(229,169,61,.3)}
+
+/* stats row */
+.dash-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:14px;margin-bottom:24px;
+}
+.dstat{
+  background:var(--white);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:18px 16px;text-align:center;
+  transition:var(--t);
+}
+.dstat:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.dstat-icon{font-size:22px;margin-bottom:8px}
+.dstat-val{font-size:22px;font-weight:900;color:var(--black);line-height:1;display:block}
+.dstat-lbl{font-size:11px;color:var(--gray);margin-top:3px;font-weight:500}
+
+/* points module */
+.dash-card{
+  background:var(--white);border:1px solid var(--line);
+  border-radius:var(--r-xl);padding:24px;margin-bottom:20px;
+  box-shadow:var(--sh);
+}
+.dash-card-title{
+  font-size:16px;font-weight:800;color:var(--black);
+  margin-bottom:18px;display:flex;align-items:center;gap:9px;
+}
+.dash-card-title span{font-size:18px}
+
+.pts-display{
+  display:flex;align-items:center;gap:20px;
+  background:linear-gradient(135deg,var(--black),#222);
+  border-radius:var(--r-lg);padding:20px 22px;margin-bottom:16px;
+}
+.pts-big{font-size:44px;font-weight:900;color:var(--gold);line-height:1;font-family:'Poppins',sans-serif}
+.pts-label{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
+
+.pts-progress-wrap{margin-bottom:16px}
+.pts-progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--gray);margin-bottom:6px;font-weight:500}
+.pts-progress-bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.pts-progress-fill{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-md));
+  transition:width .8s cubic-bezier(.4,0,.2,1);
+}
+.pts-next-reward{
+  padding:12px 16px;background:var(--gold-lt);border-radius:var(--r-sm);
+  border:1px solid rgba(229,169,61,.3);
+  font-size:13px;color:var(--gold-dk);font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+
+/* points history */
+.pts-history{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.ph-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--line2);
+}
+.ph-item:last-child{border-bottom:none}
+.ph-dot{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-size:15px;
+}
+.ph-dot.earn{background:var(--green-lt)}
+.ph-dot.use{background:var(--red-lt)}
+.ph-info{flex:1}
+.ph-reason{font-size:13px;font-weight:600;color:var(--black)}
+.ph-date{font-size:11px;color:var(--gray);margin-top:1px}
+.ph-pts{font-size:14px;font-weight:800}
+.ph-pts.earn{color:var(--green-dk)}
+.ph-pts.use{color:var(--red)}
+
+/* orders */
+.order-list{display:flex;flex-direction:column;gap:12px}
+.order-card{
+  border:1.5px solid var(--line);border-radius:var(--r-lg);
+  overflow:hidden;transition:var(--t);
+}
+.order-card:hover{box-shadow:var(--sh-md);border-color:#ccc}
+.order-head{
+  padding:14px 16px;background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  border-bottom:1px solid var(--line);
+}
+.order-id{font-size:12px;font-weight:700;color:var(--black)}
+.order-date{font-size:12px;color:var(--gray)}
+.order-status{
+  font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;
+  text-transform:uppercase;letter-spacing:.4px;
+}
+.status-delivered{background:var(--green-lt);color:var(--green-dk)}
+.status-pending{background:var(--gold-lt);color:var(--gold-dk)}
+.order-body{padding:14px 16px}
+.order-items{font-size:13px;color:var(--gray2);line-height:1.7;margin-bottom:10px}
+.order-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:10px;border-top:1px solid var(--line);
+}
+.order-total{font-size:15px;font-weight:800;color:var(--black)}
+.order-repeat{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;background:var(--black);color:var(--white);
+  border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;
+  cursor:pointer;transition:var(--t);font-family:'Poppins',sans-serif;
+}
+.order-repeat:hover{background:var(--black2)}
+
+/* profile form */
+.profile-grid{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+@media(max-width:540px){.profile-grid{grid-template-columns:1fr}}
+.profile-save{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;background:var(--gold);color:var(--black);
+  border:none;border-radius:var(--r-sm);font-size:13px;font-weight:800;
+  cursor:pointer;transition:var(--t);font-family:'Poppins',sans-serif;
+  margin-top:6px;
+}
+.profile-save:hover{background:var(--gold-dk)}
+
+/* promos personalizadas */
+.promo-pers-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.pp-card{
+  border-radius:var(--r-lg);padding:18px;
+  display:flex;align-items:center;gap:14px;
+  border:1.5px solid var(--line);background:var(--white);
+  transition:var(--t);cursor:pointer;
+}
+.pp-card:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.pp-em{font-size:30px;flex-shrink:0}
+.pp-title{font-size:14px;font-weight:700;color:var(--black);margin-bottom:3px}
+.pp-desc{font-size:12px;color:var(--gray);line-height:1.5}
+.pp-tag{
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;
+  margin-top:6px;display:inline-block;
+}
+.pp-tag-gold{background:var(--gold-lt);color:var(--gold-dk)}
+.pp-tag-green{background:var(--green-lt);color:var(--green-dk)}
+.pp-tag-red{background:var(--red-lt);color:var(--red)}
+
+/* reminders */
+.reminders-list{display:flex;flex-direction:column;gap:10px}
+.reminder-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 16px;border-radius:var(--r-sm);border:1px solid var(--line);
+  background:var(--bg);
+}
+.reminder-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.reminder-text{font-size:13px;color:var(--black2);font-weight:600;margin-bottom:2px}
+.reminder-sub{font-size:12px;color:var(--gray)}
+
+/* dash tabs */
+.dash-tabs{
+  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;
+  border-bottom:2px solid var(--line);padding-bottom:0;
+}
+.dash-tab{
+  padding:10px 16px;border-radius:var(--r-sm) var(--r-sm) 0 0;
+  border:none;background:none;font-size:13px;font-weight:600;
+  color:var(--gray);cursor:pointer;transition:var(--t);
+  font-family:'Poppins',sans-serif;border-bottom:2px solid transparent;
+  margin-bottom:-2px;
+}
+.dash-tab:hover{color:var(--black)}
+.dash-tab.on{color:var(--black);border-bottom-color:var(--gold);font-weight:800}
+
+.dash-pane{display:none}
+.dash-pane.on{display:block}
+
+/* notify toast for dashboard */
+.dash-notif{
+  position:fixed;top:80px;right:20px;z-index:1001;
+  background:var(--black);color:var(--white);
+  border-radius:var(--r);padding:14px 18px;
+  font-size:13px;font-weight:600;
+  box-shadow:var(--sh-lg);max-width:300px;
+  transform:translateX(120%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.dash-notif.show{transform:none}
+.dash-notif-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:16px;cursor:pointer;line-height:1;margin-left:auto;flex-shrink:0}
+
+
+.auth-modal-simple{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.auth-modal-simple.shake{animation:shake .45s ease}
+.auth-modal-simple .auth-title{margin-bottom:6px}
+.auth-modal-simple .auth-modal-head{padding-bottom:16px;border-bottom:1px solid var(--line)}
+.auth-modal-simple .auth-body{padding-top:20px}
+
+
+/* ── DORILOCOS HERO SECTION ──────────────────────────────────── */
+#dorilocos{
+  background:var(--black);
+  padding:0;overflow:hidden;position:relative;
+}
+.dori-inner{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:520px;
+}
+@media(max-width:860px){.dori-inner{grid-template-columns:1fr}}
+
+.dori-left{
+  padding:64px 48px 64px 32px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;z-index:1;
+}
+@media(max-width:860px){.dori-left{padding:48px 24px 32px}}
+
+.dori-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(229,169,61,.15);border:1px solid rgba(229,169,61,.3);
+  border-radius:99px;padding:5px 14px;
+  font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;width:fit-content;
+  animation:dlbpulse 2.5s ease-in-out infinite;
+}
+.dori-title{
+  font-size:clamp(32px,5vw,58px);
+  font-weight:900;line-height:1.05;
+  color:var(--white);margin-bottom:18px;letter-spacing:-.5px;
+}
+.dori-title .dori-fire{color:var(--gold)}
+.dori-desc{
+  font-size:16px;color:rgba(255,255,255,.7);
+  line-height:1.75;margin-bottom:24px;max-width:420px;
+}
+.dori-ingredients{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;
+}
+.dori-ingr{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:99px;padding:5px 12px;
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.85);
+  transition:.2s;
+}
+.dori-ingr:hover{background:rgba(229,169,61,.2);border-color:rgba(229,169,61,.4);color:var(--gold)}
+.dori-cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.dori-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 14px;border-radius:99px;
+  background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);
+  font-size:12px;font-weight:700;color:#fca5a5;
+}
+.dori-badge-dot{
+  width:7px;height:7px;border-radius:50%;background:#ef4444;
+  animation:bpulse 1.5s infinite;
+}
+
+.dori-right{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1a0a00 0%,#2d1200 100%);
+  overflow:hidden;
+}
+.dori-right::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 60% 40%,rgba(229,169,61,.18) 0%,transparent 65%);
+}
+.dori-visual{
+  position:relative;z-index:1;text-align:center;padding:40px 24px;
+}
+.dori-emoji-main{
+  font-size:120px;line-height:1;display:block;
+  animation:doriBounce 3s ease-in-out infinite;
+  filter:drop-shadow(0 20px 40px rgba(229,169,61,.4));
+}
+@keyframes doriBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-14px) scale(1.04)}}
+.dori-emojis-ring{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  margin-top:20px;
+}
+.dori-emojis-ring span{
+  font-size:32px;
+  animation:chipbounce 1.8s ease-in-out infinite;
+}
+.dori-emojis-ring span:nth-child(1){animation-delay:0s}
+.dori-emojis-ring span:nth-child(2){animation-delay:.2s}
+.dori-emojis-ring span:nth-child(3){animation-delay:.4s}
+.dori-emojis-ring span:nth-child(4){animation-delay:.6s}
+.dori-emojis-ring span:nth-child(5){animation-delay:.8s}
+.dori-emojis-ring span:nth-child(6){animation-delay:1s}
+.dori-schedule-pills{
+  display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;
+}
+.dori-pill{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-sm);padding:9px 14px;
+}
+.dori-pill strong{font-size:13px;font-weight:700;color:var(--white)}
+.dori-pill small{font-size:11px;color:rgba(255,255,255,.45);display:block;margin-top:1px}
+.dori-wave{
+  position:absolute;bottom:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--gold),#f97316,var(--gold));
+  background-size:200% 100%;
+  animation:waveMove 3s linear infinite;
+}
+@keyframes waveMove{0%{background-position:0 0}100%{background-position:200% 0}}
+
+/* ── SERVICES SECTION (new clean version) ────────────────────── */
+#servicios-pub{padding:72px 0 80px;background:var(--bg)}
+.svc-section-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;margin-bottom:40px;
+}
+.svc-section-header .sh-p{margin-top:6px}
+
+/* ── CATALOG GATE (unauthenticated view) ─────────────────────── */
+#catalogo-gate{
+  padding:80px 0 88px;
+  background:linear-gradient(160deg,#0d0d0d 0%,#1a1a1a 100%);
+  position:relative;overflow:hidden;
+}
+#catalogo-gate::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 50%,rgba(229,169,61,.08) 0%,transparent 50%),
+    radial-gradient(circle at 80% 30%,rgba(229,169,61,.05) 0%,transparent 45%);
+}
+.gate-inner{
+  max-width:680px;margin:0 auto;padding:0 24px;
+  text-align:center;position:relative;z-index:1;
+}
+.gate-lock-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(229,169,61,.12);border:2px solid rgba(229,169,61,.25);
+  display:grid;place-items:center;margin:0 auto 28px;font-size:34px;
+}
+.gate-title{
+  font-size:clamp(26px,4vw,40px);font-weight:900;
+  color:var(--white);margin-bottom:14px;line-height:1.15;
+}
+.gate-title span{color:var(--gold)}
+.gate-desc{
+  font-size:16px;color:rgba(255,255,255,.6);
+  line-height:1.75;margin-bottom:36px;max-width:500px;margin-inline:auto;
+}
+.gate-benefits{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;margin-bottom:40px;
+}
+.gate-benefit{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-lg);padding:16px 14px;text-align:center;
+  transition:.2s;
+}
+.gate-benefit:hover{background:rgba(229,169,61,.1);border-color:rgba(229,169,61,.25)}
+.gate-benefit-icon{font-size:24px;margin-bottom:8px}
+.gate-benefit-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px}
+.gate-benefit-desc{font-size:11px;color:rgba(255,255,255,.45)}
+.gate-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.gate-ctas .btn-gold{font-size:15px;padding:15px 32px;border-radius:var(--r-lg)}
+
+/* Catalog locked overlay on page (when scrolled to) */
+#catalogo-section-priv{display:none}
+#catalogo-section-priv.visible{display:block}
+
+/* ── CTA LOGIN STRIP ─────────────────────────────────────────── */
+.cta-login-strip{
+  background:var(--black);padding:64px 0;
+  position:relative;overflow:hidden;
+}
+.cta-login-strip::before{
+  content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+  width:600px;height:300px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(229,169,61,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cls-inner{
+  max-width:720px;margin:0 auto;padding:0 24px;
+  text-align:center;position:relative;z-index:1;
+}
+.cls-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(229,169,61,.12);border:1px solid rgba(229,169,61,.25);
+  border-radius:99px;padding:5px 14px;
+  font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:18px;
+}
+.cls-title{
+  font-size:clamp(28px,4.5vw,48px);font-weight:900;
+  color:var(--white);line-height:1.1;margin-bottom:14px;
+}
+.cls-title span{color:var(--gold)}
+.cls-sub{
+  font-size:16px;color:rgba(255,255,255,.6);
+  max-width:520px;margin:0 auto 32px;line-height:1.7;
+}
+.cls-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.cls-proof{
+  display:flex;flex-wrap:wrap;gap:20px;justify-content:center;
+  margin-top:28px;
+}
+.cls-proof-item{
+  display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.5);
+}
+.cls-proof-icon{font-size:16px}
+
+/* ── PRIVATE CATALOG SECTION (inside dashboard) ──────────────── */
+/* Already exists as #catalogo — just update nav to point dashboard */
+
+
+/* ── DASHBOARD CATALOG PANE ────────────────────────────────────── */
+#pane-catalogo{ padding:0 }
+
+.dcat-wrap{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--r-xl);
+  overflow:hidden;
+  box-shadow:var(--sh);
+}
+
+/* Toolbar row */
+.dcat-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  padding:16px 18px;border-bottom:1px solid var(--line);
+  background:var(--bg2);
+  position:sticky;top:0;z-index:5;
+}
+.dcat-search-wrap{
+  position:relative;flex:1;min-width:180px;max-width:360px;
+}
+.dcat-search-wrap svg{
+  position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  color:var(--gray);pointer-events:none;
+}
+.dcat-search{
+  width:100%;padding:9px 34px 9px 34px;
+  border:1.5px solid var(--line);border-radius:99px;
+  background:var(--white);font-size:13px;color:var(--black);
+  font-family:'Poppins',sans-serif;outline:none;transition:border-color .18s;
+}
+.dcat-search:focus{border-color:var(--gold);background:#fff}
+.dcat-search::placeholder{color:var(--gray)}
+.dcat-search-clr{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--gray);font-size:17px;
+  cursor:pointer;display:none;line-height:1;padding:2px;
+  transition:color .15s;
+}
+.dcat-search-clr:hover{color:var(--red)}
+.dcat-filters{display:flex;gap:6px;flex-wrap:wrap}
+.dcat-sort-row{display:flex;align-items:center;gap:10px;margin-left:auto}
+
+/* Body: sidebar + products side by side */
+.dcat-body{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  min-height:600px;
+}
+@media(max-width:780px){
+  .dcat-body{grid-template-columns:1fr}
+  .dcat-sidebar{display:none}
+  .dcat-sidebar.open{
+    display:block;
+    position:fixed;top:60px;left:0;bottom:0;z-index:820;
+    width:250px;overflow-y:auto;
+    box-shadow:6px 0 28px rgba(0,0,0,.35);
+  }
+  #mob-cats{display:flex !important}
+}
+
+/* Sidebar */
+.dcat-sidebar{
+  background:var(--black);
+  overflow-y:auto;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.dcat-sidebar-head{
+  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:16px 12px 10px;
+}
+
+/* Product area */
+.dcat-main{
+  padding:16px 18px 24px;
+  overflow-y:auto;
+  max-height:calc(100vh - 200px);
+  min-height:500px;
+}
+
+/* Override pgrid inside dashboard (smaller cards) */
+#pane-catalogo #pgrid{
+  display:grid;gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  margin-top:12px;
+}
+
+/* Override cat-panel (not used in new layout) */
+#pane-catalogo .cat-panel{display:contents}
+
+/* ── DASHBOARD CATALOG PANE ────────────────────────────────────── */
+#pane-catalogo{ padding:0; margin-top:4px; }
+
+.dcat-wrap{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--r-xl);
+  box-shadow:var(--sh);
+  display:flex;
+  flex-direction:column;
+  min-height:700px;
+}
+
+/* Toolbar */
+.dcat-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  padding:14px 18px;border-bottom:1px solid var(--line);
+  background:var(--bg2);border-radius:var(--r-xl) var(--r-xl) 0 0;
+  position:sticky;top:0;z-index:10;
+  flex-shrink:0;
+}
+.dcat-search-wrap{
+  position:relative;flex:1;min-width:180px;max-width:340px;
+}
+.dcat-search-wrap svg{
+  position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  color:var(--gray);pointer-events:none;
+}
+.dcat-search{
+  width:100%;padding:9px 32px 9px 34px;
+  border:1.5px solid var(--line);border-radius:99px;
+  background:var(--white);font-size:13px;color:var(--black);
+  font-family:'Poppins',sans-serif;outline:none;
+  transition:border-color .18s;
+}
+.dcat-search:focus{ border-color:var(--gold); background:var(--white); }
+.dcat-search::placeholder{ color:var(--gray); }
+.dcat-search-clr{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--gray);font-size:17px;
+  cursor:pointer;display:none;line-height:1;padding:2px;transition:color .15s;
+}
+.dcat-search-clr:hover{ color:var(--red); }
+.dcat-filters{ display:flex;gap:6px;flex-wrap:wrap; }
+.dcat-sort-row{ display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap; }
+
+/* Body */
+.dcat-body{
+  display:flex;
+  flex:1;
+  min-height:0;
+}
+
+/* Sidebar */
+.dcat-sidebar{
+  width:210px;
+  flex-shrink:0;
+  background:var(--black);
+  overflow-y:auto;
+  border-right:1px solid rgba(255,255,255,.06);
+  border-radius:0 0 0 var(--r-xl);
+}
+@media(max-width:780px){
+  .dcat-sidebar{
+    display:none;
+    position:fixed;top:0;left:0;bottom:0;z-index:820;
+    width:250px;overflow-y:auto;
+    box-shadow:6px 0 28px rgba(0,0,0,.4);
+  }
+  .dcat-sidebar.open{ display:block; }
+  #mob-cats{ display:flex !important; }
+}
+.dcat-sidebar-head{
+  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:16px 12px 10px;
+}
+
+/* Product area */
+.dcat-main{
+  flex:1;
+  min-width:0;
+  padding:16px 18px 28px;
+  overflow-y:auto;
+}
+
+/* Product grid inside dashboard */
+#pane-catalogo #pgrid{
+  display:grid;
+  gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(165px,1fr));
+  margin-top:10px;
+}
+
+/* skeleton loader */
+.skel{
+  background:linear-gradient(90deg,var(--line) 25%,var(--line2) 50%,var(--line) 75%);
+  background-size:200% 100%;
+  animation:skelShimmer 1.4s infinite;
+  border-radius:var(--r-sm);
+}
+@keyframes skelShimmer{ 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skel-card{
+  border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;background:var(--white);
+}
+.skel-img{ height:80px; }
+.skel-body{ padding:10px 12px;display:flex;flex-direction:column;gap:7px; }
+.skel-title{ height:14px;width:80%; }
+.skel-sub{ height:11px;width:55%; }
+.skel-price{ height:18px;width:45%;margin-top:4px; }
+.skel-btn{ height:30px;margin-top:8px; }
+
+/* error state */
+.cat-error{
+  grid-column:1/-1;text-align:center;padding:52px 20px;
+}
+.cat-error-icon{ font-size:48px;margin-bottom:14px; }
+.cat-error h3{ font-size:17px;font-weight:700;margin-bottom:8px; }
+.cat-error p{ font-size:13px;color:var(--gray);margin-bottom:18px; }
+.cat-error .btn{ display:inline-flex; }
+
+
+
+/* ── TIKTOK NAV ─────────────────────────────────────────────── */
+.tiktok-nav-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:var(--r-sm);
+  color:rgba(255,255,255,.7);transition:var(--t);flex-shrink:0;
+}
+.tiktok-nav-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+
+/* ── HORARIO STATUS PILL ────────────────────────────────────── */
+.horario-mensajes{background:#fff8ec;color:#b45309 !important}
+.horario-cerrado{background:var(--red-lt);color:var(--red) !important}
+
+/* ── ORDER HISTORY ─────────────────────────────────────────── */
+.oh-empty{text-align:center;padding:40px 20px}
+.oh-empty-icon{font-size:48px;margin-bottom:14px}
+
+/* ── HERO BTNS responsive ───────────────────────────────────── */
+@media(max-width:500px){
+  .hero-btns .btn-lg{padding:12px 18px;font-size:13px}
+}
+
 </style>
 </head>
 <body>
@@ -966,11 +1822,15 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
       </div>
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="#catalogo">Catálogo</a></li>
-      <li><a href="#servicios">Servicios</a></li>
-      <li><a href="#puntos">Puntos</a></li>
+      <li><a href="#" onclick="AUTH.currentUser?openDashboard():openAuthModal('login');return false" style="color:var(--gold)">👤 Mi Cuenta</a></li>
+        <li><a href="#dorilocos">Dorilocos 🔥</a></li>
+      <li><a href="#servicios-pub">Servicios</a></li>
       <li><a href="#ubicacion">Ubicación</a></li>
     </ul>
+    <button class="nav-login-btn" id="nav-login-btn" aria-label="Iniciar sesión"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Iniciar sesión</button><button class="nav-user-btn" id="nav-user-btn" aria-label="Ver mi cuenta"><div class="nav-user-avatar" id="nav-user-avatar">U</div><span id="nav-user-name">Mi cuenta</span></button>
+    <a href="https://www.tiktok.com/@abarrotes.la.luz?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" aria-label="Síguenos en TikTok" title="TikTok @abarrotes.la.luz" class="tiktok-nav-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+        </a>
     <button class="nav-cart" id="nav-cart-btn" aria-label="Ver carrito de pedido">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
       Pedido
@@ -987,22 +1847,22 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
     <div class="rv-l">
       <div class="hero-badge">
         <span class="hbdot" aria-hidden="true"></span>
-        Abierto · San Damián Texóloc, Tlaxcala
+        <span id="horario-badge-text">Abierto</span> · San Damián Texóloc, Tlaxcala
       </div>
       <h1 class="hero-h1">
         Todo lo que necesitas,
         <span class="hl">hasta tu puerta</span>
       </h1>
-      <p class="hero-sub">Más de 1,200 productos al mejor precio. Haz tu pedido en minutos por WhatsApp y recibe atención inmediata. ¡Sin complicaciones!</p>
+      <p class="hero-sub">Recibe promociones, novedades y pedidos rápidos desde nuestro canal oficial. <strong style="color:var(--gold)">Envío a domicilio en pedidos desde $100</strong> · Más de 1,200 productos disponibles.</p>
       <div class="hero-btns">
-        <a class="btn btn-gold btn-lg" href="https://wa.me/522461008654" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp">
-          <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5a13.1 13.1 0 01-2-7c0-7.2 5.9-13 13.2-13s13.2 5.8 13.2 13-5.9 13-13.2 13zm7.2-9.7c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
-          Pedir por WhatsApp
+        <a class="btn btn-gold btn-lg" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener" aria-label="Unirme al Canal de WhatsApp de Abarrotes La Luz">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+          Unirme al Canal de WhatsApp
         </a>
-        <a class="btn btn-ghost btn-lg" href="#catalogo">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          Ver Catálogo
-        </a>
+        <button class="btn btn-ghost btn-lg" onclick="openAuthModal()" type="button" aria-label="Iniciar sesión en mi cuenta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Iniciar Sesión
+        </button>
       </div>
       <div class="hero-stats" role="region" aria-label="Estadísticas de la tienda">
         <div class="hst"><span class="hst-n">1,258</span><div class="hst-l">Productos</div></div>
@@ -1025,6 +1885,7 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
           <div class="hc-item"><span class="hc-em">🥛</span><span class="hc-name">Leche Lala 1L</span><span class="hc-price">$26</span></div>
           <div class="hc-item"><span class="hc-em">🍞</span><span class="hc-name">Pan Bimbo Grande</span><span class="hc-price">$48</span></div>
         </div>
+        <div style="margin-bottom:10px;padding:6px 10px;background:rgba(229,169,61,.15);border-radius:6px;font-size:11px;color:var(--gold);font-weight:600;text-align:center">🛵 Pedido mayor a $100 — ¡incluye envío!</div>
         <div class="hc-foot">
           <div class="hc-total">Total: <span>$114</span></div>
           <button class="hc-wa-btn" onclick="window.open('https://wa.me/522461008654','_blank')"><svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5a13.1 13.1 0 01-2-7c0-7.2 5.9-13 13.2-13s13.2 5.8 13.2 13-5.9 13-13.2 13zm7.2-9.7c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg> Enviar</button>
@@ -1040,13 +1901,13 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
     <span class="tick-item"><span class="tick-dot"></span>Pedidos WhatsApp: 246 100 8654</span>
     <span class="tick-item"><span class="tick-dot"></span>Programa de Puntos activo</span>
     <span class="tick-item"><span class="tick-dot"></span>Calle Porfirio Díaz No. 48, Tlaxcala</span>
-    <span class="tick-item"><span class="tick-dot"></span>Entrega rápida en la zona</span>
+    <span class="tick-item"><span class="tick-dot"></span>Envío desde $100 · Horario 6AM-9PM todos los días</span>
     <span class="tick-item"><span class="tick-dot"></span>Bebidas · Botanas · Lácteos · Hogar · Más</span>
     <span class="tick-item"><span class="tick-dot"></span>1,258 Productos disponibles</span>
     <span class="tick-item"><span class="tick-dot"></span>Pedidos WhatsApp: 246 100 8654</span>
     <span class="tick-item"><span class="tick-dot"></span>Programa de Puntos activo</span>
     <span class="tick-item"><span class="tick-dot"></span>Calle Porfirio Díaz No. 48, Tlaxcala</span>
-    <span class="tick-item"><span class="tick-dot"></span>Entrega rápida en la zona</span>
+    <span class="tick-item"><span class="tick-dot"></span>Envío desde $100 · Horario 6AM-9PM todos los días</span>
     <span class="tick-item"><span class="tick-dot"></span>Bebidas · Botanas · Lácteos · Hogar · Más</span>
   </div>
 </div>
@@ -1056,221 +1917,80 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
     <div class="stat-blk"><span class="stat-n">1,258</span><div class="stat-l">Productos en catálogo</div></div>
     <div class="stat-blk"><span class="stat-n">1,008</span><div class="stat-l">Disponibles ahora</div></div>
     <div class="stat-blk"><span class="stat-n">34</span><div class="stat-l">Categorías</div></div>
-    <div class="stat-blk"><span class="stat-n">33+</span><div class="stat-l">Clientes con puntos</div></div>
+    <div class="stat-blk"><span class="stat-n">⭐</span><div class="stat-l">Programa de Puntos</div></div>
   </div>
 </div>
 
-<section class="section section-white" id="beneficios" aria-label="Beneficios">
-  <div class="wrap">
-    <div class="sh rv">
-      <span class="sh-ey">¿Por qué elegirnos?</span>
-      <h2 class="sh-h">Compra <span>fácil, rápido</span> y sin salir</h2>
-      <p class="sh-p">Diseñado para que encuentres lo que necesitas y lo pidas en menos de 5 minutos desde tu celular.</p>
-    </div>
-    <div class="benefits-grid rv">
-      <div class="bcard">
-        <div class="bcard-icon" aria-hidden="true">⚡</div>
-        <h4>Pedido en Minutos</h4>
-        <p>Selecciona productos, agrega al carrito y envía por WhatsApp en menos de 3 toques.</p>
+
+<section id="dorilocos" aria-label="Dorilocos y Chicharrones Preparados">
+  <div class="dori-inner">
+    <!-- LEFT: COPY -->
+    <div class="dori-left rv-l">
+      <div class="dori-eyebrow">
+        <span class="dori-badge-dot" aria-hidden="true"></span>
+        🔥 Sáb y Dom · desde 18 Abril
       </div>
-      <div class="bcard">
-        <div class="bcard-icon" aria-hidden="true">💰</div>
-        <h4>Precios Accesibles</h4>
-        <p>Los mejores precios del barrio. Ofertas semanales exclusivas en nuestro canal.</p>
+      <h2 class="dori-title">
+        Los Dorilocos que<br>
+        <span class="dori-fire">todos quieren 🔥</span>
+      </h2>
+      <p class="dori-desc">
+        Los auténticos Dorilocos y Chicharrones Preparados de San Damián Texóloc. Preparados al momento, con los mejores ingredientes, cada fin de semana.
+      </p>
+      <div class="dori-ingredients" aria-label="Ingredientes">
+        <span class="dori-ingr">🌽 Doritos</span>
+        <span class="dori-ingr">🐷 Chicharrón</span>
+        <span class="dori-ingr">🌶️ Chamoy</span>
+        <span class="dori-ingr">🍋 Limón</span>
+        <span class="dori-ingr">🧅 Cebolla</span>
+        <span class="dori-ingr">🥒 Pepino</span>
+        <span class="dori-ingr">🌶️ Valentina</span>
+        <span class="dori-ingr">🥜 Cacahuate</span>
       </div>
-      <div class="bcard">
-        <div class="bcard-icon" aria-hidden="true">❤️</div>
-        <h4>Atención Personalizada</h4>
-        <p>Trato amable de persona a persona. Si no lo tenemos, lo conseguimos para ti.</p>
-      </div>
-      <div class="bcard">
-        <div class="bcard-icon" aria-hidden="true">🛒</div>
-        <h4>1,200+ Productos</h4>
-        <p>Abarrotes, bebidas, botanas, lácteos, higiene, hogar, dulcería y mucho más.</p>
-      </div>
-      <div class="bcard">
-        <div class="bcard-icon" aria-hidden="true">⭐</div>
-        <h4>Programa de Puntos</h4>
-        <p>Cada compra acumula puntos. Canjéalos por productos completamente gratis.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="promociones" aria-label="Promociones y ofertas">
-  <div class="wrap">
-    <div class="sh rv">
-      <span class="sh-ey">Ofertas especiales</span>
-      <h2 class="sh-h">Promociones <span>de hoy</span></h2>
-      <p class="sh-p">Aprovecha nuestras ofertas del día. Disponibles mientras haya existencia.</p>
-    </div>
-    <div class="promo-grid rv">
-      <div class="pcard pcard-gold">
-        <div class="pcard-deco" aria-hidden="true">🔥</div>
-        <div class="pcard-badge">🔥 Más vendido</div>
-        <div class="pcard-title">Coca-Cola y refrescos<br>¡Precio especial!</div>
-        <div class="pcard-sub">Las favoritas de todos. Los mejores precios del barrio.</div>
-        <button class="pcard-btn" id="promo-view-catalog">Ver en catálogo →</button>
-      </div>
-      <div class="pcard pcard-dark">
-        <div class="pcard-deco" aria-hidden="true">🍟</div>
-        <div class="pcard-badge">✨ Combo del día</div>
-        <div class="pcard-title">Botanas + Refresco<br>Combinación perfecta</div>
-        <div class="pcard-sub">Pídelos juntos y paga menos. Disponibilidad limitada.</div>
-        <button class="pcard-btn" id="promo-combo">Pedir combo 📲</button>
-      </div>
-      <div class="pcard pcard-red">
-        <div class="pcard-deco" aria-hidden="true">⭐</div>
-        <div class="pcard-badge">💎 Exclusivo</div>
-        <div class="pcard-title">Puntos Dobles<br>Esta semana</div>
-        <div class="pcard-sub">Compra esta semana y acumula el doble de puntos en todos los productos.</div>
-        <button class="pcard-btn" id="promo-puntos">Ver mis puntos →</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="catalogo" aria-label="Catálogo de productos">
-  <div class="wrap">
-    <div class="sh rv">
-      <span class="sh-ey">Haz Tu Pedido</span>
-      <h2 class="sh-h">Catálogo <span>Completo</span></h2>
-      <p class="sh-p">1,258 productos con existencia en tiempo real. Busca, filtra y pide directo por WhatsApp.</p>
-    </div>
-
-    <div class="mob-ov" id="mob-ov" role="presentation"></div>
-
-    <div class="cat-panel">
-      <!-- SIDEBAR -->
-      <aside class="csb" id="csb" aria-label="Categorías de productos">
-        <div class="csb-head">Categorías</div>
-        <button class="cs-btn sel" id="todos-btn" data-cat="TODOS">
-          <span class="cs-em">🏪</span>
-          <span class="cs-n">Todos los productos</span>
-          <span class="cs-c" id="cnt-TODOS">1258</span>
-        </button>
-        <div class="cs-div" aria-hidden="true"></div>
-        <div id="cat-list" role="list" aria-label="Lista de categorías"></div>
-      </aside>
-
-      <!-- MAIN PANEL -->
-      <main class="cmain" role="main" aria-label="Productos del catálogo">
-        <div class="ctb">
-          <div class="ctb-l">
-            <button class="mob-cats" id="mob-cats" aria-expanded="false" aria-controls="csb">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-              Categorías
-            </button>
-            <div class="srch-wrap" role="search">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-              <input id="srch" type="search" placeholder="Buscar producto, código, categoría…" autocomplete="off" aria-label="Buscar en el catálogo"/>
-              <button id="srch-x" aria-label="Limpiar búsqueda">×</button>
-            </div>
-            <div class="flt-grp" role="group" aria-label="Filtrar por disponibilidad">
-              <button class="flt on" onclick="setFilter('all',this)">Todos</button>
-              <button class="flt" onclick="setFilter('disp',this)">✓ Disponibles</button>
-              <button class="flt" onclick="setFilter('out',this)">✗ Agotados</button>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-            <span class="rcount" id="rcount" aria-live="polite"></span>
-            <select class="srt" id="srt" onchange="setSort(this.value)" aria-label="Ordenar productos">
-              <option value="n">A → Z</option>
-              <option value="nz">Z → A</option>
-              <option value="pa">Precio ↑</option>
-              <option value="pd">Precio ↓</option>
-              <option value="st">Mayor stock</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="cc" id="cc" aria-live="polite">
-          <span class="cc-em" aria-hidden="true">🏪</span>
-          <div>
-            <div class="cc-name">Todos los Productos</div>
-            <div class="cc-info">Catálogo completo · 1,258 artículos</div>
-          </div>
-        </div>
-
-        <div id="pgrid" role="list" aria-label="Listado de productos"></div>
-        <div class="pgn" id="pgn" role="navigation" aria-label="Páginas de productos"></div>
-      </main>
-    </div>
-  </div>
-</section>
-
-<section class="section section-white" id="puntos" aria-label="Programa de puntos">
-  <div class="wrap">
-    <div class="sh rv">
-      <span class="sh-ey">Programa de Lealtad</span>
-      <h2 class="sh-h">Tus <span>Puntos La Luz</span></h2>
-      <p class="sh-p">Cada compra genera puntos que puedes canjear por productos gratis. ¡Así de sencillo!</p>
-    </div>
-    <div class="puntos-grid">
-      <div class="card rv">
-        <div class="card-title">🏆 Top Clientes <span class="chip">Esta semana</span></div>
-        <ul class="ldr-list" id="ldr-list" aria-label="Ranking de clientes con más puntos"></ul>
-      </div>
-      <div class="card rv">
-        <div class="card-title">🔍 Consulta tus Puntos</div>
-        <p style="font-size:13px;color:var(--gray);margin-bottom:16px">Ingresa tu número de cliente para ver tu saldo acumulado.</p>
-        <input class="cinput" id="cid" type="text" placeholder="Ej. 0004" maxlength="6" autocomplete="off" aria-label="Número de cliente"/>
-        <button class="btn btn-black btn-sm" id="cbtn" style="margin-bottom:12px" type="button">Consultar Puntos</button>
-        <div class="rbox" id="result-box" role="alert" aria-live="polite">
-          <span style="color:var(--gray)">Ingresa tu número para ver tu saldo.</span>
-        </div>
-        <div style="margin-top:16px;padding:12px 14px;background:var(--bg);border-radius:var(--r-sm);font-size:12.5px;color:var(--gray)">
-          💡 <strong style="color:var(--black2)">¿Sin número?</strong> Pide tu tarjeta en tienda o por WhatsApp y empieza a acumular hoy.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="canje" aria-label="Catálogo de canje">
-  <div class="wrap">
-    <div class="sh rv">
-      <span class="sh-ey">Catálogo de Canje</span>
-      <h2 class="sh-h">Canjea tus <span>Puntos</span></h2>
-      <p class="sh-p">Acumula con cada compra y llévate estos productos completamente gratis.</p>
-    </div>
-    <div class="canje-grid rv" id="canje-grid" aria-label="Productos disponibles para canje"></div>
-  </div>
-</section>
-
-<section class="section section-white" id="servicios" aria-label="Servicios adicionales">
-  <div class="wrap">
-    <div class="sh rv">
-      <span class="sh-ey">Más que una tienda</span>
-      <h2 class="sh-h">Servicios <span>adicionales</span></h2>
-      <p class="sh-p">Además de tu despensa completa, ofrecemos servicios prácticos para tu día a día. Todo en un solo lugar.</p>
-    </div>
-
-    <!-- DORILOCOS PROMO BANNER -->
-    <div class="doriloco-banner rv">
-      <div class="dlb-left">
-        <div class="dlb-badge">🔥 ¡PRÓXIMAMENTE!</div>
-        <h3 class="dlb-title">Dorilocos<br><span>cada fin de semana</span></h3>
-        <p class="dlb-desc">A partir del <strong>viernes 18 de abril</strong> y cada fin de semana siguiente, disfruta los mejores Dorilocos de San Damián Texóloc. ¡Preparados al momento!</p>
-        <a class="btn btn-gold" href="https://wa.me/522461008654?text=Hola%2C%20me%20interesan%20los%20Dorilocos%2C%20%C2%BFa%20qu%C3%A9%20hora%20est%C3%A1n%20disponibles%3F" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
-          Avisar cuando estén listos
+      <div class="dori-cta-row">
+        <a class="btn btn-gold btn-lg" href="https://wa.me/522461008654?text=Hola%2C%20quiero%20pedir%20Dorilocos%20y%20Chicharrones%20Preparados%20%F0%9F%8C%AE%F0%9F%94%A5%20%C2%BFA%20qu%C3%A9%20hora%20est%C3%A1n%20listos%3F" target="_blank" rel="noopener" style="text-decoration:none">
+          <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+          Pedir Dorilocos ahora
         </a>
-      </div>
-      <div class="dlb-right" aria-hidden="true">
-        <div class="dlb-emoji-wrap">
-          <span class="dlb-main-em">🌮</span>
-          <div class="dlb-chips">
-            <span>🌶️</span><span>🧅</span><span>🍋</span><span>🥒</span><span>🍿</span>
-          </div>
-        </div>
-        <div class="dlb-schedule">
-          <div class="dlb-day"><span class="dlb-day-icon">📅</span><div><strong>Viernes 18 Abr</strong><small>Primer día</small></div></div>
-          <div class="dlb-day"><span class="dlb-day-icon">✅</span><div><strong>Sáb y Dom</strong><small>Cada semana</small></div></div>
+        <div class="dori-badge">
+          <span class="dori-badge-dot" aria-hidden="true"></span>
+          Más vendidos del fin de semana
         </div>
       </div>
     </div>
 
+    <!-- RIGHT: VISUAL -->
+    <div class="dori-right rv-r">
+      <div class="dori-visual">
+        <span class="dori-emoji-main" aria-hidden="true">🌮</span>
+        <div class="dori-emojis-ring" aria-hidden="true">
+          <span>🌶️</span><span>🍋</span><span>🐷</span><span>🥒</span><span>🧅</span><span>🥜</span>
+        </div>
+        <div class="dori-schedule-pills">
+          <div class="dori-pill">
+            <span style="font-size:18px">📅</span>
+            <div><strong>Viernes 18 Abr</strong><small>Primer día</small></div>
+          </div>
+          <div class="dori-pill">
+            <span style="font-size:18px">✅</span>
+            <div><strong>Sáb y Dom</strong><small>Cada semana</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="dori-wave" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<section id="servicios-pub" aria-label="Servicios adicionales">
+  <div class="wrap">
+    <div class="svc-section-header">
+      <div>
+        <span class="sh-ey">Más que una tienda</span>
+        <h2 class="sh-h">Servicios <span>adicionales</span></h2>
+        <p class="sh-p">Todo lo que necesitas en un solo lugar. Rápido, fácil y de confianza.</p>
+      </div>
+    </div>
     <!-- SERVICE CARDS GRID -->
     <div class="svc-grid rv">
 
@@ -1364,7 +2084,6 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
       </div>
 
     </div>
-
     <!-- BOTTOM CTA STRIP -->
     <div class="svc-cta-strip rv">
       <div class="svc-strip-text">
@@ -1375,7 +2094,127 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
         <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
         Preguntar por WhatsApp
       </a>
+  </div>
+</section>
+
+<section class="section section-white" id="beneficios" aria-label="Beneficios">
+  <div class="wrap">
+    <div class="sh rv">
+      <span class="sh-ey">¿Por qué elegirnos?</span>
+      <h2 class="sh-h">Compra <span>fácil, rápido</span> y sin salir</h2>
+      <p class="sh-p">Diseñado para que encuentres lo que necesitas y lo pidas en menos de 5 minutos desde tu celular.</p>
     </div>
+    <div class="benefits-grid rv">
+      <div class="bcard">
+        <div class="bcard-icon" aria-hidden="true">⚡</div>
+        <h4>Pedido en Minutos</h4>
+        <p>Selecciona productos, agrega al carrito y envía por WhatsApp en menos de 3 toques.</p>
+        <div style="margin-top:10px;padding:8px 12px;background:var(--gold-lt);border-radius:var(--r-sm);border:1px solid rgba(229,169,61,.3);font-size:12px;color:var(--gold-dk);font-weight:600;display:flex;align-items:center;gap:6px">
+          <span>🛵</span> Envío disponible en pedidos de <strong>$100 o más</strong>
+        </div>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon" aria-hidden="true">💰</div>
+        <h4>Precios Accesibles</h4>
+        <p>Los mejores precios del barrio. Ofertas semanales exclusivas en nuestro canal.</p>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon" aria-hidden="true">❤️</div>
+        <h4>Atención Personalizada</h4>
+        <p>Trato amable de persona a persona. Si no lo tenemos, lo conseguimos para ti.</p>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon" aria-hidden="true">🛒</div>
+        <h4>1,200+ Productos</h4>
+        <p>Abarrotes, bebidas, botanas, lácteos, higiene, hogar, dulcería y mucho más.</p>
+      </div>
+      <div class="bcard">
+        <div class="bcard-icon" aria-hidden="true">⭐</div>
+        <h4>Programa de Puntos</h4>
+        <p>Cada compra acumula puntos. Canjéalos por productos completamente gratis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="catalogo-gate" aria-label="Acceso al catálogo">
+  <div class="gate-inner">
+    <div class="gate-lock-icon" aria-hidden="true">🔒</div>
+    <h2 class="gate-title">Tu catálogo <span>exclusivo</span><br>te espera</h2>
+    <p class="gate-desc">
+      Inicia sesión para ver más de 1,258 productos con existencia en tiempo real, precios exclusivos y hacer tu pedido express por WhatsApp.
+    </p>
+    <div class="gate-benefits" role="list">
+      <div class="gate-benefit" role="listitem">
+        <div class="gate-benefit-icon" aria-hidden="true">🛒</div>
+        <div class="gate-benefit-title">1,258 productos</div>
+        <div class="gate-benefit-desc">Catálogo completo con 34 categorías</div>
+      </div>
+      <div class="gate-benefit" role="listitem">
+        <div class="gate-benefit-icon" aria-hidden="true">⚡</div>
+        <div class="gate-benefit-title">Existencia real</div>
+        <div class="gate-benefit-desc">Consulta stock al instante</div>
+      </div>
+      <div class="gate-benefit" role="listitem">
+        <div class="gate-benefit-icon" aria-hidden="true">⭐</div>
+        <div class="gate-benefit-title">Tus puntos</div>
+        <div class="gate-benefit-desc">Acumula y canjea beneficios</div>
+      </div>
+      <div class="gate-benefit" role="listitem">
+        <div class="gate-benefit-icon" aria-hidden="true">🎁</div>
+        <div class="gate-benefit-title">Promos exclusivas</div>
+        <div class="gate-benefit-desc">Solo para clientes registrados</div>
+      </div>
+    </div>
+    <div class="gate-ctas">
+      <button class="btn btn-gold" style="font-size:15px;padding:15px 32px;border-radius:20px" onclick="openAuthModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Iniciar sesión
+      </button>
+      <a class="btn btn-ghost" href="https://wa.me/522461008654?text=Hola%2C%20quiero%20registrarme%20como%20cliente%20de%20Abarrotes%20La%20Luz" target="_blank" rel="noopener" style="text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+        Registrarme gratis
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-login-strip" id="acceso" aria-label="Acceso exclusivo">
+  <div class="cls-inner rv">
+    <div class="cls-eyebrow">Solo para clientes registrados</div>
+    <h2 class="cls-title">
+      Inicia sesión y descubre<br>
+      <span>promociones exclusivas</span>
+    </h2>
+    <p class="cls-sub">
+      Los clientes de La Luz acceden a precios especiales, su historial de pedidos y su saldo de puntos. <strong style="color:rgba(255,255,255,.85)">Entra con tu nombre y número de cliente.</strong>
+    </p>
+    <div class="cls-btns">
+      <button class="btn btn-gold btn-lg" onclick="openAuthModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Iniciar sesión ahora
+      </button>
+      <a class="btn btn-ghost btn-lg" href="https://wa.me/522461008654?text=Hola%2C%20quiero%20registrarme%20para%20acceder%20al%20cat%C3%A1logo" target="_blank" rel="noopener" style="text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+        Quiero registrarme
+      </a>
+    </div>
+    <div class="cls-proof">
+      <div class="cls-proof-item"><span class="cls-proof-icon">✅</span>Acceso en menos de 10 segundos</div>
+      <div class="cls-proof-item"><span class="cls-proof-icon">🔒</span>Información segura y privada</div>
+      <div class="cls-proof-item"><span class="cls-proof-icon">⭐</span>33+ clientes ya registrados</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="canje" aria-label="Catálogo de canje">
+  <div class="wrap">
+    <div class="sh rv">
+      <span class="sh-ey">Catálogo de Canje</span>
+      <h2 class="sh-h">Canjea tus <span>Puntos</span></h2>
+      <p class="sh-p">Acumula con cada compra y llévate estos productos completamente gratis.</p>
+    </div>
+    <div class="canje-grid rv" id="canje-grid" aria-label="Productos disponibles para canje"></div>
   </div>
 </section>
 
@@ -1406,7 +2245,11 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
           <div class="info-icon" aria-hidden="true">🕐</div>
           <div>
             <h4>Horario de Atención</h4>
-            <p>Lunes a Sábado: 8:00am – 9:00pm<br>Domingos: 8:00am – 2:00pm</p>
+            <p>Lunes a Domingo: <strong>6:00 AM – 9:00 PM</strong><br>
+            Atención por mensaje: 9:00 PM – 11:00 PM</p>
+            <div id="horario-status" style="margin-top:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;display:inline-block;background:var(--green-lt);color:var(--green-dk)">
+              🟢 Abierto ahora
+            </div>
           </div>
         </div>
         <a class="btn btn-wa" href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener" style="margin-top:8px;display:inline-flex;text-decoration:none">
@@ -1449,17 +2292,15 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
         <span class="footer-logo-name">Abarrotes La Luz</span>
       </div>
       <p style="font-size:13px;max-width:300px;line-height:1.7;margin-bottom:16px">Tu tienda de confianza en San Damián Texóloc. Más de 1,200 productos al mejor precio. Creciendo contigo cada día.</p>
-      <div class="fhr"><span class="fhr-dot" aria-hidden="true"></span>Lun–Sáb: 8:00am – 9:00pm</div>
-      <div class="fhr"><span class="fhr-dot" aria-hidden="true"></span>Domingos: 8:00am – 2:00pm</div>
+      <div class="fhr"><span class="fhr-dot" aria-hidden="true"></span>Lun–Dom: 6:00 AM – 9:00 PM</div>
+      <div class="fhr"><span class="fhr-dot" aria-hidden="true"></span>Mensajes: 9:00 PM – 11:00 PM</div>
     </div>
     <div>
       <h5>Navegación</h5>
       <ul role="list">
-        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#catalogo-gate">Catálogo</a></li>
         <li><a href="#promociones">Promociones</a></li>
-        <li><a href="#puntos">Mis Puntos</a></li>
-        <li><a href="#canje">Canjear Puntos</a></li>
-        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#servicios-pub">Servicios</a></li>
         <li><a href="#ubicacion">Ubicación</a></li>
       </ul>
     </div>
@@ -1469,6 +2310,7 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
         <li><a href="https://wa.me/522461008654" target="_blank" rel="noopener">📱 WhatsApp Pedidos</a></li>
         <li><a href="https://whatsapp.com/channel/0029Vb5qe1D3mFYFmkcz2a0Y" target="_blank" rel="noopener">📣 Canal WhatsApp</a></li>
         <li><a href="https://www.google.com/maps/place/Abarrotes+La+luz/" target="_blank" rel="noopener">📍 Google Maps</a></li>
+        <li><a href="https://www.tiktok.com/@abarrotes.la.luz?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener">🎵 TikTok @abarrotes.la.luz</a></li>
       </ul>
       <p style="margin-top:18px;font-size:12px;color:rgba(255,255,255,.3);line-height:1.6">Calle Porfirio Díaz No. 48<br>San Damián Texóloc, Tlaxcala</p>
     </div>
@@ -1509,103 +2351,47 @@ const PRODUCTOS_RAW=[{"id":"1","n":"PAN DULCE","p":6.0,"c":"PAN","e":0.0,"s":0,"
 const CAT_META_RAW={"ABARROTES":{"emoji":"🛒","total":256,"disp":202},"DULCERIA":{"emoji":"🍬","total":133,"disp":118},"GRUPO MODELO":{"emoji":"🍺","total":106,"disp":85},"COCA-COLA":{"emoji":"🥤","total":88,"disp":72},"SABRITAS":{"emoji":"🍟","total":79,"disp":48},"MARINELA":{"emoji":"🎂","total":56,"disp":42},"LEO":{"emoji":"🍫","total":50,"disp":34},"GAMESA":{"emoji":"🍪","total":49,"disp":43},"LACTEOS":{"emoji":"🥛","total":47,"disp":37},"BARCEL":{"emoji":"🌶️","total":46,"disp":33},"DANONE":{"emoji":"🧃","total":44,"disp":32},"BIMBO":{"emoji":"🍞","total":41,"disp":33},"BOING":{"emoji":"🧃","total":34,"disp":30},"HOGAR":{"emoji":"🏠","total":28,"disp":27},"Farmacia":{"emoji":"💊","total":27,"disp":23},"PEPSI":{"emoji":"🥤","total":24,"disp":19},"CUIDADO PERSONAL":{"emoji":"🧴","total":23,"disp":18},"HUBIN":{"emoji":"🧹","total":21,"disp":21},"PEÑAFIEL":{"emoji":"💧","total":19,"disp":16},"JUMEX":{"emoji":"🍹","total":19,"disp":18},"VERDURA":{"emoji":"🥦","total":18,"disp":18},"CHIDAS":{"emoji":"🍭","total":11,"disp":9},"ALPURA":{"emoji":"🥛","total":7,"disp":6},"YAKUL":{"emoji":"🥛","total":7,"disp":7},"BOTANA":{"emoji":"🍿","total":5,"disp":3},"RED COLA":{"emoji":"🥤","total":5,"disp":5},"BULDAK":{"emoji":"🍜","total":4,"disp":1},"CALCETINES":{"emoji":"🧦","total":3,"disp":3},"PAN":{"emoji":"🥐","total":2,"disp":0},"- Sin Departamento -":{"emoji":"📦","total":2,"disp":2},"TLACOYOS":{"emoji":"🫓","total":1,"disp":1},"TORTILLAS":{"emoji":"🫓","total":1,"disp":0},"FUD":{"emoji":"🥩","total":1,"disp":1},"CARBON":{"emoji":"🔥","total":1,"disp":1}};
 </script>
 <script>
+
 // ================================================================
-// ABARROTES LA LUZ — Catalog & Cart Engine
-// Bug-free version: uses event delegation, no inline onclick with escaping
+// APP ENGINE — Abarrotes La Luz
+// Catalog: PRIVATE (dashboard only, post-login)
+// All DOM accesses guarded with null checks
 // ================================================================
 
-const WA = '522461008654';
-const PER_PAGE = 48;
+var WA = '522461008654';
+var PER_PAGE = 48;
 
-const S = {
-  cat: 'TODOS',
-  flt: 'all',
-  sort: 'n',
-  q: '',
-  page: 1,
-  cart: {},
-  qtys: {}
+// ── STATE ─────────────────────────────────────────────────────────
+var S = {
+  cat: 'TODOS', flt: 'all', sort: 'n', q: '', page: 1,
+  cart: {}, qtys: {}
 };
-
-// Initialize quantities
 PRODUCTOS_RAW.forEach(function(p) { S.qtys[p.id] = 1; });
 
-// ── SIDEBAR ──────────────────────────────────────────────────────
-function buildSidebar() {
-  var el = document.getElementById('cat-list');
-  var entries = Object.entries(CAT_META_RAW).sort(function(a, b) {
-    return b[1].total - a[1].total;
-  });
-
-  // Use data attributes - NO inline onclick with string interpolation
-  var html = '';
-  entries.forEach(function(entry) {
-    var cat = entry[0];
-    var meta = entry[1];
-    html += '<button class="cs-btn" data-cat="' + escAttr(cat) + '">';
-    html += '<span class="cs-em">' + meta.emoji + '</span>';
-    html += '<span class="cs-n">' + escHtml(cat) + '</span>';
-    html += '<span class="cs-c">' + meta.disp + '/' + meta.total + '</span>';
-    html += '</button>';
-  });
-  el.innerHTML = html;
-
-  // Single event delegation listener - safe for ALL category names
-  el.addEventListener('click', function(e) {
-    var btn = e.target.closest('.cs-btn');
-    if (!btn) return;
-    var cat = btn.getAttribute('data-cat');
-    selectCat(cat, btn);
-  });
-
-  document.getElementById('cnt-TODOS').textContent = PRODUCTOS_RAW.length;
-}
-
-// ── SAFE STRING HELPERS ───────────────────────────────────────────
+// ── SAFE HELPERS ──────────────────────────────────────────────────
 function escHtml(str) {
   return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
-function escAttr(str) {
-  return String(str).replace(/"/g, '&quot;');
-}
+function escAttr(str) { return String(str).replace(/"/g, '&quot;'); }
+function gel(id) { return document.getElementById(id); }  // null-safe shorthand
 
 // ── HIGHLIGHT ─────────────────────────────────────────────────────
 function hlText(text, query) {
   if (!query) return escHtml(text);
-  // Safe regex escape
-  var escaped = query.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-  var re = new RegExp('(' + escaped + ')', 'gi');
-  return escHtml(text).replace(re, '<mark>$1</mark>');
+  var e = query.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+  return escHtml(text).replace(new RegExp('(' + e + ')', 'gi'), '<mark>$1</mark>');
 }
+function stockCls(e) { return e <= 0 ? '' : e >= 5 ? 'sfill-hi' : e >= 2 ? 'sfill-md' : 'sfill-lo'; }
+function stockW(e)   { return e <= 0 ? 0 : Math.min(100, Math.round(e * 10)); }
 
-// ── STOCK HELPERS ─────────────────────────────────────────────────
-function stockClass(e) {
-  if (e <= 0) return '';
-  if (e >= 5) return 'sfill-hi';
-  if (e >= 2) return 'sfill-md';
-  return 'sfill-lo';
-}
-function stockWidth(e) {
-  if (e <= 0) return 0;
-  return Math.min(100, Math.round(e * 10));
-}
-
-// ── FILTER & SORT ─────────────────────────────────────────────────
+// ── FILTER / SORT ─────────────────────────────────────────────────
 function getFiltered() {
   var list = PRODUCTOS_RAW;
-  if (S.cat !== 'TODOS') {
-    list = list.filter(function(p) { return p.c === S.cat; });
-  }
-  if (S.flt === 'disp') {
-    list = list.filter(function(p) { return p.s === 1; });
-  } else if (S.flt === 'out') {
-    list = list.filter(function(p) { return p.s === 0; });
-  }
+  if (S.cat !== 'TODOS') list = list.filter(function(p) { return p.c === S.cat; });
+  if (S.flt === 'disp')  list = list.filter(function(p) { return p.s === 1; });
+  if (S.flt === 'out')   list = list.filter(function(p) { return p.s === 0; });
   if (S.q) {
     var q = S.q.toLowerCase();
     list = list.filter(function(p) {
@@ -1625,8 +2411,11 @@ function getFiltered() {
   return sorted;
 }
 
-// ── RENDER PRODUCTS ───────────────────────────────────────────────
+// ── RENDER PRODUCTS (catalog pane in dashboard) ───────────────────
 function renderProducts() {
+  var grid = gel('pgrid');
+  if (!grid) return;  // catalog pane not visible / not in DOM
+
   var filtered = getFiltered();
   var total = filtered.length;
   var pages = Math.max(1, Math.ceil(total / PER_PAGE));
@@ -1634,233 +2423,247 @@ function renderProducts() {
 
   var start = (S.page - 1) * PER_PAGE;
   var slice = filtered.slice(start, start + PER_PAGE);
-  var grid = document.getElementById('pgrid');
   var q = S.q.trim();
 
   if (slice.length === 0) {
-    grid.innerHTML =
-      '<div class="empty">' +
-      '<div class="empty-icon">🔍</div>' +
+    grid.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div>' +
       '<h3>Sin resultados</h3>' +
-      '<p>No encontramos "' + escHtml(q || S.cat) + '".<br>Prueba con otro término.</p>' +
-      '</div>';
+      '<p>No encontramos "' + escHtml(q || S.cat) + '".<br>Prueba con otro término.</p></div>';
   } else {
     var html = '';
     slice.forEach(function(p) {
-      var inCart = (S.cart[p.id] || 0) > 0;
+      var ic  = (S.cart[p.id] || 0) > 0;
       var out = p.s === 0;
       var qty = S.qtys[p.id] || 1;
-      var exText = p.t === 'G'
-        ? p.e + ' kg'
-        : Math.floor(p.e) + ' pza' + (Math.floor(p.e) !== 1 ? 's' : '');
-      var sw = stockWidth(p.e);
-      var sc = stockClass(p.e);
-      var nameHL = hlText(p.n, q);
-      var isPromo = p.p <= 15;
-
+      var ex  = p.t === 'G' ? p.e + ' kg' : Math.floor(p.e) + (Math.floor(p.e) !== 1 ? ' pzas' : ' pza');
       html += '<article class="pc' + (out ? ' oos' : '') + '" role="listitem">';
-
-      // Image area
-      html += '<div class="pc-top">';
-      html += '<span>' + p.em + '</span>';
+      html += '<div class="pc-top"><span>' + p.em + '</span>';
       html += '<span class="stag ' + (out ? 'stag-no' : 'stag-ok') + '">' + (out ? 'Agotado' : 'Disponible') + '</span>';
       if (p.t === 'G') html += '<span class="ttag">Granel</span>';
-      if (isPromo) html += '<span class="ptag">Precio bajo</span>';
-      html += '</div>';
-
-      // Body
-      html += '<div class="pc-body">';
+      if (p.p <= 15)   html += '<span class="ptag">Precio bajo</span>';
+      html += '</div><div class="pc-body">';
       html += '<div class="pc-cat">' + escHtml(p.c) + '</div>';
-      html += '<div class="pc-name" title="' + escAttr(p.n) + '">' + nameHL + '</div>';
+      html += '<div class="pc-name" title="' + escAttr(p.n) + '">' + hlText(p.n, q) + '</div>';
       html += '<div class="pc-code">Cód. ' + escHtml(p.id) + '</div>';
-      html += '<div class="pc-prow">';
-      html += '<span class="pc-price">$' + p.p.toFixed(2) + '</span>';
+      html += '<div class="pc-prow"><span class="pc-price">$' + p.p.toFixed(2) + '</span>';
       html += '<span class="pc-unit">' + (p.t === 'G' ? '/kg' : '/pza') + '</span>';
       if (p.my > 0) html += '<span class="pc-may">May.$' + p.my + '</span>';
       html += '</div>';
-
       if (p.e > 0) {
-        html += '<div class="stkwrap">';
-        html += '<div class="stkrow"><span>Existencia</span><span>' + exText + '</span></div>';
-        html += '<div class="sbar"><div class="sfill ' + sc + '" style="width:' + sw + '%"></div></div>';
-        html += '</div>';
+        html += '<div class="stkwrap"><div class="stkrow"><span>Existencia</span><span>' + ex + '</span></div>';
+        html += '<div class="sbar"><div class="sfill ' + stockCls(p.e) + '" style="width:' + stockW(p.e) + '%"></div></div></div>';
       } else {
         html += '<div style="font-size:10px;color:var(--gray);margin-bottom:8px">Sin existencia</div>';
       }
-
       html += '<div class="pc-actions">';
-      html += '<div class="qctrl">';
-      html += '<button class="qbtn" data-qid="' + escAttr(p.id) + '" data-qd="-1">−</button>';
+      html += '<div class="qctrl"><button class="qbtn" data-qid="' + escAttr(p.id) + '" data-qd="-1">−</button>';
       html += '<span class="qval" id="q-' + escAttr(p.id) + '">' + qty + '</span>';
-      html += '<button class="qbtn" data-qid="' + escAttr(p.id) + '" data-qd="1">+</button>';
-      html += '</div>';
-      html += '<button class="abtn' + (inCart ? ' ic' : '') + '" data-aid="' + escAttr(p.id) + '"' + (out ? ' disabled' : '') + '>';
-      html += out ? 'Agotado' : (inCart ? '✓ Agregado' : '+ Agregar');
-      html += '</button>';
-      html += '</div>';
-
-      html += '</div></article>';
+      html += '<button class="qbtn" data-qid="' + escAttr(p.id) + '" data-qd="1">+</button></div>';
+      html += '<button class="abtn' + (ic ? ' ic' : '') + '" data-aid="' + escAttr(p.id) + '"' + (out ? ' disabled' : '') + '>';
+      html += out ? 'Agotado' : (ic ? '✓ Agregado' : '+ Agregar');
+      html += '</button></div></div></article>';
     });
     grid.innerHTML = html;
   }
 
-  // Event delegation for the grid (qty + add buttons)
+  // Event delegation for product grid
   grid.onclick = null;
   grid.addEventListener('click', gridClickHandler);
 
   renderPagination(pages, total);
 
-  // Result count
-  document.getElementById('rcount').innerHTML =
-    '<strong>' + Math.min(start + PER_PAGE, total) + '</strong> de <strong>' + total + '</strong>';
+  var rcount = gel('rcount');
+  if (rcount) rcount.innerHTML = '<strong>' + Math.min(start + PER_PAGE, total) + '</strong> de <strong>' + total + '</strong>';
 
   updateCatChip(total);
 }
 
 function gridClickHandler(e) {
-  // Qty buttons
   var qbtn = e.target.closest('.qbtn');
-  if (qbtn) {
-    var id = qbtn.getAttribute('data-qid');
-    var delta = parseInt(qbtn.getAttribute('data-qd'), 10);
-    changeQty(id, delta);
-    return;
-  }
-  // Add button
+  if (qbtn) { changeQty(qbtn.getAttribute('data-qid'), parseInt(qbtn.getAttribute('data-qd'), 10)); return; }
   var abtn = e.target.closest('.abtn');
-  if (abtn && !abtn.disabled) {
-    var aid = abtn.getAttribute('data-aid');
-    addToCart(aid);
-    return;
-  }
+  if (abtn && !abtn.disabled) addToCart(abtn.getAttribute('data-aid'));
 }
 
 function updateCatChip(total) {
-  var el = document.getElementById('cc');
+  var el = gel('cc');
+  if (!el) return;
   var html = '';
   if (S.q) {
-    html = '<span class="cc-em">🔍</span><div>' +
-      '<div class="cc-name">Búsqueda: "' + escHtml(S.q) + '"</div>' +
-      '<div class="cc-info">' + total + ' resultado' + (total !== 1 ? 's' : '') + '</div>' +
-      '</div>';
+    html = '<span class="cc-em">🔍</span><div><div class="cc-name">Búsqueda: "' + escHtml(S.q) + '"</div>' +
+      '<div class="cc-info">' + total + ' resultado' + (total !== 1 ? 's' : '') + '</div></div>';
   } else if (S.cat === 'TODOS') {
-    html = '<span class="cc-em">🏪</span><div>' +
-      '<div class="cc-name">Todos los Productos</div>' +
-      '<div class="cc-info">Catálogo completo · ' + total.toLocaleString('es') + ' artículos</div>' +
-      '</div>';
+    html = '<span class="cc-em">🏪</span><div><div class="cc-name">Todos los Productos</div>' +
+      '<div class="cc-info">Catálogo completo · ' + total.toLocaleString('es') + ' artículos</div></div>';
   } else {
     var m = CAT_META_RAW[S.cat] || {};
-    html = '<span class="cc-em">' + (m.emoji || '📦') + '</span><div>' +
-      '<div class="cc-name">' + escHtml(S.cat) + '</div>' +
-      '<div class="cc-info">' + (m.disp || 0) + ' disponibles · ' + total + ' total</div>' +
-      '</div>';
+    html = '<span class="cc-em">' + (m.emoji || '📦') + '</span><div><div class="cc-name">' + escHtml(S.cat) + '</div>' +
+      '<div class="cc-info">' + (m.disp || 0) + ' disponibles · ' + total + ' total</div></div>';
   }
   el.innerHTML = html;
 }
 
 // ── PAGINATION ────────────────────────────────────────────────────
 function renderPagination(pages, total) {
-  var el = document.getElementById('pgn');
+  var el = gel('pgn');
+  if (!el) return;
   if (pages <= 1) { el.innerHTML = ''; return; }
-  var p = S.page;
-  var html = '';
+  var p = S.page, html = '';
   html += '<button class="pg" data-pg="' + (p-1) + '"' + (p <= 1 ? ' disabled' : '') + '>‹</button>';
-
   var range = [1];
   if (p > 3) range.push('...');
   for (var i = Math.max(2, p-1); i <= Math.min(pages-1, p+1); i++) range.push(i);
   if (p < pages - 2) range.push('...');
   if (pages > 1) range.push(pages);
-
   range.forEach(function(r) {
-    if (r === '...') {
-      html += '<span class="pg-sep">…</span>';
-    } else {
-      html += '<button class="pg' + (r === p ? ' cur' : '') + '" data-pg="' + r + '"' +
-        (r === p ? ' aria-current="page"' : '') + '>' + r + '</button>';
-    }
+    if (r === '...') { html += '<span class="pg-sep">…</span>'; }
+    else html += '<button class="pg' + (r === p ? ' cur' : '') + '" data-pg="' + r + '">' + r + '</button>';
   });
   html += '<button class="pg" data-pg="' + (p+1) + '"' + (p >= pages ? ' disabled' : '') + '>›</button>';
   el.innerHTML = html;
-
   el.onclick = function(e) {
     var btn = e.target.closest('.pg');
     if (!btn || btn.disabled || btn.classList.contains('cur')) return;
     var pg = parseInt(btn.getAttribute('data-pg'), 10);
-    if (isNaN(pg)) return;
-    S.page = pg;
-    renderProducts();
-    document.querySelector('.cat-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!isNaN(pg)) {
+      S.page = pg;
+      renderProducts();
+      var panel = document.querySelector('.cat-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 }
 
-// ── CONTROLS ──────────────────────────────────────────────────────
+// ── CATALOG CONTROLS ──────────────────────────────────────────────
+function buildSidebar() {
+  var el = gel('cat-list');
+  if (!el) return;
+  var entries = Object.entries(CAT_META_RAW).sort(function(a,b){ return b[1].total - a[1].total; });
+  var html = '';
+  entries.forEach(function(entry) {
+    var cat = entry[0], m = entry[1];
+    html += '<button class="cs-btn" data-cat="' + escAttr(cat) + '">';
+    html += '<span class="cs-em">' + m.emoji + '</span>';
+    html += '<span class="cs-n">' + escHtml(cat) + '</span>';
+    html += '<span class="cs-c">' + m.disp + '/' + m.total + '</span>';
+    html += '</button>';
+  });
+  el.innerHTML = html;
+  el.addEventListener('click', function(e) {
+    var btn = e.target.closest('.cs-btn');
+    if (!btn) return;
+    selectCat(btn.getAttribute('data-cat'), btn);
+  });
+  var todosEl = gel('cnt-TODOS');
+  if (todosEl) todosEl.textContent = PRODUCTOS_RAW.length;
+}
+
 function selectCat(cat, btn) {
-  S.cat = cat;
-  S.page = 1;
+  S.cat = cat; S.page = 1;
   document.querySelectorAll('.cs-btn').forEach(function(b) { b.classList.remove('sel'); });
-  // Also deselect the "Todos" btn
-  var todosBtn = document.querySelector('[data-cat="TODOS"]');
+  var todosBtn = gel('todos-btn');
   if (todosBtn) todosBtn.classList.remove('sel');
   if (btn) btn.classList.add('sel');
   renderProducts();
-  closeSidebar();
+  closeCatalogSidebar();
 }
-
-// Todos button - direct handler
-document.getElementById('todos-btn').addEventListener('click', function() {
-  S.cat = 'TODOS';
-  S.page = 1;
-  document.querySelectorAll('.cs-btn').forEach(function(b) { b.classList.remove('sel'); });
-  this.classList.add('sel');
-  renderProducts();
-  closeSidebar();
-});
 
 function setFilter(f, btn) {
-  S.flt = f;
-  S.page = 1;
-  document.querySelectorAll('.flt').forEach(function(b) { b.classList.remove('on'); });
-  btn.classList.add('on');
+  S.flt = f; S.page = 1;
+  var flts = document.querySelectorAll('.flt');
+  if (flts) flts.forEach(function(b) { b.classList.remove('on'); });
+  if (btn) btn.classList.add('on');
   renderProducts();
 }
 
-function setSort(val) {
-  S.sort = val;
-  S.page = 1;
-  renderProducts();
+function setSort(val) { S.sort = val; S.page = 1; renderProducts(); }
+
+function clearSearch() {
+  var srch = gel('srch');
+  var srchx = gel('srch-x');
+  if (srch)  srch.value = '';
+  if (srchx) srchx.style.display = 'none';
+  S.q = ''; renderProducts();
 }
 
-// Search with debounce
-var searchTimer;
-document.getElementById('srch').addEventListener('input', function() {
-  clearTimeout(searchTimer);
-  var val = this.value;
-  searchTimer = setTimeout(function() {
-    S.q = val.trim();
-    S.page = 1;
-    document.getElementById('srch-x').style.display = S.q ? 'block' : 'none';
-    if (S.q) {
-      S.cat = 'TODOS';
+// Bind sidebar and search — called when catalog pane is shown
+function initCatalogPane() {
+  // Todos button
+  var todosBtn = gel('todos-btn');
+  if (todosBtn && !todosBtn._catInit) {
+    todosBtn._catInit = true;
+    todosBtn.addEventListener('click', function() {
+      S.cat = 'TODOS'; S.page = 1;
       document.querySelectorAll('.cs-btn').forEach(function(b) { b.classList.remove('sel'); });
-      var todosBtn = document.querySelector('[data-cat="TODOS"]');
-      if (todosBtn) todosBtn.classList.add('sel');
-    }
-    renderProducts();
-  }, 220);
-});
-
-document.getElementById('srch-x').addEventListener('click', function() {
-  document.getElementById('srch').value = '';
-  S.q = '';
-  this.style.display = 'none';
+      this.classList.add('sel');
+      renderProducts();
+      closeCatalogSidebar();
+    });
+  }
+  // Search
+  var srch = gel('srch');
+  if (srch && !srch._catInit) {
+    srch._catInit = true;
+    var stimer;
+    srch.addEventListener('input', function() {
+      clearTimeout(stimer);
+      var val = this.value;
+      stimer = setTimeout(function() {
+        S.q = val.trim(); S.page = 1;
+        var srchx = gel('srch-x');
+        if (srchx) srchx.style.display = S.q ? 'block' : 'none';
+        if (S.q) {
+          S.cat = 'TODOS';
+          document.querySelectorAll('.cs-btn').forEach(function(b) { b.classList.remove('sel'); });
+          var tb = gel('todos-btn'); if (tb) tb.classList.add('sel');
+        }
+        renderProducts();
+      }, 220);
+    });
+  }
+  var srchx = gel('srch-x');
+  if (srchx && !srchx._catInit) {
+    srchx._catInit = true;
+    srchx.addEventListener('click', clearSearch);
+  }
+  // Mobile sidebar
+  var mobCats = gel('mob-cats');
+  if (mobCats && !mobCats._catInit) {
+    mobCats._catInit = true;
+    mobCats.addEventListener('click', toggleCatalogSidebar);
+  }
+  var mobOv = gel('mob-ov');
+  if (mobOv && !mobOv._catInit) {
+    mobOv._catInit = true;
+    mobOv.addEventListener('click', closeCatalogSidebar);
+  }
+  // Build sidebar and render
+  buildSidebar();
   renderProducts();
-});
+}
+
+function toggleCatalogSidebar() {
+  var sb  = gel('csb');
+  var ov  = gel('mob-ov');
+  var btn = gel('mob-cats');
+  if (!sb) return;
+  var open = sb.classList.toggle('open');
+  if (ov)  ov.classList.toggle('open', open);
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function closeCatalogSidebar() {
+  var sb  = gel('csb');
+  var ov  = gel('mob-ov');
+  var btn = gel('mob-cats');
+  if (sb)  { sb.classList.remove('open'); sb.classList.remove('mob-open'); }
+  if (ov)  ov.classList.remove('open');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
 
 // ── CART ──────────────────────────────────────────────────────────
 function changeQty(id, delta) {
   S.qtys[id] = Math.max(1, (S.qtys[id] || 1) + delta);
-  var el = document.getElementById('q-' + id);
+  var el = gel('q-' + id);
   if (el) el.textContent = S.qtys[id];
 }
 
@@ -1868,63 +2671,44 @@ function addToCart(id) {
   var p = PRODUCTOS_RAW.find(function(x) { return x.id === id; });
   if (!p || p.s === 0) return;
   S.cart[id] = (S.cart[id] || 0) + (S.qtys[id] || 1);
-  renderCart();
-  renderProducts();
+  renderCart(); renderProducts();
   showToast('✓ ' + p.n + ' agregado al pedido');
 }
 
-function removeFromCart(id) {
-  delete S.cart[id];
-  renderCart();
-  renderProducts();
-}
+function removeFromCart(id) { delete S.cart[id]; renderCart(); renderProducts(); }
 
 function changeCartQty(id, delta) {
   var next = (S.cart[id] || 0) + delta;
-  if (next <= 0) {
-    removeFromCart(id);
-    return;
-  }
-  S.cart[id] = next;
-  renderCart();
+  if (next <= 0) { removeFromCart(id); return; }
+  S.cart[id] = next; renderCart();
 }
 
-function clearCart() {
-  S.cart = {};
-  renderCart();
-  renderProducts();
-}
+function clearCart() { S.cart = {}; renderCart(); renderProducts(); }
 
 function renderCart() {
   var keys = Object.keys(S.cart).filter(function(k) { return S.cart[k] > 0; });
   var totalQty = keys.reduce(function(s, k) { return s + S.cart[k]; }, 0);
 
-  // Badge
-  var badge = document.getElementById('nav-badge');
-  badge.textContent = totalQty;
-  badge.classList.toggle('on', totalQty > 0);
+  var badge = gel('nav-badge');
+  if (badge) { badge.textContent = totalQty; badge.classList.toggle('on', totalQty > 0); }
 
-  var listEl = document.getElementById('cp-items');
-  var footEl = document.getElementById('cp-foot');
+  var listEl = gel('cp-items');
+  var footEl = gel('cp-foot');
+  if (!listEl) return;
 
   if (keys.length === 0) {
-    listEl.innerHTML =
-      '<div class="cp-empty">' +
-      '<div class="cp-empty-icon">🛍️</div>' +
-      '<p>Tu pedido está vacío.<br>Agrega productos del catálogo.</p>' +
-      '</div>';
-    footEl.style.display = 'none';
+    listEl.innerHTML = '<div class="cp-empty"><div class="cp-empty-icon">🛍️</div>' +
+      '<p>Tu pedido está vacío.<br>Agrega productos del catálogo.</p></div>';
+    if (footEl) footEl.style.display = 'none';
     return;
   }
 
-  footEl.style.display = 'block';
-  var total = 0;
-  var html = '';
+  if (footEl) footEl.style.display = 'block';
+  var total = 0, html = '';
   keys.forEach(function(k) {
     var p = PRODUCTOS_RAW.find(function(x) { return x.id === k; });
     if (!p) return;
-    var sub = p.p * S.cart[k];
-    total += sub;
+    var sub = p.p * S.cart[k]; total += sub;
     html += '<div class="ci">';
     html += '<div class="ci-em">' + p.em + '</div>';
     html += '<div class="ci-info">';
@@ -1942,267 +2726,1088 @@ function renderCart() {
     html += '</div>';
   });
   listEl.innerHTML = html;
-
-  // Event delegation for cart items
   listEl.onclick = function(e) {
     var qb = e.target.closest('.ci-qb');
     if (qb) { changeCartQty(qb.getAttribute('data-cid'), parseInt(qb.getAttribute('data-cd'), 10)); return; }
     var rm = e.target.closest('.ci-rm');
-    if (rm) { removeFromCart(rm.getAttribute('data-rid')); }
+    if (rm) removeFromCart(rm.getAttribute('data-rid'));
   };
 
-  document.getElementById('cp-total-val').textContent = '$' + total.toFixed(2);
-  document.getElementById('cp-count').textContent = totalQty + ' producto' + (totalQty !== 1 ? 's' : '');
-
-  // Preview message — using actual newline characters
-  var lines = keys.map(function(k) {
-    var p = PRODUCTOS_RAW.find(function(x) { return x.id === k; });
-    return '- ' + p.n + ' x' + S.cart[k] + ' = $' + (p.p * S.cart[k]).toFixed(2);
-  }).join('\n');
-  var msg = 'Hola, quiero hacer este pedido:\n\n' + lines + '\n\nTotal estimado: $' + total.toFixed(2) + '\n\nMi dirección es: _______';
-
-  var prev = document.getElementById('cp-preview');
-  prev.textContent = msg;
-  prev.classList.add('show');
+  var tv = gel('cp-total-val');
+  var cc = gel('cp-count');
+  var prev = gel('cp-preview');
+  if (tv)   tv.textContent = '$' + total.toFixed(2);
+  if (cc)   cc.textContent = totalQty + ' producto' + (totalQty !== 1 ? 's' : '');
+  if (prev) {
+    var lines = keys.map(function(k) {
+      var p = PRODUCTOS_RAW.find(function(x) { return x.id === k; });
+      return '- ' + p.n + ' x' + S.cart[k] + ' = $' + (p.p * S.cart[k]).toFixed(2);
+    }).join('\n');
+    prev.textContent = 'Hola, quiero hacer este pedido:\n\n' + lines +
+      '\n\nTotal estimado: $' + total.toFixed(2) + '\n\nMi dirección es: _______';
+    prev.classList.add('show');
+  }
 }
 
 function sendWhatsApp() {
   var keys = Object.keys(S.cart).filter(function(k) { return S.cart[k] > 0; });
   if (!keys.length) return;
   var total = 0;
+  var itemsArr = [];
   var lines = keys.map(function(k) {
     var p = PRODUCTOS_RAW.find(function(x) { return x.id === k; });
-    var sub = p.p * S.cart[k];
-    total += sub;
+    var sub = p.p * S.cart[k]; total += sub;
+    itemsArr.push({ id:p.id, name:p.n, qty:S.cart[k], price:p.p, subtotal:sub });
     return '- ' + p.n + ' x' + S.cart[k] + ' = $' + sub.toFixed(2);
   }).join('\n');
 
   var msg = 'Hola, quiero hacer este pedido:\n\n' + lines +
-    '\n\nTotal estimado: $' + total.toFixed(2) +
-    '\n\nMi dirección es: _______';
+    '\n\nTotal estimado: $' + total.toFixed(2) + '\n\nMi dirección es: _______';
 
-  var encoded = encodeURIComponent(msg);
-  window.open('https://wa.me/' + WA + '?text=' + encoded, '_blank');
-}
+  // Register order in authenticated user history
+  if (AUTH && AUTH.currentUser) {
+    var pts = Math.floor(total / 10); // $10 = 1 punto
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'});
+    var timeStr = now.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+    var orderId = 'WA-' + now.getTime().toString(36).toUpperCase().slice(-6);
+    var orderSummary = itemsArr.map(function(i){ return i.name + ' x' + i.qty; }).join(', ');
 
-// ── CART PANEL ────────────────────────────────────────────────────
-function openCart() {
-  document.getElementById('cart-panel').classList.add('open');
-  document.getElementById('cart-bg').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeCart() {
-  document.getElementById('cart-panel').classList.remove('open');
-  document.getElementById('cart-bg').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.getElementById('nav-cart-btn').addEventListener('click', openCart);
-document.getElementById('cart-bg').addEventListener('click', closeCart);
-document.getElementById('cp-close').addEventListener('click', closeCart);
+    var newOrder = {
+      id: orderId,
+      date: dateStr + ' ' + timeStr,
+      items: orderSummary,
+      total: total,
+      status: 'pending',
+      channel: 'WhatsApp',
+      pts: pts
+    };
+    var newPtsEntry = {
+      type: 'earn',
+      pts: pts,
+      reason: 'Compra ' + orderId,
+      date: dateStr
+    };
 
-// ── MOBILE SIDEBAR ────────────────────────────────────────────────
-function toggleSidebar() {
-  var sb = document.getElementById('csb');
-  var ov = document.getElementById('mob-ov');
-  var btn = document.getElementById('mob-cats');
-  var isOpen = sb.classList.toggle('open');
-  ov.classList.toggle('open', isOpen);
-  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-}
-function closeSidebar() {
-  document.getElementById('csb').classList.remove('open');
-  document.getElementById('mob-ov').classList.remove('open');
-  document.getElementById('mob-cats').setAttribute('aria-expanded', 'false');
-}
-document.getElementById('mob-cats').addEventListener('click', toggleSidebar);
-document.getElementById('mob-ov').addEventListener('click', closeSidebar);
+    var user = AUTH.currentUser;
+    if (!user.orders) user.orders = [];
+    if (!user.ptsHistory) user.ptsHistory = [];
+    user.orders.push(newOrder);
+    user.ptsHistory.push(newPtsEntry);
+    user.pts = (user.pts || 0) + pts;
 
-// ── TOAST ─────────────────────────────────────────────────────────
-var toastTimer;
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2200);
-}
+    AUTH.updateUser({ orders: user.orders, ptsHistory: user.ptsHistory, pts: user.pts });
 
-// ── KEYBOARD ──────────────────────────────────────────────────────
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeCart(); closeSidebar(); }
-  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-    e.preventDefault();
-    document.getElementById('srch').focus();
-  }
-});
-
-// ── PROMO BUTTONS ─────────────────────────────────────────────────
-document.getElementById('promo-view-catalog').addEventListener('click', function() {
-  document.getElementById('srch').value = 'coca';
-  S.q = 'coca';
-  S.page = 1;
-  document.getElementById('srch-x').style.display = 'block';
-  renderProducts();
-  document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
-});
-document.getElementById('promo-combo').addEventListener('click', function() {
-  window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola, me interesa el combo botanas + refresco'), '_blank');
-});
-document.getElementById('promo-puntos').addEventListener('click', function() {
-  document.getElementById('puntos').scrollIntoView({ behavior: 'smooth' });
-});
-
-// ================================================================
-// PUNTOS ENGINE
-// ================================================================
-var CLIENTES = [
-  {id:"0001",n:"Lulu",p:660},{id:"0002",n:"Josefina Diaz",p:1182},
-  {id:"0003",n:"Veronica Nava",p:1735},{id:"0004",n:"Gerardo Sanchez",p:2724},
-  {id:"0005",n:"Margarita",p:15},{id:"0006",n:"Higinia Diaz",p:792},
-  {id:"0007",n:"Rosa",p:748},{id:"0008",n:"Maria Felix",p:360},
-  {id:"0009",n:"Rosy",p:454},{id:"0010",n:"Patricia Sanchez",p:276},
-  {id:"0012",n:"Leonardo",p:1349},{id:"0013",n:"Angelica Hdz",p:310},
-  {id:"0014",n:"Guadalupe Diaz",p:200},{id:"0015",n:"Concha",p:223},
-  {id:"0016",n:"Leonor",p:314},{id:"0018",n:"Mauro",p:1185},
-  {id:"0019",n:"Natividad",p:225},{id:"0021",n:"Alejandro Rojas",p:392},
-  {id:"0022",n:"Gloria",p:38},{id:"0024",n:"Angelica Marquez",p:147},
-  {id:"0025",n:"Remedios",p:335},{id:"0026",n:"Benito Hdz",p:251},
-  {id:"0029",n:"Jorge Lira",p:220},{id:"0030",n:"Tony Lira",p:361},
-  {id:"0032",n:"Silvia Alonso",p:895},{id:"0033",n:"Guadalupe Salazar",p:124},
-  {id:"0037",n:"Alfredo",p:694},{id:"0038",n:"Sara Nava",p:250},
-  {id:"0040",n:"Yolanda",p:317},{id:"0041",n:"Johana Flores",p:127},
-  {id:"0042",n:"Monica",p:557},{id:"0043",n:"Yesenia",p:216},
-  {id:"0045",n:"Rebeca",p:223}
-];
-
-var CANJE_PRODS = [
-  {n:"Refresco 600ml",d:"Coca-Cola, Pepsi o similar",pts:2500,em:"🥤"},
-  {n:"Bolsa de Sabritas",d:"Variedades clásicas",pts:1800,em:"🍟"},
-  {n:"Pan Bimbo Grande",d:"Blanco o Integral",pts:4200,em:"🍞"},
-  {n:"Café Nescafé 50g",d:"Clásico soluble",pts:5500,em:"☕"},
-  {n:"Leche 1L",d:"Lala o Alpura",pts:3000,em:"🥛"},
-  {n:"Chocolate Abuelita",d:"Para tus tardes frías",pts:4000,em:"🍫"}
-];
-
-function buildLeaderboard() {
-  var top = CLIENTES.slice().sort(function(a,b){ return b.p - a.p; }).slice(0, 5);
-  var maxPts = top[0].p;
-  var rankClass = ['g','s','b','',''];
-  var html = '';
-  top.forEach(function(c, i) {
-    var pct = Math.round(c.p / maxPts * 100);
-    html += '<li class="ldr-item">';
-    html += '<div class="ldr-rank ' + rankClass[i] + '">' + (i+1) + '</div>';
-    html += '<div style="flex:1;min-width:0">';
-    html += '<div style="display:flex;align-items:center;gap:7px">';
-    html += '<span class="ldr-name">' + escHtml(c.n) + '</span>';
-    html += '<span class="ldr-id">#' + c.id + '</span>';
-    html += '</div>';
-    html += '<div class="pts-bar"><div class="pts-fill" style="width:' + pct + '%"></div></div>';
-    html += '</div>';
-    html += '<span class="ldr-pts">' + c.p.toLocaleString('es') + '</span>';
-    html += '</li>';
-  });
-  document.getElementById('ldr-list').innerHTML = html;
-}
-
-function consultarPuntos() {
-  var val = document.getElementById('cid').value.trim().padStart(4, '0');
-  var box = document.getElementById('result-box');
-  var c = CLIENTES.find(function(x) { return x.id === val; });
-  box.className = 'rbox';
-  if (c) {
-    box.classList.add('ok');
-    var canjes = CANJE_PRODS.filter(function(p) { return p.pts <= c.p; });
-    var html = '<div class="pts-circle"><strong>' + c.p.toLocaleString('es') + '</strong><small>pts</small></div>';
-    html += '<div>';
-    html += '<strong style="font-size:15px">👤 ' + escHtml(c.n) + '</strong>';
-    html += '<p style="font-size:12px;margin-top:3px;color:var(--gray)">Cliente #' + c.id + '</p>';
-    if (canjes.length > 0) {
-      html += '<p style="font-size:12.5px;color:var(--green-dk);margin-top:5px;font-weight:600">¡Puedes canjear ' + canjes.length + ' producto' + (canjes.length > 1 ? 's' : '') + '!</p>';
-    } else {
-      html += '<p style="font-size:12.5px;color:var(--gray);margin-top:5px">Sigue acumulando 💪</p>';
+    // Refresh dashboard if open
+    var dash = document.getElementById('dashboard');
+    if (dash && dash.classList.contains('open')) {
+      populateDashboard(AUTH.currentUser);
     }
-    html += '</div>';
-    box.innerHTML = html;
-  } else {
-    box.classList.add('err');
-    box.innerHTML = '<span>❌ Número no encontrado. Verifica e intenta nuevamente.</span>';
+    if (pts > 0) showToast('✅ Pedido enviado · +' + pts + ' puntos acumulados');
   }
+
+  window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank');
+  S.cart = {};
+  renderCart();
 }
-document.getElementById('cbtn').addEventListener('click', consultarPuntos);
-document.getElementById('cid').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') consultarPuntos();
-});
+
+// Cart panel open/close
+function openCart()  { var cp=gel('cart-panel'),bg=gel('cart-bg'); if(cp)cp.classList.add('open'); if(bg)bg.classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart() { var cp=gel('cart-panel'),bg=gel('cart-bg'); if(cp)cp.classList.remove('open'); if(bg)bg.classList.remove('open'); document.body.style.overflow=''; }
+var navCartBtn = gel('nav-cart-btn');
+var cartBg     = gel('cart-bg');
+var cpClose    = gel('cp-close');
+if (navCartBtn) navCartBtn.addEventListener('click', openCart);
+if (cartBg)     cartBg.addEventListener('click', closeCart);
+if (cpClose)    cpClose.addEventListener('click', closeCart);
+
+// ── CANJE ─────────────────────────────────────────────────────────
+var CANJE_PRODS = [
+  {n:'Refresco 600ml',d:'Coca-Cola, Pepsi o similar',pts:2500,em:'🥤'},
+  {n:'Bolsa de Sabritas',d:'Variedades clásicas',pts:1800,em:'🍟'},
+  {n:'Pan Bimbo Grande',d:'Blanco o Integral',pts:4200,em:'🍞'},
+  {n:'Café Nescafé 50g',d:'Clásico soluble',pts:5500,em:'☕'},
+  {n:'Leche 1L',d:'Lala o Alpura',pts:3000,em:'🥛'},
+  {n:'Chocolate Abuelita',d:'Para tus tardes frías',pts:4000,em:'🍫'}
+];
 
 function buildCanje() {
+  var el = gel('canje-grid');
+  if (!el) return;
   var html = '';
   CANJE_PRODS.forEach(function(p) {
-    html += '<div class="cj">';
-    html += '<div class="cj-img">' + p.em + '</div>';
-    html += '<div class="cj-body">';
-    html += '<div class="cj-name">' + escHtml(p.n) + '</div>';
+    html += '<div class="cj"><div class="cj-img">' + p.em + '</div>';
+    html += '<div class="cj-body"><div class="cj-name">' + escHtml(p.n) + '</div>';
     html += '<div class="cj-desc">' + escHtml(p.d) + '</div>';
     html += '<span class="cj-pts">⭐ ' + p.pts.toLocaleString('es') + ' pts</span>';
     html += '</div></div>';
   });
-  document.getElementById('canje-grid').innerHTML = html;
+  el.innerHTML = html;
 }
 
-// ================================================================
-// SCROLL REVEAL
-// ================================================================
+// ── SCROLL REVEAL ─────────────────────────────────────────────────
 var revealObs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
-    if (e.isIntersecting) {
-      e.target.classList.add('on');
-      revealObs.unobserve(e.target);
-    }
+    if (e.isIntersecting) { e.target.classList.add('on'); revealObs.unobserve(e.target); }
   });
 }, { threshold: 0.1 });
-document.querySelectorAll('.rv, .rv-l, .rv-r').forEach(function(el) {
-  revealObs.observe(el);
-});
+document.querySelectorAll('.rv, .rv-l, .rv-r').forEach(function(el) { revealObs.observe(el); });
 
 // ── NAV SCROLL ────────────────────────────────────────────────────
 window.addEventListener('scroll', function() {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+  var nav = gel('nav');
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
 // ── NAV ACTIVE LINK ───────────────────────────────────────────────
 var navLinks = document.querySelectorAll('.nav-links a');
-var linkObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) {
-      navLinks.forEach(function(a) { a.classList.remove('active'); });
-      var link = document.querySelector('.nav-links a[href="#' + e.target.id + '"]');
-      if (link) link.classList.add('active');
-    }
-  });
-}, { threshold: 0.4 });
-document.querySelectorAll('section[id]').forEach(function(s) { linkObs.observe(s); });
+if (navLinks.length) {
+  var linkObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        navLinks.forEach(function(a) { a.classList.remove('active'); });
+        var link = document.querySelector('.nav-links a[href="#' + e.target.id + '"]');
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(function(s) { linkObs.observe(s); });
+}
+
+// ── KEYBOARD ──────────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeCart();
+    closeCatalogSidebar();
+  }
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    var srch = gel('srch');
+    if (srch) { e.preventDefault(); srch.focus(); }
+  }
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────
+var toastTimer;
+function showToast(msg) {
+  var t = gel('toast');
+  if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
 
 // ── YEAR ──────────────────────────────────────────────────────────
-document.getElementById('yr').textContent = new Date().getFullYear();
+var yrEl = gel('yr');
+if (yrEl) yrEl.textContent = new Date().getFullYear();
 
 // ================================================================
-// INIT — called after DOM ready
+// INIT — safe, all guards in place
 // ================================================================
-buildSidebar();
-renderProducts();
-renderCart();
-buildLeaderboard();
-buildCanje();
+renderCart();   // cart badge update (cart-panel always in DOM)
+buildCanje();   // canje-grid is always in DOM (public page)
+// buildSidebar() and renderProducts() are called via initCatalogPane()
+// which is triggered when the catalog pane is shown in the dashboard
+
 
 </script>
 
+<!-- ═══════════════════════════════════════════════════════════
+     PANTALLA DE LOGIN — Nombre + Número de Cliente
+     Simple, rápida, sin registro público
+═══════════════════════════════════════════════════════════ -->
+<div class="auth-overlay" id="auth-overlay" role="dialog" aria-modal="true" aria-label="Iniciar sesión en Abarrotes La Luz">
+  <div class="auth-modal auth-modal-simple">
+
+    <!-- HEADER -->
+    <div class="auth-modal-head">
+      <div class="auth-logo-wrap">
+        <div class="auth-logo-icon" aria-hidden="true">LL</div>
+        <div>
+          <div class="auth-logo-name">Abarrotes La Luz</div>
+          <div style="font-size:11px;color:var(--gray);font-weight:400">Área de clientes</div>
+        </div>
+      </div>
+      <button class="auth-close" id="auth-close" aria-label="Cerrar sesión">×</button>
+    </div>
+
+    <!-- BODY -->
+    <div class="auth-body">
+      <h2 class="auth-title" style="font-size:20px">Consulta tus puntos 👋</h2>
+      <p class="auth-sub">Ingresa con tu nombre y número de cliente para ver tus puntos y pedidos.</p>
+
+      <!-- NOMBRE -->
+      <div class="auth-field" id="lf-name-field">
+        <label class="auth-label" for="lf-name">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:5px"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Tu nombre
+        </label>
+        <input
+          class="auth-input"
+          id="lf-name"
+          type="text"
+          placeholder="Ej. Veronica, Gerardo Sanchez…"
+          autocomplete="name"
+          autocapitalize="words"
+          spellcheck="false"
+        />
+        <div class="auth-field-err" id="lf-name-err">Ingresa el nombre con el que te registraste</div>
+      </div>
+
+      <!-- NÚMERO DE CLIENTE -->
+      <div class="auth-field" id="lf-num-field">
+        <label class="auth-label" for="lf-num">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Número de cliente
+          <span style="color:var(--gray);font-weight:400;font-size:11px;margin-left:4px">(tu contraseña)</span>
+        </label>
+        <input
+          class="auth-input"
+          id="lf-num"
+          type="text"
+          inputmode="numeric"
+          placeholder="Ej. 0004"
+          maxlength="6"
+          autocomplete="off"
+        />
+        <div class="auth-field-err" id="lf-num-err">Usuario o número de cliente incorrecto</div>
+      </div>
+
+      <!-- ERROR GENERAL -->
+      <div id="lf-general-err" style="display:none;background:var(--red-lt);border:1px solid var(--red);border-radius:var(--r-sm);padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;font-weight:600">
+        ❌ Usuario o número de cliente incorrecto. Verifica e intenta de nuevo.
+      </div>
+
+      <!-- BOTÓN INGRESAR -->
+      <button class="auth-submit" id="login-btn" style="font-size:15px;padding:15px">
+        <span class="auth-btn-text">Ingresar</span>
+        <div class="auth-loading"></div>
+      </button>
+
+      <!-- DIVIDER -->
+      <div class="auth-divider"><span>¿Necesitas ayuda?</span></div>
+
+      <!-- BOTÓN AYUDA -->
+      <a class="auth-wa-btn" href="https://wa.me/522461008654?text=Hola%2C%20necesito%20ayuda%20para%20iniciar%20sesi%C3%B3n%20en%20el%20sitio" target="_blank" rel="noopener" style="text-decoration:none;display:flex">
+        <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+        Necesito ayuda por WhatsApp
+      </a>
+
+      <p style="text-align:center;font-size:12px;color:var(--gray);margin-top:14px;line-height:1.6">
+        ¿No tienes número de cliente?<br>
+        <a href="https://wa.me/522461008654?text=Hola%2C%20quiero%20registrarme%20como%20cliente%20de%20Abarrotes%20La%20Luz" target="_blank" rel="noopener" style="color:var(--gold-dk);font-weight:700">Regístrate gratis por WhatsApp</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DASHBOARD PANEL
+═══════════════════════════════════════════════════════════ -->
+<div class="dashboard-overlay" id="dashboard" role="main" aria-label="Tu cuenta">
+  <nav class="dash-nav">
+    <button class="dash-back" id="dash-back-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Volver a la tienda
+    </button>
+    <span class="dash-nav-title">Mi Cuenta</span>
+    <button class="dash-logout" id="dash-logout-btn">Cerrar sesión</button>
+  </nav>
+
+  <div class="dash-inner">
+
+    <!-- WELCOME CARD -->
+    <div class="dash-welcome" id="dash-welcome">
+      <div class="dash-welcome-hi">Hola de nuevo,</div>
+      <div class="dash-welcome-name" id="dash-name">–</div>
+      <div class="dash-welcome-sub" id="dash-sub">Cliente de Abarrotes La Luz</div>
+      <div class="dash-level-badge level-bronze" id="dash-level-badge">🥉 Nivel Bronce</div>
+    </div>
+
+    <!-- STATS CHIPS -->
+    <div class="dash-stats">
+      <div class="dstat">
+        <div class="dstat-icon">⭐</div>
+        <span class="dstat-val" id="dstat-pts">0</span>
+        <div class="dstat-lbl">Puntos totales</div>
+      </div>
+      <div class="dstat">
+        <div class="dstat-icon">🛒</div>
+        <span class="dstat-val" id="dstat-orders">0</span>
+        <div class="dstat-lbl">Pedidos</div>
+      </div>
+      <div class="dstat">
+        <div class="dstat-icon">💰</div>
+        <span class="dstat-val" id="dstat-saved">$0</span>
+        <div class="dstat-lbl">Ahorrado</div>
+      </div>
+      <div class="dstat">
+        <div class="dstat-icon">📅</div>
+        <span class="dstat-val" id="dstat-member">–</span>
+        <div class="dstat-lbl">Miembro desde</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="dash-tabs" role="tablist">
+      <button class="dash-tab on" role="tab" aria-selected="true" onclick="dashTab('puntos', this)">⭐ Puntos</button>
+      <button class="dash-tab" role="tab" aria-selected="false" onclick="dashTab('catalogo', this)">🛒 Catálogo</button>
+      <button class="dash-tab" role="tab" aria-selected="false" onclick="dashTab('pedidos', this)">📋 Pedidos</button>
+      <button class="dash-tab" role="tab" aria-selected="false" onclick="dashTab('promos', this)">🎁 Promos</button>
+      <button class="dash-tab" role="tab" aria-selected="false" onclick="dashTab('perfil', this)">👤 Perfil</button>
+    </div>
+
+    <!-- PANE: PUNTOS -->
+    <div class="dash-pane on" id="pane-puntos">
+      <div class="dash-card">
+        <div class="dash-card-title"><span>⭐</span> Tus Puntos La Luz</div>
+        <div class="pts-display">
+          <div>
+            <div class="pts-big" id="pts-big">0</div>
+            <div class="pts-label">puntos acumulados</div>
+          </div>
+          <div style="flex:1;padding-left:16px;border-left:1px solid rgba(255,255,255,.1)">
+            <div style="font-size:12px;color:rgba(255,255,255,.45);margin-bottom:8px">Gana puntos comprando</div>
+            <div style="font-size:12px;color:var(--gold);font-weight:600">$10 = 1 punto</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:4px">Canjea desde 1,800 pts</div>
+          </div>
+        </div>
+
+        <div class="pts-progress-wrap">
+          <div class="pts-progress-label">
+            <span id="pts-prog-curr">0 pts</span>
+            <span id="pts-prog-next">siguiente recompensa: 0 pts</span>
+          </div>
+          <div class="pts-progress-bar">
+            <div class="pts-progress-fill" id="pts-prog-fill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="pts-next-reward" id="pts-next-msg">
+          🎁 ¡Acumula más puntos para canjear tu primera recompensa!
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-card-title"><span>📋</span> Historial de Puntos</div>
+        <div class="pts-history" id="pts-history"></div>
+      </div>
+    </div>
+
+    <!-- PANE: PEDIDOS -->
+    <div class="dash-pane" id="pane-pedidos">
+      <div class="dash-card">
+        <div class="dash-card-title"><span>🛒</span> Mis Pedidos</div>
+        <div class="order-list" id="order-list"></div>
+      </div>
+    </div>
+
+    <!-- PANE: PROMOS -->
+    <div class="dash-pane" id="pane-promos">
+      <div class="dash-card">
+        <div class="dash-card-title"><span>🔔</span> Avisos para ti</div>
+        <div class="reminders-list" id="reminders-list"></div>
+      </div>
+      <div class="dash-card" style="margin-top:20px">
+        <div class="dash-card-title"><span>🎁</span> Promociones exclusivas para ti</div>
+        <div class="promo-pers-grid" id="promos-pers"></div>
+      </div>
+    </div>
+
+    <!-- PANE: PERFIL -->
+    <div class="dash-pane" id="pane-perfil">
+      <div class="dash-card">
+        <div class="dash-card-title"><span>👤</span> Mi Perfil</div>
+        <div class="profile-grid">
+          <div class="auth-field">
+            <label class="auth-label">Nombre completo</label>
+            <input class="auth-input" id="pf-name" type="text" placeholder="Tu nombre"/>
+          </div>
+          <div class="auth-field">
+            <label class="auth-label">Teléfono</label>
+            <input class="auth-input" id="pf-phone" type="tel" placeholder="10 dígitos"/>
+          </div>
+          <div class="auth-field">
+            <label class="auth-label">Correo electrónico</label>
+            <input class="auth-input" id="pf-email" type="email" placeholder="tu@correo.com"/>
+          </div>
+          <div class="auth-field">
+            <label class="auth-label">Fecha de cumpleaños</label>
+            <input class="auth-input" id="pf-bday" type="date"/>
+          </div>
+        </div>
+        <div class="auth-field" style="margin-top:4px">
+          <label class="auth-label">Dirección de entrega</label>
+          <input class="auth-input" id="pf-addr" type="text" placeholder="Calle, número, colonia"/>
+        </div>
+        <button class="profile-save" onclick="saveProfile()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Guardar cambios
+        </button>
+      </div>
+
+      <div class="dash-card" style="margin-top:20px">
+        <div class="dash-card-title"><span>🔐</span> Seguridad</div>
+        <div class="auth-field">
+          <label class="auth-label">Nueva contraseña</label>
+          <input class="auth-input" id="pf-newpass" type="password" placeholder="Nueva contraseña (mínimo 6 caracteres)"/>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Confirmar contraseña</label>
+          <input class="auth-input" id="pf-newpass2" type="password" placeholder="Repite la nueva contraseña"/>
+        </div>
+        <button class="profile-save" onclick="changePassword()" style="background:var(--black)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Cambiar contraseña
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+    <!-- PANE: CATÁLOGO PRIVADO -->
+    <div class="dash-pane" id="pane-catalogo">
+      <div class="dcat-wrap">
+
+        <!-- TOOLBAR -->
+        <div class="dcat-toolbar">
+          <div class="dcat-search-wrap" role="search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="srch" type="search" class="dcat-search" placeholder="Buscar producto, código…" autocomplete="off" aria-label="Buscar en el catálogo"/>
+            <button id="srch-x" class="dcat-search-clr" aria-label="Limpiar">×</button>
+          </div>
+          <div class="dcat-filters" role="group" aria-label="Filtrar">
+            <button class="flt on" onclick="setFilter('all',this)">Todos</button>
+            <button class="flt" onclick="setFilter('disp',this)">✓ Disponibles</button>
+            <button class="flt" onclick="setFilter('out',this)">✗ Agotados</button>
+          </div>
+          <div class="dcat-sort-row">
+            <span class="rcount" id="rcount" aria-live="polite"></span>
+            <select class="srt" onchange="setSort(this.value)" aria-label="Ordenar">
+              <option value="n">A → Z</option>
+              <option value="nz">Z → A</option>
+              <option value="pa">Precio ↑</option>
+              <option value="pd">Precio ↓</option>
+              <option value="st">Mayor stock</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- BODY: CATEGORIES + PRODUCTS -->
+        <div class="dcat-body" id="dcat-body">
+
+          <!-- SIDEBAR CATEGORIES -->
+          <aside class="dcat-sidebar" id="csb" aria-label="Categorías">
+            <div class="dcat-sidebar-head">Categorías</div>
+            <button class="cs-btn sel" id="todos-btn" data-cat="TODOS">
+              <span class="cs-em">🏪</span>
+              <span class="cs-n">Todos</span>
+              <span class="cs-c" id="cnt-TODOS">1258</span>
+            </button>
+            <div class="cs-div" aria-hidden="true"></div>
+            <div id="cat-list" role="list" aria-label="Lista de categorías"></div>
+          </aside>
+
+          <!-- PRODUCT AREA -->
+          <div class="dcat-main">
+            <!-- Category chip -->
+            <div class="cc" id="cc" aria-live="polite">
+              <span class="cc-em" aria-hidden="true">🏪</span>
+              <div>
+                <div class="cc-name">Todos los Productos</div>
+                <div class="cc-info">Catálogo completo · 1,258 artículos</div>
+              </div>
+            </div>
+            <!-- Mobile sidebar toggle -->
+            <button class="mob-cats" id="mob-cats" aria-expanded="false" aria-controls="csb" style="display:none">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              Categorías
+            </button>
+            <!-- Grid -->
+            <div id="pgrid" role="list" aria-label="Listado de productos"><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div></div>
+            <!-- Pagination -->
+            <div class="pgn" id="pgn" role="navigation" aria-label="Páginas de productos"></div>
+          </div>
+
+        </div><!-- /dcat-body -->
+
+        <!-- Mobile overlay -->
+        <div id="mob-ov" class="mob-ov" role="presentation"></div>
+
+      </div><!-- /dcat-wrap -->
+    </div>
+
+<!-- DASHBOARD NOTIFICATION -->
+<div class="dash-notif" id="dash-notif">
+  <span id="dash-notif-text"></span>
+  <button class="dash-notif-close" onclick="closeDashNotif()">×</button>
+</div>
+
+
+<script>
+// ================================================================
+// AUTH ENGINE v2 — Abarrotes La Luz
+// Login: nombre (usuario) + número de cliente (contraseña)
+// Sin registro público — privado y exclusivo por cliente
+// ================================================================
+
+function openCatalogFromOrders() {
+  var btn = document.querySelector('.dash-tab[onclick*="catalogo"]');
+  dashTab('catalogo', btn || null);
+}
+
+function buildOrdersPanel(orders) {
+  var el = document.getElementById('order-list');
+  if (!el) return;
+  if (!orders || orders.length === 0) {
+    var parts = [
+      '<div class="oh-empty">',
+      '<div style="font-size:48px;margin-bottom:14px">&#x1F6D2;</div>',
+      '<h3 style="font-size:18px;font-weight:800;margin-bottom:8px">Sin pedidos a\xFAn</h3>',
+      '<p style="font-size:14px;color:var(--gray);margin-bottom:18px">Haz tu primer pedido desde el cat\xE1logo y aparecer\xE1 aqu\xED autom\xE1ticamente.</p>',
+      '<button class="btn btn-gold btn-sm" onclick="openCatalogFromOrders()" style="display:inline-flex">Ver Cat\xE1logo</button>',
+      '</div>'
+    ];
+    el.innerHTML = parts.join('');
+    return;
+  }
+  var rows = [];
+  orders.slice().reverse().forEach(function(o) {
+    var delivered = o.status === 'delivered';
+    var waText = 'Hola, quiero repetir mi pedido ' + o.id + ':\n' + o.items;
+    var waMsg  = encodeURIComponent(waText);
+    var statusCls = delivered ? 'status-delivered' : 'status-pending';
+    var statusTxt = delivered ? '&#x2713; Entregado' : '&#x23F3; En proceso';
+    var row = [
+      '<div class="order-card">',
+      '<div class="order-head" style="flex-wrap:wrap;gap:6px">',
+      '<span class="order-id" style="font-weight:800">' + escHtml(o.id) + '</span>',
+      '<span class="order-date">' + escHtml(o.date) + '</span>',
+      '<span class="order-status ' + statusCls + '">' + statusTxt + '</span>'
+    ];
+    if (o.channel) {
+      row.push('<span style="font-size:10px;color:var(--gray);padding:2px 8px;background:var(--bg);border-radius:99px;border:1px solid var(--line)">&#x1F4F1; ' + escHtml(o.channel) + '</span>');
+    }
+    row.push('</div><div class="order-body">');
+    row.push('<div class="order-items" style="font-size:13px;color:var(--gray2);line-height:1.7;margin-bottom:8px">' + escHtml(o.items) + '</div>');
+    if (o.pts) {
+      row.push('<div style="font-size:12px;color:var(--green-dk);font-weight:600;margin-bottom:8px">&#x2B50; +' + o.pts + ' puntos ganados</div>');
+    }
+    row.push('<div class="order-footer">');
+    row.push('<span class="order-total">$' + Number(o.total).toFixed(2) + '</span>');
+    var waHref = 'https://wa.me/522461008654?text=' + waMsg;
+    row.push('<button class="order-repeat" onclick="window.open(\'' + waHref + '\',\'_blank\')">');
+    row.push('<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg> Volver a pedir</button>');
+    row.push('</div></div></div>');
+    rows.push(row.join(''));
+  });
+  el.innerHTML = rows.join('');
+}
+
+// ── HORARIO DINÁMICO ──────────────────────────────────────────────
+function updateHorario() {
+  var now = new Date();
+  var mins = now.getHours() * 60 + now.getMinutes();
+  var status, cssClass, emoji;
+  if (mins >= 360 && mins < 1260) {
+    status = '🟢 Abierto ahora · 6:00 AM – 9:00 PM';
+    cssClass = '';
+    emoji = 'Abierto';
+  } else if (mins >= 1260 && mins < 1380) {
+    status = '💬 Atención por mensaje · hasta 11:00 PM';
+    cssClass = 'horario-mensajes';
+    emoji = 'Por mensaje';
+  } else {
+    status = '🔴 Cerrado · Abrimos 6:00 AM';
+    cssClass = 'horario-cerrado';
+    emoji = 'Cerrado';
+  }
+  var badge = document.getElementById('horario-badge-text');
+  if (badge) badge.textContent = emoji;
+  var pill = document.getElementById('horario-status');
+  if (pill) { pill.textContent = status; pill.className = cssClass ? cssClass : ''; }
+}
+updateHorario();
+setInterval(updateHorario, 60000);
+
+var AUTH = {
+  currentUser: null,
+  SESSION_KEY: 'laluz_v2_session',
+
+  // ── FULL CLIENT DATABASE (todos los clientes reales) ──────────
+  // Usuario = nombre registrado  |  Contraseña = número de cliente
+  clients: [
+    { id:'0001', name:'Lulu',              pts:660,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[
+      { type:'earn', pts:660, reason:'Compras acumuladas', date:'Abr 2025' }
+    ]},
+    { id:'0002', name:'Josefina Diaz',     pts:1182, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[
+      { type:'earn', pts:1182, reason:'Compras acumuladas', date:'Abr 2025' }
+    ]},
+    { id:'0003', name:'Veronica Nava',     pts:1735, addr:'San Damián Texóloc', phone:'', orders:[
+      { id:'PED-010', date:'2025-04-12', items:'Yogurt Danone x3, Leche x2, Queso', total:128, status:'pending'   },
+      { id:'PED-011', date:'2025-04-05', items:'Detergente, Jabón Zote, Cloro',      total:110, status:'delivered' }
+    ], ptsHistory:[
+      { type:'earn', pts:24,  reason:'Compra #PED-010', date:'12 Abr 2025' },
+      { type:'earn', pts:22,  reason:'Compra #PED-011', date:'5 Abr 2025'  },
+      { type:'earn', pts:1689,reason:'Compras anteriores', date:'2024-2025' }
+    ]},
+    { id:'0004', name:'Gerardo Sanchez',   pts:2724, addr:'San Damián Texóloc', phone:'', orders:[
+      { id:'PED-001', date:'2025-04-10', items:'Coca-Cola x2, Sabritas x1, Leche x1', total:86,  status:'delivered' },
+      { id:'PED-002', date:'2025-04-03', items:'Arroz 1kg, Frijol 1kg, Sal, Aceite',  total:105, status:'delivered' },
+      { id:'PED-003', date:'2025-03-28', items:'Pan Bimbo, Nescafé, Azúcar 1kg',       total:92,  status:'delivered' }
+    ], ptsHistory:[
+      { type:'earn', pts:9,   reason:'Compra #PED-001', date:'10 Abr 2025' },
+      { type:'earn', pts:10,  reason:'Compra #PED-002', date:'3 Abr 2025'  },
+      { type:'use',  pts:50,  reason:'Canje Sabritas',  date:'1 Abr 2025'  },
+      { type:'earn', pts:9,   reason:'Compra #PED-003', date:'28 Mar 2025' },
+      { type:'earn', pts:2746,reason:'Compras anteriores', date:'2024-2025'}
+    ]},
+    { id:'0005', name:'Margarita',         pts:15,   addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:15,  reason:'Primera compra',      date:'Abr 2025' }]},
+    { id:'0006', name:'Higinia Diaz',      pts:792,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:792, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0007', name:'Rosa',              pts:748,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:748, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0008', name:'Maria Felix',       pts:360,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:360, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0009', name:'Rosy',              pts:454,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:454, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0010', name:'Patricia Sanchez',  pts:276,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:276, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0012', name:'Leonardo',          pts:1349, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1349,reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0013', name:'Angelica Hdz',      pts:310,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:310, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0014', name:'Guadalupe Diaz',    pts:200,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:200, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0015', name:'Concha',            pts:223,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:223, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0016', name:'Leonor',            pts:314,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:314, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0018', name:'Mauro',             pts:1185, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1185,reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0019', name:'Natividad',         pts:225,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:225, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0021', name:'Alejandro Rojas',   pts:392,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:392, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0022', name:'Gloria',            pts:38,   addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:38,  reason:'Compras recientes',    date:'2025'     }]},
+    { id:'0024', name:'Angelica Marquez',  pts:147,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:147, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0025', name:'Remedios',          pts:335,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:335, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0026', name:'Benito Hdz',        pts:251,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:251, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0029', name:'Jorge Lira',        pts:220,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:220, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0030', name:'Tony Lira',         pts:361,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:361, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0032', name:'Silvia Alonso',     pts:895,  addr:'San Damián Texóloc', phone:'', orders:[
+      { id:'PED-032', date:'2025-04-08', items:'Refresco Coca-Cola x4, Sabritas x2', total:116, status:'delivered' }
+    ], ptsHistory:[
+      { type:'earn', pts:12,  reason:'Compra #PED-032', date:'8 Abr 2025' },
+      { type:'earn', pts:883, reason:'Compras anteriores', date:'2025'    }
+    ]},
+    { id:'0033', name:'Guadalupe Salazar', pts:124,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:124, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0037', name:'Alfredo',           pts:694,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:694, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0038', name:'Sara Nava',         pts:250,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:250, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0040', name:'Yolanda',           pts:317,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:317, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0041', name:'Johana Flores',     pts:127,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:127, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0042', name:'Monica',            pts:557,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:557, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0043', name:'Yesenia',           pts:216,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:216, reason:'Compras acumuladas',   date:'2025'     }]},
+    { id:'0045', name:'Rebeca',            pts:223,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:223, reason:'Compras acumuladas',   date:'2025'     }]}
+  ],
+
+  // ── FIND CLIENT: nombre (fuzzy, case-insensitive) + id exacto ─
+  findClient: function(nombre, numero) {
+    var n = nombre.trim().toLowerCase();
+    var num = numero.trim().padStart(4, '0');
+    return this.clients.find(function(c) {
+      var nameMatch = c.name.toLowerCase() === n ||
+                      c.name.toLowerCase().split(' ')[0] === n;
+      var idMatch   = c.id === num;
+      return nameMatch && idMatch;
+    });
+  },
+
+  // ── LOGIN ──────────────────────────────────────────────────────
+  login: function(nombre, numero) {
+    var client = this.findClient(nombre, numero);
+    if (!client) {
+      return { ok: false };
+    }
+    // Merge any saved updates from localStorage
+    var savedKey = 'laluz_client_' + client.id;
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(savedKey)); } catch(e) {}
+    var user = saved ? Object.assign({}, client, saved) : Object.assign({}, client);
+
+    sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+    this.currentUser = user;
+    return { ok: true, user: user };
+  },
+
+  // ── LOGOUT ────────────────────────────────────────────────────
+  logout: function() {
+    sessionStorage.removeItem(this.SESSION_KEY);
+    this.currentUser = null;
+  },
+
+  // ── RESTORE SESSION ────────────────────────────────────────────
+  restoreSession: function() {
+    try {
+      var saved = sessionStorage.getItem(this.SESSION_KEY);
+      if (saved) {
+        var user = JSON.parse(saved);
+        this.currentUser = user;
+        return user;
+      }
+    } catch(e) {}
+    return null;
+  },
+
+  // ── UPDATE PROFILE ────────────────────────────────────────────
+  updateUser: function(updates) {
+    if (!this.currentUser) return;
+    Object.assign(this.currentUser, updates);
+    sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(this.currentUser));
+    // Persist to localStorage (orders, pts, profile)
+    var savedKey = 'laluz_client_' + this.currentUser.id;
+    var toSave = {
+      addr: this.currentUser.addr,
+      phone: this.currentUser.phone,
+      bday: this.currentUser.bday,
+      pts: this.currentUser.pts,
+      orders: this.currentUser.orders,
+      ptsHistory: this.currentUser.ptsHistory
+    };
+    localStorage.setItem(savedKey, JSON.stringify(toSave));
+  },
+
+  // ── LEVEL ─────────────────────────────────────────────────────
+  getLevel: function(pts) {
+    if (pts >= 5000) return { label:'🥇 Nivel Oro',    cls:'level-gold',   next:null,    nextPts:0    };
+    if (pts >= 2000) return { label:'🥈 Nivel Plata',  cls:'level-silver', next:'Oro',   nextPts:5000 };
+    return              { label:'🥉 Nivel Bronce',     cls:'level-bronze', next:'Plata', nextPts:2000 };
+  },
+
+  // ── ON LOGIN SUCCESS ──────────────────────────────────────────
+  onLoginSuccess: function(user) {
+    var loginBtn = document.getElementById('nav-login-btn');
+    var userBtn  = document.getElementById('nav-user-btn');
+    var avatar   = document.getElementById('nav-user-avatar');
+    var uname    = document.getElementById('nav-user-name');
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (userBtn)  userBtn.classList.add('visible');
+    if (avatar)   avatar.textContent = user.name.charAt(0).toUpperCase();
+    if (uname)    uname.textContent  = user.name.split(' ')[0];
+  },
+
+  // ── INIT ──────────────────────────────────────────────────────
+  init: function() {
+    var user = this.restoreSession();
+    if (user) {
+      this.onLoginSuccess(user);
+    }
+  }
+};
+
+// ================================================================
+// FORM HELPERS
+// ================================================================
+function setFieldErr(fieldId, show) {
+  var el = document.getElementById(fieldId);
+  if (el) el.classList.toggle('has-err', show);
+}
+
+// ================================================================
+// AUTH MODAL — OPEN / CLOSE
+// ================================================================
+function openAuthModal() {
+  var overlay = document.getElementById('auth-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Auto-focus nombre field
+  setTimeout(function() {
+    var el = document.getElementById('lf-name');
+    if (el) el.focus();
+  }, 260);
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Clear errors
+  document.getElementById('lf-general-err').style.display = 'none';
+  setFieldErr('lf-name-field', false);
+  setFieldErr('lf-num-field', false);
+}
+
+document.getElementById('auth-close').addEventListener('click', closeAuthModal);
+document.getElementById('auth-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeAuthModal();
+});
+
+// ================================================================
+// LOGIN — nombre + número de cliente
+// ================================================================
+function doLogin() {
+  var nombre = document.getElementById('lf-name').value.trim();
+  var numero = document.getElementById('lf-num').value.trim();
+  var genErr = document.getElementById('lf-general-err');
+  var valid  = true;
+
+  // Reset errors
+  genErr.style.display = 'none';
+  setFieldErr('lf-name-field', false);
+  setFieldErr('lf-num-field', false);
+
+  if (!nombre) {
+    setFieldErr('lf-name-field', true);
+    document.getElementById('lf-name').focus();
+    valid = false;
+  }
+  if (!numero) {
+    setFieldErr('lf-num-field', true);
+    if (valid) document.getElementById('lf-num').focus();
+    valid = false;
+  }
+  if (!valid) return;
+
+  var btn = document.getElementById('login-btn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  // Small delay for UX feel (not slow)
+  setTimeout(function() {
+    var result = AUTH.login(nombre, numero);
+    btn.classList.remove('loading');
+    btn.disabled = false;
+
+    if (result.ok) {
+      AUTH.onLoginSuccess(result.user);
+      closeAuthModal();
+      openDashboard();
+    } else {
+      genErr.style.display = 'block';
+      // Shake animation on modal
+      var modal = document.querySelector('.auth-modal-simple');
+      if (modal) {
+        modal.classList.add('shake');
+        setTimeout(function() { modal.classList.remove('shake'); }, 500);
+      }
+      document.getElementById('lf-name').focus();
+      document.getElementById('lf-name').select();
+    }
+  }, 600);
+}
+
+// Enter key on any field triggers login
+document.getElementById('lf-name').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { document.getElementById('lf-num').focus(); }
+});
+document.getElementById('lf-num').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ================================================================
+// DASHBOARD
+// ================================================================
+function openDashboard() {
+  var user = AUTH.currentUser;
+  if (!user) { openAuthModal(); return; }
+  var dash = document.getElementById('dashboard');
+  dash.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  populateDashboard(user);
+  setTimeout(function() { showSmartReminder(user); }, 1200);
+}
+
+function closeDashboard() {
+  document.getElementById('dashboard').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('dash-back-btn').addEventListener('click', closeDashboard);
+document.getElementById('dash-logout-btn').addEventListener('click', function() {
+  AUTH.logout();
+  closeDashboard();
+  var loginBtn = document.getElementById('nav-login-btn');
+  var userBtn  = document.getElementById('nav-user-btn');
+  if (loginBtn) loginBtn.style.display = '';
+  if (userBtn)  userBtn.classList.remove('visible');
+  showToast('Sesión cerrada. ¡Hasta pronto! 👋');
+});
+
+function populateDashboard(user) {
+  var level    = AUTH.getLevel(user.pts);
+  var orders   = user.orders || [];
+  var saved    = Math.round(user.pts * 0.1);
+
+  // Welcome
+  document.getElementById('dash-name').textContent  = user.name.split(' ')[0] + ' 👋';
+  document.getElementById('dash-sub').textContent   = 'Cliente #' + user.id + ' · Abarrotes La Luz';
+  var badge = document.getElementById('dash-level-badge');
+  badge.textContent = level.label;
+  badge.className   = 'dash-level-badge ' + level.cls;
+
+  // Stats
+  document.getElementById('dstat-pts').textContent    = user.pts.toLocaleString('es');
+  document.getElementById('dstat-orders').textContent  = orders.length;
+  document.getElementById('dstat-saved').textContent   = '$' + saved;
+  document.getElementById('dstat-member').textContent  = '#' + user.id;
+
+  buildPointsPanel(user, level);
+  buildOrdersPanel(orders);
+  buildPromosPanel(user);
+
+  // Profile
+  document.getElementById('pf-name').value  = user.name  || '';
+  document.getElementById('pf-phone').value = user.phone || '';
+  document.getElementById('pf-email').value = user.email || '';
+  document.getElementById('pf-addr').value  = user.addr  || '';
+  document.getElementById('pf-bday').value  = user.bday  || '';
+}
+
+function buildPointsPanel(user, level) {
+  var pts = user.pts;
+  document.getElementById('pts-big').textContent = pts.toLocaleString('es');
+
+  // Progress toward next reward
+  var REWARDS = [1800, 3000, 4000, 4200, 5500];
+  var nextRw  = REWARDS.find(function(r) { return r > pts; });
+  if (nextRw) {
+    var pct = Math.min(100, Math.round((pts / nextRw) * 100));
+    document.getElementById('pts-prog-fill').style.width = pct + '%';
+    document.getElementById('pts-prog-curr').textContent = pts.toLocaleString('es') + ' pts';
+    document.getElementById('pts-prog-next').textContent = 'meta: ' + nextRw.toLocaleString('es') + ' pts';
+    var diff = nextRw - pts;
+    document.getElementById('pts-next-msg').textContent =
+      diff <= 0
+        ? '🎉 ¡Ya puedes canjear una recompensa! Visítanos o escríbenos.'
+        : '🎁 Te faltan ' + diff.toLocaleString('es') + ' puntos para tu próxima recompensa gratis';
+  } else {
+    document.getElementById('pts-prog-fill').style.width = '100%';
+    document.getElementById('pts-next-msg').textContent = '🏆 ¡Tienes múltiples recompensas disponibles! Visítanos.';
+  }
+
+  // History
+  var hist  = (user.ptsHistory || []).slice().reverse();
+  var histEl = document.getElementById('pts-history');
+  if (!hist.length) {
+    histEl.innerHTML = '<p style="font-size:13px;color:var(--gray);text-align:center;padding:16px 0">Sin movimientos registrados aún.</p>';
+    return;
+  }
+  var html = '';
+  hist.forEach(function(h) {
+    var isEarn = h.type === 'earn';
+    html += '<div class="ph-item">';
+    html += '<div class="ph-dot ' + h.type + '">' + (isEarn ? '⬆️' : '🎁') + '</div>';
+    html += '<div class="ph-info"><div class="ph-reason">' + escHtml(h.reason) + '</div><div class="ph-date">' + h.date + '</div></div>';
+    html += '<div class="ph-pts ' + h.type + '">' + (isEarn ? '+' : '−') + h.pts + ' pts</div>';
+    html += '</div>';
+  });
+  histEl.innerHTML = html;
+}
+
+function buildPromosPanel(user) {
+  var pts    = user.pts;
+  var orders = user.orders || [];
+
+  // Smart reminders
+  var reminders = [];
+  if (pts >= 1800) {
+    reminders.push({ icon:'🎁', text:'¡Tienes ' + pts.toLocaleString('es') + ' puntos para canjear!', sub:'Visítanos o escríbenos por WhatsApp para usarlos' });
+  } else {
+    reminders.push({ icon:'⭐', text:'Te faltan ' + (1800-pts).toLocaleString('es') + ' puntos para tu primera recompensa', sub:'Cada $10 de compra = 1 punto · ¡Sigue acumulando!' });
+  }
+  if (orders.length === 0) {
+    reminders.push({ icon:'🛒', text:'Haz tu primer pedido hoy', sub:'Escríbenos por WhatsApp y empieza a acumular puntos' });
+  } else {
+    var last = orders[orders.length - 1];
+    if (last) {
+      reminders.push({ icon:'🔄', text:'Repite tu último pedido fácilmente', sub:last.items });
+    }
+  }
+  if (user.bday) {
+    var today = new Date(), bday = new Date(user.bday);
+    var next = new Date(today.getFullYear(), bday.getMonth(), bday.getDate());
+    if (next < today) next.setFullYear(today.getFullYear()+1);
+    var days = Math.floor((next - today) / 86400000);
+    if (days <= 30) reminders.push({ icon:'🎂', text:'Tu cumpleaños es en ' + days + ' días', sub:'Prepara tu regalo especial de La Luz 🎁' });
+  }
+
+  var rEl = document.getElementById('reminders-list');
+  rEl.innerHTML = reminders.map(function(r) {
+    return '<div class="reminder-item"><div class="reminder-icon">' + r.icon + '</div>' +
+      '<div><div class="reminder-text">' + r.text + '</div><div class="reminder-sub">' + escHtml(r.sub) + '</div></div></div>';
+  }).join('') || '<p style="font-size:13px;color:var(--gray)">Sin avisos por ahora.</p>';
+
+  // Personalized promos
+  var promos = [
+    { em:'🥤', title:'Descuento para ti en bebidas', desc:'Por ser cliente frecuente tienes beneficios especiales. Pregunta en tienda.', tag:'Exclusivo', tagCls:'pp-tag-gold', wa:'quiero%20saber%20mis%20beneficios%20exclusivos' },
+    { em:'🌮', title:'Dorilocos cada fin de semana', desc:'Sáb y Dom a partir del 18 de abril. Dorilocos y Chicharrones Preparados al momento.', tag:'¡Nuevo!', tagCls:'pp-tag-red', wa:'quiero%20informaci%C3%B3n%20de%20los%20Dorilocos' },
+    { em:'🎁', title:'Canjea tus ' + pts.toLocaleString('es') + ' puntos', desc:pts >= 1800 ? '¡Ya tienes puntos suficientes! Visítanos o escríbenos.' : 'Sigue acumulando para obtener productos gratis.', tag:pts>=1800?'Disponible':'Acumulando', tagCls:pts>=1800?'pp-tag-green':'pp-tag-gold', wa:'quiero%20canjear%20mis%20puntos' }
+  ];
+  document.getElementById('promos-pers').innerHTML = promos.map(function(p) {
+    return '<div class="pp-card" onclick="window.open(\'https://wa.me/522461008654?text=Hola%20' + p.wa + '\',\'_blank\')">' +
+      '<div class="pp-em">' + p.em + '</div>' +
+      '<div><div class="pp-title">' + p.title + '</div><div class="pp-desc">' + p.desc + '</div>' +
+      '<span class="pp-tag ' + p.tagCls + '">' + p.tag + '</span></div></div>';
+  }).join('');
+}
+
+// ── DASHBOARD TABS ────────────────────────────────────────────────
+function dashTab(name, btn) {
+  document.querySelectorAll('.dash-pane').forEach(function(p) { p.classList.remove('on'); });
+  document.querySelectorAll('.dash-tab').forEach(function(t) { t.classList.remove('on'); t.setAttribute('aria-selected','false'); });
+  var pane = document.getElementById('pane-' + name);
+  if (pane) pane.classList.add('on');
+  if (btn)  { btn.classList.add('on'); btn.setAttribute('aria-selected','true'); }
+  if (name === 'catalogo') {
+    // Small delay lets the pane render before we query elements inside it
+    setTimeout(function() {
+      if (typeof initCatalogPane === 'function') initCatalogPane();
+    }, 80);
+  }
+}
+
+// ── PROFILE SAVE ──────────────────────────────────────────────────
+function saveProfile() {
+  var updates = {
+    phone: document.getElementById('pf-phone').value.trim(),
+    addr:  document.getElementById('pf-addr').value.trim(),
+    bday:  document.getElementById('pf-bday').value
+  };
+  AUTH.updateUser(updates);
+  showDashNotif('✅ Perfil actualizado');
+}
+
+function changePassword() {
+  // In this system "password" = client number — no change allowed
+  showDashNotif('ℹ️ Para cambiar tu número de cliente, escríbenos por WhatsApp');
+}
+
+// ── SMART REMINDER ────────────────────────────────────────────────
+function showSmartReminder(user) {
+  if (user.pts >= 1800) {
+    showDashNotif('🎁 ¡Tienes ' + user.pts.toLocaleString('es') + ' puntos para canjear!');
+  }
+}
+
+// ── DASHBOARD NOTIFICATIONS ───────────────────────────────────────
+var dashNotifTimer;
+function showDashNotif(msg) {
+  var el = document.getElementById('dash-notif');
+  document.getElementById('dash-notif-text').textContent = msg;
+  el.classList.add('show');
+  clearTimeout(dashNotifTimer);
+  dashNotifTimer = setTimeout(function() { el.classList.remove('show'); }, 3500);
+}
+function closeDashNotif() {
+  document.getElementById('dash-notif').classList.remove('show');
+}
+
+// ── NAV BUTTON LISTENERS ──────────────────────────────────────────
+document.getElementById('nav-login-btn').addEventListener('click', function() { openAuthModal(); });
+document.getElementById('nav-user-btn').addEventListener('click', function() {
+  if (AUTH.currentUser) openDashboard();
+  else openAuthModal();
+});
+
+// ── KEYBOARD ─────────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeAuthModal();
+});
+
+// ── INIT ─────────────────────────────────────────────────────────
+// refresh every minute
+
+AUTH.init();
+</script>
 </body>
 </html>
-
-
-
-
-
 
 
 
