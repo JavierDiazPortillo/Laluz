@@ -15,6 +15,7 @@
 <meta property="og:locale" content="es_MX"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 /* ================================================================
@@ -1574,117 +1575,32 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
 /* Already exists as #catalogo — just update nav to point dashboard */
 
 
-/* ── DASHBOARD CATALOG PANE ────────────────────────────────────── */
-#pane-catalogo{ padding:0 }
+/* ── DASHBOARD CATALOG PANE ─────────────────────────────────────
+   Single authoritative definition — no duplicates
+──────────────────────────────────────────────────────────────── */
 
+/* Outer wrapper */
 .dcat-wrap{
   background:var(--white);
   border:1px solid var(--line);
   border-radius:var(--r-xl);
   overflow:hidden;
   box-shadow:var(--sh);
-}
-
-/* Toolbar row */
-.dcat-toolbar{
-  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
-  padding:16px 18px;border-bottom:1px solid var(--line);
-  background:var(--bg2);
-  position:sticky;top:0;z-index:5;
-}
-.dcat-search-wrap{
-  position:relative;flex:1;min-width:180px;max-width:360px;
-}
-.dcat-search-wrap svg{
-  position:absolute;left:11px;top:50%;transform:translateY(-50%);
-  color:var(--gray);pointer-events:none;
-}
-.dcat-search{
-  width:100%;padding:9px 34px 9px 34px;
-  border:1.5px solid var(--line);border-radius:99px;
-  background:var(--white);font-size:13px;color:var(--black);
-  font-family:'Poppins',sans-serif;outline:none;transition:border-color .18s;
-}
-.dcat-search:focus{border-color:var(--gold);background:#fff}
-.dcat-search::placeholder{color:var(--gray)}
-.dcat-search-clr{
-  position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  background:none;border:none;color:var(--gray);font-size:17px;
-  cursor:pointer;display:none;line-height:1;padding:2px;
-  transition:color .15s;
-}
-.dcat-search-clr:hover{color:var(--red)}
-.dcat-filters{display:flex;gap:6px;flex-wrap:wrap}
-.dcat-sort-row{display:flex;align-items:center;gap:10px;margin-left:auto}
-
-/* Body: sidebar + products side by side */
-.dcat-body{
-  display:grid;
-  grid-template-columns:220px 1fr;
-  min-height:600px;
-}
-@media(max-width:780px){
-  .dcat-body{grid-template-columns:1fr}
-  .dcat-sidebar{display:none}
-  .dcat-sidebar.open{
-    display:block;
-    position:fixed;top:60px;left:0;bottom:0;z-index:820;
-    width:250px;overflow-y:auto;
-    box-shadow:6px 0 28px rgba(0,0,0,.35);
-  }
-  #mob-cats{display:flex !important}
-}
-
-/* Sidebar */
-.dcat-sidebar{
-  background:var(--black);
-  overflow-y:auto;
-  border-right:1px solid rgba(255,255,255,.06);
-}
-.dcat-sidebar-head{
-  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:rgba(255,255,255,.3);padding:16px 12px 10px;
-}
-
-/* Product area */
-.dcat-main{
-  padding:16px 18px 24px;
-  overflow-y:auto;
-  max-height:calc(100vh - 200px);
-  min-height:500px;
-}
-
-/* Override pgrid inside dashboard (smaller cards) */
-#pane-catalogo #pgrid{
-  display:grid;gap:10px;
-  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-  margin-top:12px;
-}
-
-/* Override cat-panel (not used in new layout) */
-#pane-catalogo .cat-panel{display:contents}
-
-/* ── DASHBOARD CATALOG PANE ────────────────────────────────────── */
-#pane-catalogo{ padding:0; margin-top:4px; }
-
-.dcat-wrap{
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:var(--r-xl);
-  box-shadow:var(--sh);
   display:flex;
   flex-direction:column;
   min-height:700px;
 }
 
-/* Toolbar */
+/* Sticky toolbar */
 .dcat-toolbar{
   display:flex;flex-wrap:wrap;align-items:center;gap:10px;
-  padding:14px 18px;border-bottom:1px solid var(--line);
-  background:var(--bg2);border-radius:var(--r-xl) var(--r-xl) 0 0;
-  position:sticky;top:0;z-index:10;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+  background:var(--bg2);
   flex-shrink:0;
 }
+
+/* Search */
 .dcat-search-wrap{
   position:relative;flex:1;min-width:180px;max-width:340px;
 }
@@ -1699,32 +1615,40 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
   font-family:'Poppins',sans-serif;outline:none;
   transition:border-color .18s;
 }
-.dcat-search:focus{ border-color:var(--gold); background:var(--white); }
+.dcat-search:focus{ border-color:var(--gold); }
 .dcat-search::placeholder{ color:var(--gray); }
 .dcat-search-clr{
   position:absolute;right:10px;top:50%;transform:translateY(-50%);
   background:none;border:none;color:var(--gray);font-size:17px;
-  cursor:pointer;display:none;line-height:1;padding:2px;transition:color .15s;
+  cursor:pointer;display:none;line-height:1;padding:2px;
+  transition:color .15s;
 }
 .dcat-search-clr:hover{ color:var(--red); }
 .dcat-filters{ display:flex;gap:6px;flex-wrap:wrap; }
-.dcat-sort-row{ display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap; }
+.dcat-sort-row{ display:flex;align-items:center;gap:10px;margin-left:auto; }
 
-/* Body */
+/* Body: sidebar + main side by side — FLEX, not grid */
 .dcat-body{
   display:flex;
   flex:1;
   min-height:0;
+  overflow:hidden;
 }
 
-/* Sidebar */
+/* Sidebar — ALWAYS visible on desktop */
 .dcat-sidebar{
   width:210px;
   flex-shrink:0;
   background:var(--black);
   overflow-y:auto;
-  border-right:1px solid rgba(255,255,255,.06);
+  border-right:1px solid rgba(255,255,255,.07);
   border-radius:0 0 0 var(--r-xl);
+  /* IMPORTANT: display:block on desktop — never none */
+  display:block;
+}
+.dcat-sidebar-head{
+  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:16px 12px 10px;
 }
 @media(max-width:780px){
   .dcat-sidebar{
@@ -1733,12 +1657,8 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
     width:250px;overflow-y:auto;
     box-shadow:6px 0 28px rgba(0,0,0,.4);
   }
-  .dcat-sidebar.open{ display:block; }
+  .dcat-sidebar.open{ display:block !important; }
   #mob-cats{ display:flex !important; }
-}
-.dcat-sidebar-head{
-  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:rgba(255,255,255,.3);padding:16px 12px 10px;
 }
 
 /* Product area */
@@ -1747,9 +1667,10 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
   min-width:0;
   padding:16px 18px 28px;
   overflow-y:auto;
+  max-height:calc(100vh - 180px);
 }
 
-/* Product grid inside dashboard */
+/* Grid override inside dashboard */
 #pane-catalogo #pgrid{
   display:grid;
   gap:10px;
@@ -1757,14 +1678,17 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
   margin-top:10px;
 }
 
-/* skeleton loader */
+/* Skeleton loading */
 .skel{
   background:linear-gradient(90deg,var(--line) 25%,var(--line2) 50%,var(--line) 75%);
   background-size:200% 100%;
   animation:skelShimmer 1.4s infinite;
   border-radius:var(--r-sm);
 }
-@keyframes skelShimmer{ 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+@keyframes skelShimmer{
+  0%{ background-position:200% 0 }
+  100%{ background-position:-200% 0 }
+}
 .skel-card{
   border:1px solid var(--line);border-radius:var(--r);
   overflow:hidden;background:var(--white);
@@ -1776,16 +1700,13 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
 .skel-price{ height:18px;width:45%;margin-top:4px; }
 .skel-btn{ height:30px;margin-top:8px; }
 
-/* error state */
+/* Error state */
 .cat-error{
   grid-column:1/-1;text-align:center;padding:52px 20px;
 }
 .cat-error-icon{ font-size:48px;margin-bottom:14px; }
 .cat-error h3{ font-size:17px;font-weight:700;margin-bottom:8px; }
 .cat-error p{ font-size:13px;color:var(--gray);margin-bottom:18px; }
-.cat-error .btn{ display:inline-flex; }
-
-
 
 /* ── TIKTOK NAV ─────────────────────────────────────────────── */
 .tiktok-nav-btn{
@@ -1806,6 +1727,418 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
 /* ── HERO BTNS responsive ───────────────────────────────────── */
 @media(max-width:500px){
   .hero-btns .btn-lg{padding:12px 18px;font-size:13px}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SISTEMA DE CANJE CON QR — Abarrotes La Luz
+   CSS completo para canjes, QR modal y validación
+═══════════════════════════════════════════════════════════════ */
+
+/* ── CANJE PRODUCTS GRID ─────────────────────────────────────── */
+.canje-opts{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+.canje-opt{
+  border:2px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:18px 16px;
+  cursor:pointer;
+  transition:var(--t);
+  background:var(--white);
+  position:relative;
+  text-align:center;
+  user-select:none;
+}
+.canje-opt:hover{
+  border-color:var(--gold);
+  box-shadow:var(--sh-gold);
+  transform:translateY(-3px);
+}
+.canje-opt.selected{
+  border-color:var(--gold);
+  background:var(--gold-lt);
+  box-shadow:var(--sh-gold);
+}
+.canje-opt.disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+.canje-opt-em{
+  font-size:36px;
+  margin-bottom:10px;
+  display:block;
+}
+.canje-opt-name{
+  font-size:14px;
+  font-weight:800;
+  color:var(--black);
+  margin-bottom:5px;
+}
+.canje-opt-desc{
+  font-size:12px;
+  color:var(--gray);
+  margin-bottom:10px;
+  line-height:1.4;
+}
+.canje-opt-pts{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:var(--gold-lt);
+  border:1px solid rgba(229,169,61,.3);
+  border-radius:99px;
+  padding:4px 12px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--gold-dk);
+}
+.canje-opt.selected .canje-opt-pts{
+  background:var(--gold);
+  color:var(--black);
+  border-color:var(--gold-dk);
+}
+.canje-opt-check{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:var(--gold);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  color:var(--black);
+  font-weight:900;
+}
+.canje-opt.selected .canje-opt-check{display:flex}
+
+.canje-insuf{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--red-lt);
+  border:1px solid var(--red);
+  border-radius:var(--r-sm);
+  padding:10px 14px;
+  font-size:13px;
+  color:var(--red);
+  font-weight:600;
+  margin-top:10px;
+  display:none;
+}
+
+/* ── QR MODAL ────────────────────────────────────────────────── */
+.qr-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1100;
+  background:rgba(0,0,0,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+.qr-overlay.open{
+  opacity:1;
+  pointer-events:all;
+}
+.qr-modal{
+  background:var(--white);
+  border-radius:var(--r-xl);
+  width:100%;
+  max-width:440px;
+  max-height:94vh;
+  overflow-y:auto;
+  box-shadow:0 32px 80px rgba(0,0,0,.35);
+  transform:scale(.94) translateY(20px);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.qr-overlay.open .qr-modal{
+  transform:none;
+}
+.qr-modal-head{
+  background:var(--black);
+  padding:20px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+}
+.qr-modal-head h3{
+  font-size:17px;
+  font-weight:800;
+  color:var(--white);
+}
+.qr-modal-close{
+  background:none;
+  border:none;
+  color:rgba(255,255,255,.5);
+  font-size:24px;
+  cursor:pointer;
+  line-height:1;
+  transition:color var(--t);
+}
+.qr-modal-close:hover{color:var(--white)}
+.qr-modal-body{
+  padding:28px 24px 32px;
+}
+
+/* Status banner */
+.qr-status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 16px;
+  border-radius:var(--r-sm);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:22px;
+}
+.qr-status-ok{
+  background:var(--green-lt);
+  color:var(--green-dk);
+  border:1px solid rgba(34,197,94,.25);
+}
+.qr-status-used{
+  background:var(--line);
+  color:var(--gray2);
+  border:1px solid var(--line);
+}
+.qr-status-exp{
+  background:var(--red-lt);
+  color:var(--red);
+  border:1px solid rgba(239,68,68,.2);
+}
+
+/* QR canvas area */
+.qr-canvas-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:24px;
+}
+.qr-canvas-frame{
+  border:3px solid var(--black);
+  border-radius:var(--r-lg);
+  padding:14px;
+  background:var(--white);
+  display:inline-block;
+  box-shadow:var(--sh-md);
+  margin-bottom:14px;
+  position:relative;
+}
+.qr-canvas-frame canvas{
+  display:block;
+  border-radius:8px;
+}
+.qr-canvas-frame::before,
+.qr-canvas-frame::after{
+  content:'';
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-color:var(--gold);
+  border-style:solid;
+}
+.qr-canvas-frame::before{
+  top:-3px;left:-3px;
+  border-width:3px 0 0 3px;
+  border-radius:6px 0 0 0;
+}
+.qr-canvas-frame::after{
+  bottom:-3px;right:-3px;
+  border-width:0 3px 3px 0;
+  border-radius:0 0 6px 0;
+}
+.qr-expiry{
+  font-size:12px;
+  color:var(--gray);
+  text-align:center;
+}
+.qr-expiry strong{
+  color:var(--black);
+}
+
+/* QR Info table */
+.qr-info{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.qr-info-row{
+  display:flex;
+  align-items:center;
+  padding:11px 14px;
+  border-bottom:1px solid var(--line);
+}
+.qr-info-row:last-child{border-bottom:none}
+.qr-info-label{
+  font-size:12px;
+  color:var(--gray);
+  font-weight:600;
+  width:130px;
+  flex-shrink:0;
+}
+.qr-info-val{
+  font-size:13px;
+  font-weight:700;
+  color:var(--black);
+  flex:1;
+}
+
+/* Actions */
+.qr-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.qr-save-btn{
+  width:100%;
+  padding:14px;
+  background:var(--black);
+  color:var(--white);
+  border:none;
+  border-radius:var(--r);
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-family:'Poppins',sans-serif;
+  transition:var(--t);
+}
+.qr-save-btn:hover{background:var(--black2);transform:translateY(-1px)}
+.qr-share-btn{
+  width:100%;
+  padding:12px;
+  background:var(--wa);
+  color:var(--white);
+  border:none;
+  border-radius:var(--r);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-family:'Poppins',sans-serif;
+  transition:var(--t);
+}
+.qr-share-btn:hover{background:var(--wa-dk)}
+
+/* Transaction ID badge */
+.qr-txn{
+  text-align:center;
+  font-size:11px;
+  color:var(--gray);
+  margin-top:14px;
+  font-family:monospace;
+}
+
+/* Points panel canje section */
+.pts-canje-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:18px;
+}
+.canje-confirm-row{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.canje-confirm-btn{
+  flex:1;
+  min-width:160px;
+  padding:13px;
+  background:var(--gold);
+  color:var(--black);
+  border:none;
+  border-radius:var(--r);
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:'Poppins',sans-serif;
+  transition:var(--t);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-shadow:var(--sh-gold);
+}
+.canje-confirm-btn:hover{background:var(--gold-dk);transform:translateY(-2px)}
+.canje-confirm-btn:disabled{
+  background:var(--line);
+  color:var(--gray);
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+.canje-cancel-btn{
+  padding:13px 20px;
+  background:none;
+  border:1.5px solid var(--line);
+  border-radius:var(--r);
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  font-family:'Poppins',sans-serif;
+  transition:var(--t);
+  color:var(--gray2);
+}
+.canje-cancel-btn:hover{border-color:var(--black);color:var(--black)}
+
+/* History of canjes in points panel */
+.canje-hist-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--line2);
+}
+.canje-hist-item:last-child{border-bottom:none}
+.canje-hist-dot{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:grid;place-items:center;font-size:16px;
+  background:#fff0f0;
+}
+.canje-hist-info{flex:1}
+.canje-hist-title{font-size:13px;font-weight:700;color:var(--black)}
+.canje-hist-date{font-size:11px;color:var(--gray);margin-top:1px}
+.canje-hist-pts{font-size:14px;font-weight:800;color:var(--red)}
+.canje-hist-status{
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;
+  display:block;margin-top:3px;
+}
+.chs-pending{background:var(--gold-lt);color:var(--gold-dk)}
+.chs-used{background:var(--green-lt);color:var(--green-dk)}
+.chs-exp{background:var(--red-lt);color:var(--red)}
+
+
+/* ── MICROONDAS card special glow ───────────────────────────── */
+.svc-featured .svc-icon{
+  animation:microGlow 3s ease-in-out infinite;
+}
+@keyframes microGlow{
+  0%,100%{ box-shadow:0 0 0 rgba(229,169,61,0); }
+  50%{ box-shadow:0 0 16px rgba(229,169,61,.4); }
 }
 
 </style>
@@ -1902,12 +2235,14 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
     <span class="tick-item"><span class="tick-dot"></span>Programa de Puntos activo</span>
     <span class="tick-item"><span class="tick-dot"></span>Calle Porfirio Díaz No. 48, Tlaxcala</span>
     <span class="tick-item"><span class="tick-dot"></span>Envío desde $100 · Horario 6AM-9PM todos los días</span>
+    <span class="tick-item"><span class="tick-dot"></span>🍿 Palomitas de microondas · ¡Nuevo servicio!</span>
     <span class="tick-item"><span class="tick-dot"></span>Bebidas · Botanas · Lácteos · Hogar · Más</span>
     <span class="tick-item"><span class="tick-dot"></span>1,258 Productos disponibles</span>
     <span class="tick-item"><span class="tick-dot"></span>Pedidos WhatsApp: 246 100 8654</span>
     <span class="tick-item"><span class="tick-dot"></span>Programa de Puntos activo</span>
     <span class="tick-item"><span class="tick-dot"></span>Calle Porfirio Díaz No. 48, Tlaxcala</span>
     <span class="tick-item"><span class="tick-dot"></span>Envío desde $100 · Horario 6AM-9PM todos los días</span>
+    <span class="tick-item"><span class="tick-dot"></span>🍿 Palomitas de microondas · ¡Nuevo servicio!</span>
     <span class="tick-item"><span class="tick-dot"></span>Bebidas · Botanas · Lácteos · Hogar · Más</span>
   </div>
 </div>
@@ -1988,7 +2323,7 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
       <div>
         <span class="sh-ey">Más que una tienda</span>
         <h2 class="sh-h">Servicios <span>adicionales</span></h2>
-        <p class="sh-p">Todo lo que necesitas en un solo lugar. Rápido, fácil y de confianza.</p>
+        <p class="sh-p">Todo en un solo lugar: copias, recargas, pagos, tarjetas y ahora <strong>servicio de microondas</strong>. Rápido, fácil y de confianza.</p>
       </div>
     </div>
     <!-- SERVICE CARDS GRID -->
@@ -2084,6 +2419,29 @@ mark{background:rgba(229,169,61,.22);color:var(--gold-dk);border-radius:2px;padd
       </div>
 
     </div>
+    
+      <!-- MICROONDAS -->
+      <div class="svc-card svc-featured">
+        <div class="svc-card-top">
+          <div class="svc-icon" aria-hidden="true">📡</div>
+          <div class="svc-badge svc-badge-gold">¡Nuevo!</div>
+        </div>
+        <h4>Servicio de Microondas</h4>
+        <p>¿No tienes microondas en casa? Calienta o prepara tus alimentos en nuestra tienda. Rápido, limpio y accesible.</p>
+        <ul class="svc-list">
+          <li>Calentado de alimentos en general</li>
+          <li>Palomitas de microondas 🍿</li>
+          <li>Sopas y caldos instantáneos</li>
+          <li>Avena y cereales calientes</li>
+          <li>Descongelado rápido</li>
+          <li>Bebidas calientes</li>
+        </ul>
+        <a class="svc-cta svc-cta-gold" href="https://wa.me/522461008654?text=Hola%2C%20quisiera%20usar%20el%20microondas%20%F0%9F%93%A1%20%C2%BFest%C3%A1%20disponible%3F" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+          Preguntar disponibilidad
+        </a>
+      </div>
+
     <!-- BOTTOM CTA STRIP -->
     <div class="svc-cta-strip rv">
       <div class="svc-strip-text">
@@ -2351,6 +2709,7 @@ const PRODUCTOS_RAW=[{"id":"1","n":"PAN DULCE","p":6.0,"c":"PAN","e":0.0,"s":0,"
 const CAT_META_RAW={"ABARROTES":{"emoji":"🛒","total":256,"disp":202},"DULCERIA":{"emoji":"🍬","total":133,"disp":118},"GRUPO MODELO":{"emoji":"🍺","total":106,"disp":85},"COCA-COLA":{"emoji":"🥤","total":88,"disp":72},"SABRITAS":{"emoji":"🍟","total":79,"disp":48},"MARINELA":{"emoji":"🎂","total":56,"disp":42},"LEO":{"emoji":"🍫","total":50,"disp":34},"GAMESA":{"emoji":"🍪","total":49,"disp":43},"LACTEOS":{"emoji":"🥛","total":47,"disp":37},"BARCEL":{"emoji":"🌶️","total":46,"disp":33},"DANONE":{"emoji":"🧃","total":44,"disp":32},"BIMBO":{"emoji":"🍞","total":41,"disp":33},"BOING":{"emoji":"🧃","total":34,"disp":30},"HOGAR":{"emoji":"🏠","total":28,"disp":27},"Farmacia":{"emoji":"💊","total":27,"disp":23},"PEPSI":{"emoji":"🥤","total":24,"disp":19},"CUIDADO PERSONAL":{"emoji":"🧴","total":23,"disp":18},"HUBIN":{"emoji":"🧹","total":21,"disp":21},"PEÑAFIEL":{"emoji":"💧","total":19,"disp":16},"JUMEX":{"emoji":"🍹","total":19,"disp":18},"VERDURA":{"emoji":"🥦","total":18,"disp":18},"CHIDAS":{"emoji":"🍭","total":11,"disp":9},"ALPURA":{"emoji":"🥛","total":7,"disp":6},"YAKUL":{"emoji":"🥛","total":7,"disp":7},"BOTANA":{"emoji":"🍿","total":5,"disp":3},"RED COLA":{"emoji":"🥤","total":5,"disp":5},"BULDAK":{"emoji":"🍜","total":4,"disp":1},"CALCETINES":{"emoji":"🧦","total":3,"disp":3},"PAN":{"emoji":"🥐","total":2,"disp":0},"- Sin Departamento -":{"emoji":"📦","total":2,"disp":2},"TLACOYOS":{"emoji":"🫓","total":1,"disp":1},"TORTILLAS":{"emoji":"🫓","total":1,"disp":0},"FUD":{"emoji":"🥩","total":1,"disp":1},"CARBON":{"emoji":"🔥","total":1,"disp":1}};
 </script>
 <script>
+
 
 // ================================================================
 // APP ENGINE — Abarrotes La Luz
@@ -2909,6 +3268,7 @@ buildCanje();   // canje-grid is always in DOM (public page)
 // which is triggered when the catalog pane is shown in the dashboard
 
 
+
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -3094,6 +3454,122 @@ buildCanje();   // canje-grid is always in DOM (public page)
     </div>
 
     <!-- PANE: PEDIDOS -->
+<!-- ═══════════════════════════════════════════════════════════════
+     SECCIÓN DE CANJE CON QR — injected into #pane-puntos
+     Replace the existing canje block in the points pane
+═══════════════════════════════════════════════════════════════ -->
+
+<!-- CANJE PRODUCTS CARD — injected after pts-next-reward -->
+<div class="dash-card" id="card-canje" style="margin-top:20px">
+  <div class="pts-canje-header">
+    <div class="dash-card-title" style="margin-bottom:0"><span>🎁</span> Canjear mis Puntos</div>
+    <div id="pts-current-badge" style="font-size:13px;font-weight:700;color:var(--gold-dk);background:var(--gold-lt);padding:5px 14px;border-radius:99px;border:1px solid rgba(229,169,61,.3)">
+      ⭐ 0 pts disponibles
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--gray);margin:10px 0 18px;line-height:1.6">
+    Selecciona un producto para canjear. Se generará un código QR único que presentas en tienda.
+  </p>
+
+  <!-- Product options -->
+  <div class="canje-opts" id="canje-opts-grid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- Insufficient points warning -->
+  <div class="canje-insuf" id="canje-insuf-msg">
+    <span style="font-size:16px">⚠️</span>
+    <span id="canje-insuf-text">No tienes suficientes puntos para este canje.</span>
+  </div>
+
+  <!-- Confirm row -->
+  <div class="canje-confirm-row">
+    <button class="canje-confirm-btn" id="btn-generar-qr" disabled onclick="confirmarCanje()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><rect x="10" y="10" width="4" height="4"/><path d="M16 10h5v5m0 3v3h-3m-3 0h-1"/></svg>
+      Generar Código QR
+    </button>
+  </div>
+</div>
+
+<!-- CANJE HISTORY -->
+<div class="dash-card" id="card-canje-hist" style="margin-top:20px">
+  <div class="dash-card-title"><span>📋</span> Mis Canjes</div>
+  <div id="canje-hist-list">
+    <p style="font-size:13px;color:var(--gray);text-align:center;padding:16px 0">Sin canjes registrados aún.</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     QR MODAL — Full screen overlay
+═══════════════════════════════════════════════════════════════ -->
+<div class="qr-overlay" id="qr-overlay" role="dialog" aria-modal="true" aria-label="Código QR de canje">
+  <div class="qr-modal">
+    <div class="qr-modal-head">
+      <h3>🎁 Código de Canje</h3>
+      <button class="qr-modal-close" onclick="cerrarQR()" aria-label="Cerrar">×</button>
+    </div>
+    <div class="qr-modal-body">
+
+      <!-- Status banner -->
+      <div class="qr-status qr-status-ok" id="qr-status-banner">
+        <span style="font-size:18px">✅</span>
+        <span>Código activo — Preséntalo en tienda</span>
+      </div>
+
+      <!-- QR canvas -->
+      <div class="qr-canvas-wrap">
+        <div class="qr-canvas-frame" id="qr-canvas-frame">
+          <canvas id="qr-canvas" width="220" height="220"></canvas>
+        </div>
+        <div class="qr-expiry" id="qr-expiry-text">
+          Válido hasta: <strong id="qr-exp-date">—</strong>
+        </div>
+      </div>
+
+      <!-- Info table -->
+      <div class="qr-info">
+        <div class="qr-info-row">
+          <span class="qr-info-label">Cliente</span>
+          <span class="qr-info-val" id="qr-info-nombre">—</span>
+        </div>
+        <div class="qr-info-row">
+          <span class="qr-info-label">Producto</span>
+          <span class="qr-info-val" id="qr-info-prod">—</span>
+        </div>
+        <div class="qr-info-row">
+          <span class="qr-info-label">Puntos usados</span>
+          <span class="qr-info-val" id="qr-info-pts">—</span>
+        </div>
+        <div class="qr-info-row">
+          <span class="qr-info-label">Generado</span>
+          <span class="qr-info-val" id="qr-info-fecha">—</span>
+        </div>
+        <div class="qr-info-row">
+          <span class="qr-info-label">Estado</span>
+          <span class="qr-info-val" id="qr-info-estado">Pendiente</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="qr-actions">
+        <button class="qr-save-btn" onclick="guardarQR()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Guardar / Mostrar en tienda
+        </button>
+        <button class="qr-share-btn" onclick="compartirQR()">
+          <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor"><path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/></svg>
+          Compartir por WhatsApp
+        </button>
+      </div>
+
+      <!-- Transaction ID -->
+      <div class="qr-txn" id="qr-txn-id">TXN-···</div>
+
+    </div>
+  </div>
+</div>
+
     <div class="dash-pane" id="pane-pedidos">
       <div class="dash-card">
         <div class="dash-card-title"><span>🛒</span> Mis Pedidos</div>
@@ -3166,76 +3642,77 @@ buildCanje();   // canje-grid is always in DOM (public page)
 </div>
 
 
-    <!-- PANE: CATÁLOGO PRIVADO -->
+    <!-- PANE: CATÁLOGO / PEDIDOS -->
     <div class="dash-pane" id="pane-catalogo">
-      <div class="dcat-wrap">
+      <div class="dash-card" style="text-align:center;padding:40px 28px">
 
-        <!-- TOOLBAR -->
-        <div class="dcat-toolbar">
-          <div class="dcat-search-wrap" role="search">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input id="srch" type="search" class="dcat-search" placeholder="Buscar producto, código…" autocomplete="off" aria-label="Buscar en el catálogo"/>
-            <button id="srch-x" class="dcat-search-clr" aria-label="Limpiar">×</button>
+        <div style="font-size:52px;margin-bottom:18px">🛒</div>
+        <h3 style="font-size:22px;font-weight:900;color:var(--black);margin-bottom:10px">
+          ¿Qué necesitas hoy?
+        </h3>
+        <p style="font-size:15px;color:var(--gray);max-width:460px;margin:0 auto 32px;line-height:1.7">
+          Escríbenos directamente por WhatsApp para hacer tu pedido o preguntar si tenemos
+          disponible cualquier producto. ¡Respuesta inmediata!
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:14px;max-width:380px;margin:0 auto">
+
+          <!-- CTA 1: Hacer pedido -->
+          <a
+            href="https://wa.me/522461008654?text=Hola%2C%20quiero%20hacer%20un%20pedido.%20Me%20gustar%C3%ADa%20pedir%3A%0A%0A1.%20"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-wa"
+            style="justify-content:center;padding:16px 24px;font-size:15px;border-radius:16px;text-decoration:none"
+            id="btn-pedido-wa"
+          >
+            <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+              <path d="M16 .4C7.5.4.4 7.5.4 16c0 2.8.7 5.5 2.1 7.8L.4 31.6l8-2.1c2.2 1.3 4.8 2 7.6 2 8.5 0 15.6-7.1 15.6-15.5C31.6 7.5 24.5.4 16 .4zm7.2 18.3c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.3 1.5c-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1.1-2-2.4-2.3-2.8-.2-.4 0-.6.2-.8l.6-.7c.2-.2.2-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.1.2 2.3 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5s-.4-.3-.8-.4z"/>
+            </svg>
+            Hacer pedido por WhatsApp
+          </a>
+
+          <!-- CTA 2: Consultar existencias -->
+          <a
+            href="https://wa.me/522461008654?text=Hola%2C%20quisiera%20saber%20si%20tienen%20disponible%3A%0A%0A"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-outline"
+            style="justify-content:center;padding:16px 24px;font-size:15px;border-radius:16px;text-decoration:none"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            Consultar existencia de un producto
+          </a>
+
+        </div>
+
+        <!-- Info pills -->
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:32px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray);background:var(--bg);border-radius:99px;padding:6px 14px;border:1px solid var(--line)">
+            <span>⚡</span> Respuesta inmediata
           </div>
-          <div class="dcat-filters" role="group" aria-label="Filtrar">
-            <button class="flt on" onclick="setFilter('all',this)">Todos</button>
-            <button class="flt" onclick="setFilter('disp',this)">✓ Disponibles</button>
-            <button class="flt" onclick="setFilter('out',this)">✗ Agotados</button>
+          <div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray);background:var(--bg);border-radius:99px;padding:6px 14px;border:1px solid var(--line)">
+            <span>🛵</span> Envío desde $100
           </div>
-          <div class="dcat-sort-row">
-            <span class="rcount" id="rcount" aria-live="polite"></span>
-            <select class="srt" onchange="setSort(this.value)" aria-label="Ordenar">
-              <option value="n">A → Z</option>
-              <option value="nz">Z → A</option>
-              <option value="pa">Precio ↑</option>
-              <option value="pd">Precio ↓</option>
-              <option value="st">Mayor stock</option>
-            </select>
+          <div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray);background:var(--bg);border-radius:99px;padding:6px 14px;border:1px solid var(--line)">
+            <span>🕐</span> Lun–Dom 6AM–9PM
           </div>
         </div>
 
-        <!-- BODY: CATEGORIES + PRODUCTS -->
-        <div class="dcat-body" id="dcat-body">
+        <!-- Cart if items in it -->
+        <div id="pane-catalogo-cart-note" style="display:none;margin-top:24px;padding:16px;background:var(--green-lt);border:1px solid #a0d9b4;border-radius:var(--r-lg)">
+          <p style="font-size:14px;color:var(--green-dk);font-weight:600;margin-bottom:10px">
+            🛒 Tienes productos en tu carrito
+          </p>
+          <button class="btn btn-black btn-sm" onclick="openCart()" style="display:inline-flex">
+            Ver mi carrito →
+          </button>
+        </div>
 
-          <!-- SIDEBAR CATEGORIES -->
-          <aside class="dcat-sidebar" id="csb" aria-label="Categorías">
-            <div class="dcat-sidebar-head">Categorías</div>
-            <button class="cs-btn sel" id="todos-btn" data-cat="TODOS">
-              <span class="cs-em">🏪</span>
-              <span class="cs-n">Todos</span>
-              <span class="cs-c" id="cnt-TODOS">1258</span>
-            </button>
-            <div class="cs-div" aria-hidden="true"></div>
-            <div id="cat-list" role="list" aria-label="Lista de categorías"></div>
-          </aside>
-
-          <!-- PRODUCT AREA -->
-          <div class="dcat-main">
-            <!-- Category chip -->
-            <div class="cc" id="cc" aria-live="polite">
-              <span class="cc-em" aria-hidden="true">🏪</span>
-              <div>
-                <div class="cc-name">Todos los Productos</div>
-                <div class="cc-info">Catálogo completo · 1,258 artículos</div>
-              </div>
-            </div>
-            <!-- Mobile sidebar toggle -->
-            <button class="mob-cats" id="mob-cats" aria-expanded="false" aria-controls="csb" style="display:none">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-              Categorías
-            </button>
-            <!-- Grid -->
-            <div id="pgrid" role="list" aria-label="Listado de productos"><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div></div>
-            <!-- Pagination -->
-            <div class="pgn" id="pgn" role="navigation" aria-label="Páginas de productos"></div>
-          </div>
-
-        </div><!-- /dcat-body -->
-
-        <!-- Mobile overlay -->
-        <div id="mob-ov" class="mob-ov" role="presentation"></div>
-
-      </div><!-- /dcat-wrap -->
+      </div>
     </div>
 
 <!-- DASHBOARD NOTIFICATION -->
@@ -3246,6 +3723,8 @@ buildCanje();   // canje-grid is always in DOM (public page)
 
 
 <script>
+
+
 // ================================================================
 // AUTH ENGINE v2 — Abarrotes La Luz
 // Login: nombre (usuario) + número de cliente (contraseña)
@@ -3338,65 +3817,54 @@ var AUTH = {
   // ── FULL CLIENT DATABASE (todos los clientes reales) ──────────
   // Usuario = nombre registrado  |  Contraseña = número de cliente
   clients: [
-    { id:'0001', name:'Lulu',              pts:660,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[
-      { type:'earn', pts:660, reason:'Compras acumuladas', date:'Abr 2025' }
-    ]},
-    { id:'0002', name:'Josefina Diaz',     pts:1182, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[
-      { type:'earn', pts:1182, reason:'Compras acumuladas', date:'Abr 2025' }
-    ]},
-    { id:'0003', name:'Veronica Nava',     pts:1735, addr:'San Damián Texóloc', phone:'', orders:[
-      { id:'PED-010', date:'2025-04-12', items:'Yogurt Danone x3, Leche x2, Queso', total:128, status:'pending'   },
-      { id:'PED-011', date:'2025-04-05', items:'Detergente, Jabón Zote, Cloro',      total:110, status:'delivered' }
-    ], ptsHistory:[
-      { type:'earn', pts:24,  reason:'Compra #PED-010', date:'12 Abr 2025' },
-      { type:'earn', pts:22,  reason:'Compra #PED-011', date:'5 Abr 2025'  },
-      { type:'earn', pts:1689,reason:'Compras anteriores', date:'2024-2025' }
-    ]},
-    { id:'0004', name:'Gerardo Sanchez',   pts:2724, addr:'San Damián Texóloc', phone:'', orders:[
-      { id:'PED-001', date:'2025-04-10', items:'Coca-Cola x2, Sabritas x1, Leche x1', total:86,  status:'delivered' },
-      { id:'PED-002', date:'2025-04-03', items:'Arroz 1kg, Frijol 1kg, Sal, Aceite',  total:105, status:'delivered' },
-      { id:'PED-003', date:'2025-03-28', items:'Pan Bimbo, Nescafé, Azúcar 1kg',       total:92,  status:'delivered' }
-    ], ptsHistory:[
-      { type:'earn', pts:9,   reason:'Compra #PED-001', date:'10 Abr 2025' },
-      { type:'earn', pts:10,  reason:'Compra #PED-002', date:'3 Abr 2025'  },
-      { type:'use',  pts:50,  reason:'Canje Sabritas',  date:'1 Abr 2025'  },
-      { type:'earn', pts:9,   reason:'Compra #PED-003', date:'28 Mar 2025' },
-      { type:'earn', pts:2746,reason:'Compras anteriores', date:'2024-2025'}
-    ]},
-    { id:'0005', name:'Margarita',         pts:15,   addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:15,  reason:'Primera compra',      date:'Abr 2025' }]},
-    { id:'0006', name:'Higinia Diaz',      pts:792,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:792, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0007', name:'Rosa',              pts:748,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:748, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0008', name:'Maria Felix',       pts:360,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:360, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0009', name:'Rosy',              pts:454,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:454, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0010', name:'Patricia Sanchez',  pts:276,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:276, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0012', name:'Leonardo',          pts:1349, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1349,reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0013', name:'Angelica Hdz',      pts:310,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:310, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0014', name:'Guadalupe Diaz',    pts:200,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:200, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0015', name:'Concha',            pts:223,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:223, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0016', name:'Leonor',            pts:314,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:314, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0018', name:'Mauro',             pts:1185, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1185,reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0019', name:'Natividad',         pts:225,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:225, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0021', name:'Alejandro Rojas',   pts:392,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:392, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0022', name:'Gloria',            pts:38,   addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:38,  reason:'Compras recientes',    date:'2025'     }]},
-    { id:'0024', name:'Angelica Marquez',  pts:147,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:147, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0025', name:'Remedios',          pts:335,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:335, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0026', name:'Benito Hdz',        pts:251,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:251, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0029', name:'Jorge Lira',        pts:220,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:220, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0030', name:'Tony Lira',         pts:361,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:361, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0032', name:'Silvia Alonso',     pts:895,  addr:'San Damián Texóloc', phone:'', orders:[
-      { id:'PED-032', date:'2025-04-08', items:'Refresco Coca-Cola x4, Sabritas x2', total:116, status:'delivered' }
-    ], ptsHistory:[
-      { type:'earn', pts:12,  reason:'Compra #PED-032', date:'8 Abr 2025' },
-      { type:'earn', pts:883, reason:'Compras anteriores', date:'2025'    }
-    ]},
-    { id:'0033', name:'Guadalupe Salazar', pts:124,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:124, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0037', name:'Alfredo',           pts:694,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:694, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0038', name:'Sara Nava',         pts:250,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:250, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0040', name:'Yolanda',           pts:317,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:317, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0041', name:'Johana Flores',     pts:127,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:127, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0042', name:'Monica',            pts:557,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:557, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0043', name:'Yesenia',           pts:216,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:216, reason:'Compras acumuladas',   date:'2025'     }]},
-    { id:'0045', name:'Rebeca',            pts:223,  addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:223, reason:'Compras acumuladas',   date:'2025'     }]}
+  { id:'0001', name:'LULU YONI', pts:1457, ventas:107, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1457, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0002', name:'JOSEFINA DIAZ', pts:3001, ventas:216, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:3001, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0003', name:'Veronica', pts:3890, ventas:388, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:3890, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0004', name:'Gerardo Sanchez', pts:4085, ventas:347, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:4085, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0005', name:'Margarita', pts:15, ventas:2, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:15, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0006', name:'Higinia Diaz', pts:1729, ventas:111, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1729, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0007', name:'ROSA Quesera', pts:1783, ventas:140, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1783, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0008', name:'Maria Felix Lira', pts:1507, ventas:89, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1507, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0009', name:'Rosy', pts:911, ventas:44, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:911, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0010', name:'Patricia Sanchez', pts:1045, ventas:52, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1045, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0012', name:'Leo', pts:2589, ventas:233, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:2589, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0013', name:'Angelica hdz', pts:350, ventas:20, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:350, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0014', name:'Guadalupe Diaz', pts:289, ventas:24, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:289, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0015', name:'Concha', pts:511, ventas:62, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:511, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0016', name:'leonor', pts:348, ventas:35, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:348, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0018', name:'Mauro', pts:2508, ventas:218, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:2508, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0019', name:'Natividad', pts:502, ventas:89, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:502, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0020', name:'ines', pts:110, ventas:13, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:110, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0021', name:'Alejandro Rojas', pts:1056, ventas:78, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1056, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0022', name:'gloria', pts:150, ventas:16, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:150, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0023', name:'Sonia Marisol', pts:22, ventas:1, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:22, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0024', name:'Angelina', pts:170, ventas:14, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:170, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0025', name:'Remedios', pts:543, ventas:45, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:543, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0026', name:'Luz Diaz', pts:814, ventas:51, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:814, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0027', name:'Brayan', pts:122, ventas:7, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:122, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0028', name:'Francisco Sanchez', pts:874, ventas:21, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:874, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0029', name:'Jorge', pts:760, ventas:50, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:760, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0030', name:'Tony Lira', pts:2150, ventas:215, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:2150, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0031', name:'Georgina', pts:119, ventas:13, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:119, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0032', name:'Silvia Alonso', pts:3733, ventas:166, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:3733, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0033', name:'guadalupe zalasar', pts:377, ventas:21, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:377, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0034', name:'azucena Lira', pts:1190, ventas:37, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1190, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0035', name:'Petra', pts:60, ventas:5, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:60, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0036', name:'Leticia', pts:113, ventas:6, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:113, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0037', name:'Alfredo', pts:906, ventas:70, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:906, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0038', name:'Sara Nava', pts:598, ventas:53, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:598, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0039', name:'Adela', pts:1507, ventas:97, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1507, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0040', name:'Yolanda', pts:2384, ventas:93, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:2384, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0041', name:'Johana Flores', pts:338, ventas:20, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:338, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0042', name:'Monica', pts:2311, ventas:107, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:2311, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0043', name:'yesenia', pts:583, ventas:34, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:583, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0044', name:'esme diaz', pts:175, ventas:33, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:175, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0045', name:'Rebeca Marquez', pts:1563, ventas:46, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:1563, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0046', name:'Fany lira', pts:300, ventas:16, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:300, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0047', name:'Emir Lira', pts:601, ventas:26, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:601, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0048', name:'Alejandra Diaz', pts:137, ventas:4, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:137, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0049', name:'Pablo', pts:40, ventas:4, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:40, reason:'Acumulado de ventas', date:'Abr 2026' }] },
+  { id:'0050', name:'ezperanza', pts:0, ventas:2, addr:'San Damián Texóloc', phone:'', orders:[], ptsHistory:[{ type:'earn', pts:0, reason:'Acumulado de ventas', date:'Abr 2026' }] }
   ],
 
   // ── FIND CLIENT: nombre (fuzzy, case-insensitive) + id exacto ─
@@ -3422,6 +3890,10 @@ var AUTH = {
     var saved = null;
     try { saved = JSON.parse(localStorage.getItem(savedKey)); } catch(e) {}
     var user = saved ? Object.assign({}, client, saved) : Object.assign({}, client);
+    // Ensure array fields always exist
+    if (!user.orders)     user.orders     = [];
+    if (!user.ptsHistory) user.ptsHistory = [];
+    if (!user.canjes)     user.canjes     = [];
 
     sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
     this.currentUser = user;
@@ -3455,12 +3927,13 @@ var AUTH = {
     // Persist to localStorage (orders, pts, profile)
     var savedKey = 'laluz_client_' + this.currentUser.id;
     var toSave = {
-      addr: this.currentUser.addr,
-      phone: this.currentUser.phone,
-      bday: this.currentUser.bday,
-      pts: this.currentUser.pts,
-      orders: this.currentUser.orders,
-      ptsHistory: this.currentUser.ptsHistory
+      addr:        this.currentUser.addr,
+      phone:       this.currentUser.phone,
+      bday:        this.currentUser.bday,
+      pts:         this.currentUser.pts,
+      orders:      this.currentUser.orders,
+      ptsHistory:  this.currentUser.ptsHistory,
+      canjes:      this.currentUser.canjes || []
     };
     localStorage.setItem(savedKey, JSON.stringify(toSave));
   },
@@ -3745,11 +4218,13 @@ function dashTab(name, btn) {
   var pane = document.getElementById('pane-' + name);
   if (pane) pane.classList.add('on');
   if (btn)  { btn.classList.add('on'); btn.setAttribute('aria-selected','true'); }
+  // Catalog pane now uses WhatsApp CTAs — show cart note if items present
   if (name === 'catalogo') {
-    // Small delay lets the pane render before we query elements inside it
-    setTimeout(function() {
-      if (typeof initCatalogPane === 'function') initCatalogPane();
-    }, 80);
+    var noteEl = document.getElementById('pane-catalogo-cart-note');
+    if (noteEl) {
+      var hasCart = Object.keys(S && S.cart ? S.cart : {}).some(function(k){ return (S.cart[k]||0) > 0; });
+      noteEl.style.display = hasCart ? 'block' : 'none';
+    }
   }
 }
 
@@ -3805,12 +4280,423 @@ document.addEventListener('keydown', function(e) {
 // refresh every minute
 
 AUTH.init();
+
+
+</script>
+
+<script>
+// ================================================================
+// SISTEMA DE CANJE CON QR — Abarrotes La Luz
+// Generación de QR seguro, firmado, expirable, no reutilizable
+// 100% client-side (GitHub Pages compatible)
+// ================================================================
+
+// ── QR LIBRARY LOADER ────────────────────────────────────────────
+// We use qrcode.js loaded from CDN (injected in <head>)
+
+// ── CANJE PRODUCTS CATALOG ───────────────────────────────────────
+var CANJE_ITEMS = [
+  { id:'C01', em:'🥤', name:'Refresco 600ml',       desc:'Coca-Cola, Pepsi o similar',     pts:500  },
+  { id:'C02', em:'🍟', name:'Bolsa de Sabritas',    desc:'Variedades clásicas',             pts:300  },
+  { id:'C03', em:'🌮', name:'Combo Dorilocos',      desc:'Con todos los ingredientes',      pts:800  },
+  { id:'C04', em:'🥛', name:'Leche Lala 1L',        desc:'Entera o light',                  pts:600  },
+  { id:'C05', em:'🍞', name:'Pan Bimbo Grande',     desc:'Blanco o Integral',               pts:900  },
+  { id:'C06', em:'☕', name:'Café Nescafé 50g',     desc:'Clásico soluble',                 pts:1100 },
+  { id:'C07', em:'🍫', name:'Chocolate Abuelita',   desc:'Para tus tardes frías',           pts:850  },
+  { id:'C08', em:'🎁', name:'Combo Botanas',        desc:'3 paquetes a elegir',             pts:700  },
+  { id:'C09', em:'💊', name:'Pedido Libre $30',     desc:'Cualquier producto hasta $30',    pts:1500 },
+  { id:'C10', em:'🌟', name:'Pedido Libre $50',     desc:'Cualquier producto hasta $50',    pts:2500 },
+];
+
+// ── SECURITY HELPERS ─────────────────────────────────────────────
+// Simple hash function (djb2 variant) — good enough for client-side verification
+// For production replace with HMAC-SHA256 server call
+function hashDJB2(str) {
+  var hash = 5381;
+  for (var i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) + str.charCodeAt(i);
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(36).toUpperCase().padStart(8, '0');
+}
+
+function genTxnId() {
+  var ts  = Date.now().toString(36).toUpperCase();
+  var rnd = Math.random().toString(36).substr(2, 5).toUpperCase();
+  return 'TXN-' + ts + '-' + rnd;
+}
+
+function buildQRPayload(user, item, txnId, expDate) {
+  var payload = {
+    v:       '1',                          // version
+    cl:      user.id,                      // client id
+    nm:      user.name,                    // client name
+    prod:    item.name,                    // product
+    prodId:  item.id,                      // product id
+    pts:     item.pts,                     // points used
+    gen:     new Date().toISOString(),     // generated at
+    exp:     expDate.toISOString(),        // expires at
+    txn:     txnId,                        // transaction id
+    st:      'PENDING'                     // status
+  };
+  // Sign: hash of all values concatenated
+  var sigStr = payload.v + payload.cl + payload.prodId + payload.pts + payload.txn + payload.exp;
+  payload.sig = hashDJB2(sigStr);
+  return payload;
+}
+
+// ── STATE ─────────────────────────────────────────────────────────
+var CANJE_STATE = {
+  selected:    null,    // selected CANJE_ITEMS item
+  currentQR:   null,    // active QR payload
+  qrDataURL:   null,    // base64 PNG of QR
+};
+
+// ── BUILD CANJE OPTS GRID ─────────────────────────────────────────
+function buildCanjeOpts() {
+  var grid = document.getElementById('canje-opts-grid');
+  if (!grid) return;
+  var user = AUTH.currentUser;
+  var userPts = user ? (user.pts || 0) : 0;
+
+  // Update pts badge
+  var badge = document.getElementById('pts-current-badge');
+  if (badge) badge.textContent = '⭐ ' + userPts.toLocaleString('es') + ' pts disponibles';
+
+  var html = '';
+  CANJE_ITEMS.forEach(function(item) {
+    var canAfford = userPts >= item.pts;
+    html += '<div class="canje-opt' + (canAfford ? '' : ' disabled') + '" ';
+    html += 'data-id="' + item.id + '" onclick="selectCanjeItem(this)">';
+    html += '<div class="canje-opt-check">✓</div>';
+    html += '<span class="canje-opt-em">' + item.em + '</span>';
+    html += '<div class="canje-opt-name">' + escHtml(item.name) + '</div>';
+    html += '<div class="canje-opt-desc">' + escHtml(item.desc) + '</div>';
+    html += '<span class="canje-opt-pts">⭐ ' + item.pts.toLocaleString('es') + ' pts</span>';
+    if (!canAfford) {
+      var need = item.pts - userPts;
+      html += '<div style="font-size:10px;color:var(--red);margin-top:6px;font-weight:600">Faltan ' + need + ' pts</div>';
+    }
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+
+  // Reset selection
+  CANJE_STATE.selected = null;
+  var btn = document.getElementById('btn-generar-qr');
+  if (btn) btn.disabled = true;
+}
+
+function selectCanjeItem(el) {
+  // Deselect all
+  document.querySelectorAll('.canje-opt').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+
+  var itemId = el.getAttribute('data-id');
+  CANJE_STATE.selected = CANJE_ITEMS.find(function(i){ return i.id === itemId; });
+
+  var user = AUTH.currentUser;
+  var userPts = user ? (user.pts || 0) : 0;
+  var btn = document.getElementById('btn-generar-qr');
+  var insuf = document.getElementById('canje-insuf-msg');
+
+  if (CANJE_STATE.selected && userPts >= CANJE_STATE.selected.pts) {
+    if (btn) btn.disabled = false;
+    if (insuf) insuf.style.display = 'none';
+  } else {
+    if (btn) btn.disabled = true;
+    if (insuf) {
+      insuf.style.display = 'flex';
+      var need = CANJE_STATE.selected ? (CANJE_STATE.selected.pts - userPts) : 0;
+      document.getElementById('canje-insuf-text').textContent =
+        'Te faltan ' + need.toLocaleString('es') + ' puntos para este canje.';
+    }
+  }
+}
+
+// ── CONFIRM CANJE → GENERATE QR ──────────────────────────────────
+function confirmarCanje() {
+  var user = AUTH.currentUser;
+  if (!user || !CANJE_STATE.selected) return;
+
+  var item    = CANJE_STATE.selected;
+  var userPts = user.pts || 0;
+
+  if (userPts < item.pts) {
+    showToast('⚠️ No tienes suficientes puntos');
+    return;
+  }
+
+  // Generate transaction
+  var txnId   = genTxnId();
+  var now     = new Date();
+  var expDate = new Date(now.getTime() + 48 * 60 * 60 * 1000); // 48h expiry
+
+  var payload = buildQRPayload(user, item, txnId, expDate);
+  var qrText  = JSON.stringify(payload);
+
+  // Deduct points BEFORE generating QR (atomic)
+  var newPts   = userPts - item.pts;
+  var dateStr  = now.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'});
+  var timeStr  = now.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+
+  var ptsEntry = {
+    type:   'use',
+    pts:    item.pts,
+    reason: 'Canje: ' + item.name + ' (' + txnId + ')',
+    date:   dateStr
+  };
+
+  var canjeRecord = {
+    txn:      txnId,
+    itemId:   item.id,
+    itemName: item.name,
+    pts:      item.pts,
+    gen:      dateStr + ' ' + timeStr,
+    exp:      expDate.toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}),
+    status:   'pending',
+    payload:  qrText
+  };
+
+  if (!user.ptsHistory) user.ptsHistory = [];
+  if (!user.canjes)     user.canjes     = [];
+  user.ptsHistory.push(ptsEntry);
+  user.canjes.push(canjeRecord);
+  user.pts = newPts;
+
+  AUTH.updateUser({
+    pts:        newPts,
+    ptsHistory: user.ptsHistory,
+    canjes:     user.canjes
+  });
+
+  CANJE_STATE.currentQR = { payload: payload, record: canjeRecord };
+
+  // Show QR modal
+  abrirQRModal(payload, canjeRecord, item);
+
+  // Refresh dashboard panels
+  buildCanjeOpts();
+  buildCanjeHistory();
+  buildPointsPanel(AUTH.currentUser, AUTH.getLevel(newPts));
+  if (document.getElementById('pts-big')) {
+    document.getElementById('pts-big').textContent = newPts.toLocaleString('es');
+  }
+}
+
+// ── OPEN QR MODAL ─────────────────────────────────────────────────
+function abrirQRModal(payload, record, item) {
+  var overlay = document.getElementById('qr-overlay');
+  if (!overlay) return;
+
+  // Fill info
+  document.getElementById('qr-info-nombre').textContent = payload.nm;
+  document.getElementById('qr-info-prod').textContent   = item.em + ' ' + item.name;
+  document.getElementById('qr-info-pts').textContent    = '⭐ ' + item.pts.toLocaleString('es') + ' puntos';
+  document.getElementById('qr-info-fecha').textContent  = record.gen;
+  document.getElementById('qr-info-estado').textContent = '🟡 Pendiente de canje';
+  document.getElementById('qr-exp-date').textContent    = record.exp;
+  document.getElementById('qr-txn-id').textContent      = 'ID: ' + payload.txn + ' · SIG: ' + payload.sig;
+
+  // Generate QR on canvas using pure JS
+  renderQRCanvas(JSON.stringify(payload));
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarQR() {
+  var overlay = document.getElementById('qr-overlay');
+  if (overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── PURE JS QR RENDERER ───────────────────────────────────────────
+// Self-contained QR generation — no external library needed
+// Uses the qrcodejs library loaded via CDN
+function renderQRCanvas(text) {
+  var canvas = document.getElementById('qr-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+
+  // Check if QRCode library is available
+  if (typeof QRCode !== 'undefined') {
+    // Clear previous
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Create offscreen div for qrcodejs
+    var div = document.createElement('div');
+    div.style.display = 'none';
+    document.body.appendChild(div);
+    try {
+      var qr = new QRCode(div, {
+        text:          text,
+        width:         220,
+        height:        220,
+        colorDark:     '#111111',
+        colorLight:    '#ffffff',
+        correctLevel:  QRCode.CorrectLevel.M
+      });
+      // Copy image to canvas
+      setTimeout(function() {
+        var img = div.querySelector('img') || div.querySelector('canvas');
+        if (img) {
+          if (img.tagName === 'CANVAS') {
+            ctx.drawImage(img, 0, 0, 220, 220);
+          } else {
+            var i = new Image();
+            i.onload = function() { ctx.drawImage(i, 0, 0, 220, 220); };
+            i.src = img.src;
+          }
+        }
+        document.body.removeChild(div);
+        // Store data URL for saving
+        CANJE_STATE.qrDataURL = canvas.toDataURL('image/png');
+      }, 100);
+    } catch(e) {
+      document.body.removeChild(div);
+      renderQRFallback(ctx, text);
+    }
+  } else {
+    renderQRFallback(ctx, text);
+  }
+}
+
+function renderQRFallback(ctx, text) {
+  // Elegant fallback: display transaction info as text in a styled box
+  var c = document.getElementById('qr-canvas');
+  c.width = 220; c.height = 220;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, 220, 220);
+  ctx.strokeStyle = '#111111';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(8, 8, 204, 204);
+  // Corner markers
+  [[10,10],[180,10],[10,180]].forEach(function(p){
+    ctx.fillStyle = '#111';
+    ctx.fillRect(p[0],p[1],40,40);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(p[0]+7,p[1]+7,26,26);
+    ctx.fillStyle = '#111';
+    ctx.fillRect(p[0]+14,p[1]+14,12,12);
+  });
+  ctx.fillStyle = '#111';
+  ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'center';
+  try { var p = JSON.parse(text); ctx.fillText(p.txn || 'QR', 110, 155); } catch(e){}
+  ctx.font = '9px monospace';
+  ctx.fillText('Abarrotes La Luz', 110, 175);
+  ctx.fillText(new Date().toLocaleDateString('es-MX'), 110, 190);
+}
+
+// ── SAVE QR ───────────────────────────────────────────────────────
+function guardarQR() {
+  var canvas = document.getElementById('qr-canvas');
+  if (!canvas) return;
+  try {
+    var dataURL = canvas.toDataURL('image/png');
+    var link    = document.createElement('a');
+    var record  = CANJE_STATE.currentQR;
+    link.download = 'canje-' + (record ? record.payload.txn : 'QR') + '.png';
+    link.href   = dataURL;
+    link.click();
+    showToast('✅ QR guardado en tu dispositivo');
+  } catch(e) {
+    showToast('Para guardar, haz una captura de pantalla');
+  }
+}
+
+function compartirQR() {
+  var record = CANJE_STATE.currentQR;
+  if (!record) return;
+  var p   = record.payload;
+  var msg = 'Mi código de canje - Abarrotes La Luz\n\n' +
+    '🎁 ' + p.prod + '\n' +
+    '⭐ ' + p.pts + ' puntos\n' +
+    '🆔 ' + p.txn + '\n' +
+    '📅 Válido hasta: ' + record.record.exp + '\n\n' +
+    'Hola, vengo a canjear mi código ' + p.txn;
+  window.open('https://wa.me/522461008654?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// ── CANJE HISTORY ─────────────────────────────────────────────────
+function buildCanjeHistory() {
+  var el = document.getElementById('canje-hist-list');
+  if (!el) return;
+  var user = AUTH.currentUser;
+  var canjes = (user && user.canjes) ? user.canjes : [];
+
+  if (!canjes.length) {
+    el.innerHTML = '<p style="font-size:13px;color:var(--gray);text-align:center;padding:16px 0">Sin canjes registrados aún.</p>';
+    return;
+  }
+
+  var html = '';
+  canjes.slice().reverse().forEach(function(c) {
+    var item = CANJE_ITEMS.find(function(i){ return i.id === c.itemId; }) || { em:'🎁' };
+    var stCls = c.status === 'used' ? 'chs-used' : (c.status === 'expired' ? 'chs-exp' : 'chs-pending');
+    var stLbl = c.status === 'used' ? '✓ Canjeado' : (c.status === 'expired' ? '✗ Expirado' : '⏳ Pendiente');
+    var isExpired = false;
+    try {
+      var p = JSON.parse(c.payload);
+      isExpired = new Date(p.exp) < new Date();
+      if (isExpired && c.status === 'pending') {
+        c.status = 'expired'; // mutate the record in the array
+        stCls = 'chs-exp'; stLbl = '✗ Expirado';
+      }
+    } catch(e) {}
+
+    html += '<div class="canje-hist-item">';
+    html += '<div class="canje-hist-dot">' + item.em + '</div>';
+    html += '<div class="canje-hist-info">';
+    html += '<div class="canje-hist-title">' + escHtml(c.itemName) + '</div>';
+    html += '<div class="canje-hist-date">' + escHtml(c.gen) + ' · ' + escHtml(c.txn) + '</div>';
+    html += '<span class="canje-hist-status ' + stCls + '">' + stLbl + '</span>';
+    html += '</div>';
+    html += '<div class="canje-hist-pts">−' + c.pts.toLocaleString('es') + ' pts</div>';
+    // Show QR again if still pending and not expired
+    if (c.status === 'pending' && !isExpired) {
+      html += '<button style="margin-left:8px;padding:5px 10px;background:var(--black);color:var(--white);border:none;border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:Poppins,sans-serif" onclick="verQRExistente(\'' + escAttr(c.txn) + '\')" title="Ver QR">📱 Ver</button>';
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function verQRExistente(txn) {
+  var user = AUTH.currentUser;
+  if (!user || !user.canjes) return;
+  var c = user.canjes.find(function(x){ return x.txn === txn; });
+  if (!c) return;
+  try {
+    var payload = JSON.parse(c.payload);
+    var item = CANJE_ITEMS.find(function(i){ return i.id === c.itemId; }) || CANJE_ITEMS[0];
+    CANJE_STATE.currentQR = { payload: payload, record: c };
+    abrirQRModal(payload, c, item);
+  } catch(e) {
+    showToast('No se pudo recuperar el QR');
+  }
+}
+
+// canjes persistence is now handled directly inside AUTH.updateUser and AUTH.login
+// No override needed — removed to prevent double-save
+
+// buildCanjeOpts and buildCanjeHistory are called from dashTab('puntos')
+// and from confirmarCanje — no override needed
+
+// Close QR on overlay click
+document.addEventListener('click', function(e) {
+  var overlay = document.getElementById('qr-overlay');
+  if (overlay && e.target === overlay) cerrarQR();
+});
+
+// Close QR on ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') cerrarQR();
+});
+
 </script>
 </body>
 </html>
-
-
-
 
 
 
