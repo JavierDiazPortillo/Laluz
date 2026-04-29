@@ -2711,6 +2711,7 @@ const CAT_META_RAW={"ABARROTES":{"emoji":"🛒","total":256,"disp":202},"DULCERI
 <script>
 
 
+
 // ================================================================
 // APP ENGINE — Abarrotes La Luz
 // Catalog: PRIVATE (dashboard only, post-login)
@@ -3269,6 +3270,7 @@ buildCanje();   // canje-grid is always in DOM (public page)
 
 
 
+
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -3570,6 +3572,63 @@ buildCanje();   // canje-grid is always in DOM (public page)
   </div>
 </div>
 
+    <div class="dash-pane" id="pane-catalogo">
+      <div class="dcat-wrap">
+        <div class="dcat-toolbar">
+          <button class="mob-cats" id="mob-cats" aria-expanded="false" aria-controls="csb" style="display:none">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            Categorías
+          </button>
+          <div class="dcat-search-wrap" role="search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="srch" type="search" class="dcat-search" placeholder="Buscar producto, código…" autocomplete="off" aria-label="Buscar"/>
+            <button id="srch-x" class="dcat-search-clr" aria-label="Limpiar">×</button>
+          </div>
+          <div class="dcat-filters" role="group">
+            <button class="flt on" onclick="setFilter('all',this)">Todos</button>
+            <button class="flt" onclick="setFilter('disp',this)">✓ Disponibles</button>
+            <button class="flt" onclick="setFilter('out',this)">✗ Agotados</button>
+          </div>
+          <div class="dcat-sort-row">
+            <span class="rcount" id="rcount" aria-live="polite"></span>
+            <select class="srt" onchange="setSort(this.value)" aria-label="Ordenar">
+              <option value="n">A → Z</option>
+              <option value="nz">Z → A</option>
+              <option value="pa">Precio ↑</option>
+              <option value="pd">Precio ↓</option>
+              <option value="st">Mayor stock</option>
+            </select>
+          </div>
+        </div>
+        <div class="dcat-body">
+          <aside class="dcat-sidebar" id="csb" aria-label="Categorías">
+            <div class="dcat-sidebar-head">Categorías</div>
+            <button class="cs-btn sel" id="todos-btn" data-cat="TODOS">
+              <span class="cs-em">🏪</span>
+              <span class="cs-n">Todos</span>
+              <span class="cs-c" id="cnt-TODOS">1258</span>
+            </button>
+            <div class="cs-div"></div>
+            <div id="cat-list" role="list"></div>
+          </aside>
+          <div class="dcat-main">
+            <div class="cc" id="cc" aria-live="polite">
+              <span class="cc-em">🏪</span>
+              <div><div class="cc-name">Todos los Productos</div>
+              <div class="cc-info">1,258 artículos disponibles</div></div>
+            </div>
+            <div id="pgrid" role="list" aria-label="Productos">
+              <div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div>
+              <div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div>
+              <div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div>
+              <div class="skel-card"><div class="skel skel-img"></div><div class="skel-body"><div class="skel skel-title"></div><div class="skel skel-sub"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div>
+            </div>
+            <div class="pgn" id="pgn" role="navigation"></div>
+          </div>
+        </div>
+        <div id="mob-ov" class="mob-ov"></div>
+      </div>
+    </div>
     <div class="dash-pane" id="pane-pedidos">
       <div class="dash-card">
         <div class="dash-card-title"><span>🛒</span> Mis Pedidos</div>
@@ -3642,7 +3701,8 @@ buildCanje();   // canje-grid is always in DOM (public page)
 </div>
 
 
-    <!-- PANE: CATÁLOGO / PEDIDOS -->
+    <!-- PANE: CATÁLOGO PRIVADO -->
+ <!-- PANE: CATÁLOGO / PEDIDOS -->
     <div class="dash-pane" id="pane-catalogo">
       <div class="dash-card" style="text-align:center;padding:40px 28px">
 
@@ -3723,6 +3783,7 @@ buildCanje();   // canje-grid is always in DOM (public page)
 
 
 <script>
+
 
 
 // ================================================================
@@ -3997,6 +4058,7 @@ function closeAuthModal() {
   setFieldErr('lf-num-field', false);
 }
 
+document.getElementById('login-btn').addEventListener('click', doLogin);
 document.getElementById('auth-close').addEventListener('click', closeAuthModal);
 document.getElementById('auth-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeAuthModal();
@@ -4114,6 +4176,8 @@ function populateDashboard(user) {
   buildPointsPanel(user, level);
   buildOrdersPanel(orders);
   buildPromosPanel(user);
+  if (typeof buildCanjeOpts    === 'function') buildCanjeOpts();
+  if (typeof buildCanjeHistory === 'function') buildCanjeHistory();
 
   // Profile
   document.getElementById('pf-name').value  = user.name  || '';
@@ -4214,17 +4278,22 @@ function buildPromosPanel(user) {
 // ── DASHBOARD TABS ────────────────────────────────────────────────
 function dashTab(name, btn) {
   document.querySelectorAll('.dash-pane').forEach(function(p) { p.classList.remove('on'); });
-  document.querySelectorAll('.dash-tab').forEach(function(t) { t.classList.remove('on'); t.setAttribute('aria-selected','false'); });
+  document.querySelectorAll('.dash-tab').forEach(function(t) {
+    t.classList.remove('on'); t.setAttribute('aria-selected', 'false');
+  });
   var pane = document.getElementById('pane-' + name);
   if (pane) pane.classList.add('on');
-  if (btn)  { btn.classList.add('on'); btn.setAttribute('aria-selected','true'); }
-  // Catalog pane now uses WhatsApp CTAs — show cart note if items present
+  if (btn)  { btn.classList.add('on'); btn.setAttribute('aria-selected', 'true'); }
+  if (name === 'puntos') {
+    setTimeout(function() {
+      if (typeof buildCanjeOpts    === 'function') buildCanjeOpts();
+      if (typeof buildCanjeHistory === 'function') buildCanjeHistory();
+    }, 60);
+  }
   if (name === 'catalogo') {
-    var noteEl = document.getElementById('pane-catalogo-cart-note');
-    if (noteEl) {
-      var hasCart = Object.keys(S && S.cart ? S.cart : {}).some(function(k){ return (S.cart[k]||0) > 0; });
-      noteEl.style.display = hasCart ? 'block' : 'none';
-    }
+    setTimeout(function() {
+      if (typeof initCatalogPane === 'function') initCatalogPane();
+    }, 80);
   }
 }
 
@@ -4282,9 +4351,11 @@ document.addEventListener('keydown', function(e) {
 AUTH.init();
 
 
+
 </script>
 
 <script>
+
 // ================================================================
 // SISTEMA DE CANJE CON QR — Abarrotes La Luz
 // Generación de QR seguro, firmado, expirable, no reutilizable
@@ -4694,9 +4765,8 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') cerrarQR();
 });
 
+
 </script>
 </body>
 </html>
-
-
 
